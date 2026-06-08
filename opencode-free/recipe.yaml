@@ -1,28 +1,21 @@
+# yaml-language-server: $schema=../recipe.schema.json
 # ── Recipe: opencode-free ─────────────────────────────────────────────────────
 # OpenCode Zen free-tier models via LiteLLM proxy.
+# Extends _default for shared profiles, compose, and proxy config.
 #
-# This recipe sets up:
-#   - Claude Code profiles routing through the local LiteLLM proxy
-#   - Proxy config with OpenCode Zen as the sole provider
-#   - Model aliases for Ultra/Pro/Flash/Air all pointing to free-tier models
-#   - No database (stateless proxy)
-#   - Optional: Chrome, Web, and GitHub tools
+# This recipe adds:
+#   - Claude Code profile with OpenCode Zen model aliases
+#   - Proxy provider config for OpenCode Zen free-tier models
+#   - Slimmed reasoning-efforts mapping (5 rules only)
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: opencode-free
+extends: _default
 description: "OpenCode Zen free-tier models via LiteLLM proxy"
 version: 1
 
 files:
-  # ── Claude Code config ──────────────────────────────────────────────────
-  - path: .env.claude
-    target: .env.claude
-    merge: env
-  - path: .env.claude.secrets
-    target: .env.claude.secrets
-    merge: env
-
-  # ── Proxy config ────────────────────────────────────────────────────────
+  # ── Proxy config (recipe-specific) ──────────────────────────────────────
   - path: .env.proxy
     target: .env.proxy
     merge: env
@@ -30,46 +23,27 @@ files:
     target: .env.proxy.secrets
     merge: env
 
-  # ── Profiles ────────────────────────────────────────────────────────────
+  # ── Claude Code profile (recipe-specific model aliases) ─────────────────
   - path: profiles/claude-code.json
     target: profiles/claude-code.json
     merge: deepdiff
-  - path: profiles/claude-code.schema.json
-    target: profiles/claude-code.schema.json
-    merge: deepdiff
-  - path: profiles/chrome.json
-    target: profiles/chrome.json
-    merge: deepdiff
-  - path: profiles/chrome.schema.json
-    target: profiles/chrome.schema.json
-    merge: deepdiff
-  - path: profiles/web.json
-    target: profiles/web.json
-    merge: deepdiff
-  - path: profiles/web.schema.json
-    target: profiles/web.schema.json
-    merge: deepdiff
-  - path: profiles/github.json
-    target: profiles/github.json
-    merge: deepdiff
-  - path: profiles/github.schema.json
-    target: profiles/github.schema.json
-    merge: deepdiff
 
-  # ── Proxy compose ───────────────────────────────────────────────────────
-  - path: proxy/docker-compose.yaml
-    target: proxy/docker-compose.yaml
-    merge: deepdiff
-  - path: proxy/config/config.yaml
-    target: proxy/config/config.yaml
-    merge: deepdiff
-
-  # ── Providers ───────────────────────────────────────────────────────────
+  # ── Proxy provider ─────────────────────────────────────────────────────
   - path: proxy/config/providers/opencode.yaml
     target: proxy/config/providers/opencode.yaml
     merge: deepdiff
 
-  # ── Plugins ─────────────────────────────────────────────────────────────
+  # ── Compose override (adds OpenCode Zen env vars) ──────────────────────
+  - path: proxy/docker-compose.yaml
+    target: proxy/docker-compose.yaml
+    merge: deepdiff
+
+  # ── Config override (adds provider include) ────────────────────────────
+  - path: proxy/config/config.yaml
+    target: proxy/config/config.yaml
+    merge: deepdiff
+
+  # ── Slimmed reasoning-efforts (5 opencode-free rules) ─────────────────
   - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
@@ -92,8 +66,3 @@ optional_config:
     default: "OpenCode/Big-Pickle"
   - var: LITELLM_MODEL_ALIAS_AIR
     default: "OpenCode/Nemotron-3-Ultra-FREE"
-
-tools_optional:
-  - chrome
-  - web
-  - github

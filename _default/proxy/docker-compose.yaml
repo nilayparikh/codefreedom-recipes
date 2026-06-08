@@ -1,0 +1,62 @@
+---
+# ── LiteLLM Proxy (CodeFreedom image) — Base ────────────────────────────────
+# Shared compose file used by all recipes. Recipe-specific env vars
+# (provider URLs, API keys, model aliases) are injected via .env.proxy
+# files and the `cf proxy start` CLI.
+#
+# When using `cf proxy start`, the CLI injects POSTGRES_HOST_DATA_DIR
+# from $CODEFREEDOM_HOME automatically, respecting any custom
+# CODEFREEDOM_HOME setting.  The fallback below only applies when
+# running `docker compose` directly (ignores CODEFREEDOM_HOME).
+# ───────────────────────────────────────────────────────────────────────────
+
+name: codefreedom
+
+services:
+  litellm:
+    image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
+    container_name: ${LITELLM_CONTAINER_NAME:-litellm-codefreedom}
+    restart: unless-stopped
+    profiles:
+      - litellm
+      - all
+    labels:
+      "codefreedom.component": "litellm-proxy"
+    command:
+      - --config
+      - /app/litellm-config/config.yaml
+      - --port
+      - "${LITELLM_PORT:-4000}"
+      - --host
+      - "0.0.0.0"
+    ports:
+      - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:${LITELLM_PORT:-4000}"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
+      LITELLM_LOG_LEVEL: ${LITELLM_LOG_LEVEL:-INFO}
+      NO_DOCS: ${LITELLM_NO_DOCS:-True}
+      NO_REDOC: ${LITELLM_NO_REDOC:-True}
+      LITELLM_NUM_RETRIES: ${LITELLM_NUM_RETRIES:-5}
+      LITELLM_RETRY_AFTER: ${LITELLM_RETRY_AFTER:-0}
+      LITELLM_TIMEOUT_ERROR_RETRIES: ${LITELLM_TIMEOUT_ERROR_RETRIES:-5}
+      LITELLM_RATE_LIMIT_ERROR_RETRIES: ${LITELLM_RATE_LIMIT_ERROR_RETRIES:-5}
+      LITELLM_INTERNAL_ERROR_RETRIES: ${LITELLM_INTERNAL_ERROR_RETRIES:-5}
+      LITELLM_JSON_LOGS: ${LITELLM_JSON_LOGS:-true}
+      LITELLM_DROP_PARAMS: ${LITELLM_DROP_PARAMS:-true}
+      LITELLM_REDACT_USER_API_KEY: ${LITELLM_REDACT_USER_API_KEY:-true}
+      LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
+      LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
+      LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
+    networks:
+      - codefreedom
+    volumes:
+      - ./config:/app/litellm-config
+      - ${POSTGRES_HOST_DATA_DIR:-${HOME}/.codefreedom/pg/data}:/var/lib/postgresql/data
+      - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
+
+networks:
+  codefreedom:
+    name: codefreedom
+    driver: bridge

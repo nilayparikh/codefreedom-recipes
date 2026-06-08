@@ -1,57 +1,7 @@
-# ── LiteLLM Configuration for local self-hosted inference ─────────────────────
-# Routes all model requests to locally-hosted OpenAI-compatible inference servers.
-# No cloud providers are configured. See providers/local.yaml for model details.
+# ── Local inference — provider include ──────────────────────────────────────
+# DeepDiff-merged into the _default config.yaml on install.
+# Adds the local inference provider to the model list.
 # ──────────────────────────────────────────────────────────────────────────────
 
 include:
-  # ── Local self-hosted models ──────────────────────────────────────────────
-  # Two pre-configured backends on ports 8000 and 8001.
-  # Set LOCAL_M_API_KEY / LOCAL_S_API_KEY in .env.proxy.secrets to enable.
   - providers/local.yaml
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# General Settings
-# ═══════════════════════════════════════════════════════════════════════════════
-general_settings:
-  store_model_in_db: false
-  store_prompts_in_spend_logs: false
-  forward_client_headers_to_llm_api: true
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# Router Settings
-# ═══════════════════════════════════════════════════════════════════════════════
-router_settings:
-  num_retries: 5
-  retry_after: 0
-  allowed_fails: 3
-
-  # ── Model Group Aliases ──────────────────────────────────────────────────
-  model_group_alias:
-    "CodeFreedom/Ultra": os.environ/LITELLM_MODEL_ALIAS_ULTRA
-    "CodeFreedom/Pro": os.environ/LITELLM_MODEL_ALIAS_PRO
-    "CodeFreedom/Flash": os.environ/LITELLM_MODEL_ALIAS_FLASH
-    "CodeFreedom/Air": os.environ/LITELLM_MODEL_ALIAS_AIR
-    "opus": os.environ/LITELLM_MODEL_ALIAS_ULTRA
-    "sonnet": os.environ/LITELLM_MODEL_ALIAS_PRO
-    "haiku": os.environ/LITELLM_MODEL_ALIAS_FLASH
-
-  retry_policy:
-    AuthenticationErrorRetries: 0
-    TimeoutErrorRetries: os.environ/LITELLM_TIMEOUT_ERROR_RETRIES
-    RateLimitErrorRetries: os.environ/LITELLM_RATE_LIMIT_ERROR_RETRIES
-    ContentPolicyViolationErrorRetries: 0
-    InternalServerErrorRetries: os.environ/LITELLM_INTERNAL_ERROR_RETRIES
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# LiteLLM Settings
-# ═══════════════════════════════════════════════════════════════════════════════
-litellm_settings:
-  always_include_stream_usage: os.environ/LITELLM_STREAM_USAGE
-  drop_params: os.environ/LITELLM_DROP_PARAMS
-  redact_user_api_key_info: os.environ/LITELLM_REDACT_USER_API_KEY
-  turn_off_message_logging: os.environ/LITELLM_TURN_OFF_MSG_LOGGING
-  json_logs: os.environ/LITELLM_JSON_LOGS
-  modify_params: true
-  use_chat_completions_url_for_anthropic_messages: true
-  callbacks:
-    - prometheus
