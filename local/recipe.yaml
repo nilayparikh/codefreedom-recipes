@@ -1,0 +1,114 @@
+# ── Recipe: local ─────────────────────────────────────────────────────────────
+# Self-hosted local inference via LiteLLM proxy.
+#
+# This recipe sets up:
+#   - Claude Code profiles routing through the local LiteLLM proxy
+#   - Proxy config with two local inference backends (ports 8000, 8001)
+#   - Model aliases for Ultra/Pro/Flash/Air pointing to local models
+#   - No cloud providers, no API keys needed
+#   - Embedded PostgreSQL (stateless proxy)
+#   - Optional: Chrome, Web, and GitHub tools
+#
+# Prerequisites:
+#   - One or two OpenAI-compatible inference servers running locally
+#     (vLLM, llama.cpp, Ollama, etc.)
+#   - Default ports: 8000 (primary), 8001 (fast/vision)
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: local
+description: "Self-hosted local inference via LiteLLM proxy"
+version: 1
+
+files:
+  # ── Claude Code config ──────────────────────────────────────────────────
+  - path: .env.claude
+    target: .env.claude
+    merge: env
+  - path: .env.claude.secrets
+    target: .env.claude.secrets
+    merge: env
+
+  # ── Proxy config ────────────────────────────────────────────────────────
+  - path: .env.proxy
+    target: .env.proxy
+    merge: env
+  - path: .env.proxy.secrets
+    target: .env.proxy.secrets
+    merge: env
+
+  # ── Profiles ────────────────────────────────────────────────────────────
+  - path: profiles/claude-code.json
+    target: profiles/claude-code.json
+    merge: deepdiff
+  - path: profiles/claude-code.schema.json
+    target: profiles/claude-code.schema.json
+    merge: deepdiff
+  - path: profiles/chrome.json
+    target: profiles/chrome.json
+    merge: deepdiff
+  - path: profiles/chrome.schema.json
+    target: profiles/chrome.schema.json
+    merge: deepdiff
+  - path: profiles/web.json
+    target: profiles/web.json
+    merge: deepdiff
+  - path: profiles/web.schema.json
+    target: profiles/web.schema.json
+    merge: deepdiff
+  - path: profiles/github.json
+    target: profiles/github.json
+    merge: deepdiff
+  - path: profiles/github.schema.json
+    target: profiles/github.schema.json
+    merge: deepdiff
+
+  # ── Proxy compose ───────────────────────────────────────────────────────
+  - path: proxy/docker-compose.yaml
+    target: proxy/docker-compose.yaml
+    merge: deepdiff
+  - path: proxy/config/config.yaml
+    target: proxy/config/config.yaml
+    merge: deepdiff
+
+  # ── Providers ───────────────────────────────────────────────────────────
+  - path: proxy/config/providers/local.yaml
+    target: proxy/config/providers/local.yaml
+    merge: deepdiff
+
+  # ── Plugins ─────────────────────────────────────────────────────────────
+  - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    merge: deepdiff
+
+required_secrets:
+  - var: LITELLM_MASTER_KEY
+    prompt: "LiteLLM proxy master key"
+    hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
+    default: "sk-codefreedom-local"
+  - var: LOCAL_M_API_KEY
+    prompt: "Local backend M API key (port 8000)"
+    hint: "Most local servers accept any value; 'sk-dummy' works"
+    default: "sk-dummy"
+  - var: LOCAL_S_API_KEY
+    prompt: "Local backend S API key (port 8001)"
+    hint: "Most local servers accept any value; 'sk-dummy' works"
+    default: "sk-dummy"
+
+optional_config:
+  - var: LITELLM_MODEL_ALIAS_ULTRA
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_PRO
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_FLASH
+    default: "DGX/Qwen3.6-35B-A3B"
+  - var: LITELLM_MODEL_ALIAS_AIR
+    default: "DGX/Qwen3.6-35B-A3B"
+  - var: LOCAL_M_BASE_URL
+    default: "http://host.docker.internal:8000/v1"
+  - var: LOCAL_S_BASE_URL
+    default: "http://host.docker.internal:8001/v1"
+
+tools_optional:
+  - chrome
+  - web
+  - github
