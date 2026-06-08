@@ -1,0 +1,99 @@
+# ── Recipe: opencode-free ─────────────────────────────────────────────────────
+# OpenCode Zen free-tier models via LiteLLM proxy.
+#
+# This recipe sets up:
+#   - Claude Code profiles routing through the local LiteLLM proxy
+#   - Proxy config with OpenCode Zen as the sole provider
+#   - Model aliases for Ultra/Pro/Flash/Air all pointing to free-tier models
+#   - No database (stateless proxy)
+#   - Optional: Chrome, Web, and GitHub tools
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: opencode-free
+description: "OpenCode Zen free-tier models via LiteLLM proxy"
+version: 1
+
+files:
+  # ── Claude Code config ──────────────────────────────────────────────────
+  - path: .env.claude
+    target: .env.claude
+    merge: env
+  - path: .env.claude.secrets
+    target: .env.claude.secrets
+    merge: env
+
+  # ── Proxy config ────────────────────────────────────────────────────────
+  - path: .env.proxy
+    target: .env.proxy
+    merge: env
+  - path: .env.proxy.secrets
+    target: .env.proxy.secrets
+    merge: env
+
+  # ── Profiles ────────────────────────────────────────────────────────────
+  - path: profiles/claude-code.json
+    target: profiles/claude-code.json
+    merge: deepdiff
+  - path: profiles/claude-code.schema.json
+    target: profiles/claude-code.schema.json
+    merge: deepdiff
+  - path: profiles/chrome.json
+    target: profiles/chrome.json
+    merge: deepdiff
+  - path: profiles/chrome.schema.json
+    target: profiles/chrome.schema.json
+    merge: deepdiff
+  - path: profiles/web.json
+    target: profiles/web.json
+    merge: deepdiff
+  - path: profiles/web.schema.json
+    target: profiles/web.schema.json
+    merge: deepdiff
+  - path: profiles/github.json
+    target: profiles/github.json
+    merge: deepdiff
+  - path: profiles/github.schema.json
+    target: profiles/github.schema.json
+    merge: deepdiff
+
+  # ── Proxy compose ───────────────────────────────────────────────────────
+  - path: proxy/docker-compose.yaml
+    target: proxy/docker-compose.yaml
+    merge: deepdiff
+  - path: proxy/config/config.yaml
+    target: proxy/config/config.yaml
+    merge: deepdiff
+
+  # ── Providers ───────────────────────────────────────────────────────────
+  - path: proxy/config/providers/opencode.yaml
+    target: proxy/config/providers/opencode.yaml
+    merge: deepdiff
+
+  # ── Plugins ─────────────────────────────────────────────────────────────
+  - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    merge: deepdiff
+
+required_secrets:
+  - var: OPENCODE_ZEN_API_KEY
+    prompt: "OpenCode Zen API key"
+    hint: "Get free key at https://opencode.ai/zen"
+  - var: LITELLM_MASTER_KEY
+    prompt: "LiteLLM proxy master key"
+    hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
+    default: "sk-codefreedom-local"
+
+optional_config:
+  - var: LITELLM_MODEL_ALIAS_ULTRA
+    default: "OpenCode/MiMo-V2.5-FREE"
+  - var: LITELLM_MODEL_ALIAS_PRO
+    default: "OpenCode/DeepSeek-V4-Flash-FREE"
+  - var: LITELLM_MODEL_ALIAS_FLASH
+    default: "OpenCode/Big-Pickle"
+  - var: LITELLM_MODEL_ALIAS_AIR
+    default: "OpenCode/Nemotron-3-Ultra-FREE"
+
+tools_optional:
+  - chrome
+  - web
+  - github
