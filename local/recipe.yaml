@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../recipe.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/recipe.schema.json
 # ── Recipe: local ─────────────────────────────────────────────────────────────
 # Self-hosted local inference via LiteLLM proxy.
 # Extends _default for shared profiles, compose, and proxy config.

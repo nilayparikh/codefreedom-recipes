@@ -1,5 +1,5 @@
 {
-  "$schema": "github.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/github.schema.json",
   "description": "GitHub MCP Server tool profile for codefreedom — configures container image, ports, data directory, and environment.",
   "notes": [
     "The 'github' block defines all settings for 'codefreedom tools github'.",

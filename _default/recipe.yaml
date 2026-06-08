@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../recipe.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/recipe.schema.json
 # ── Recipe: _default ─────────────────────────────────────────────────────────
 # Base recipe providing shared configuration for all other recipes.
 # Other recipes extend this via the `extends: _default` field.

@@ -1,5 +1,5 @@
 {
-  "$schema": "web.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/web.schema.json",
   "description": "Web search tool profile for codefreedom \u2014 configures container image, ports, data directory, search engines, and parser registry.",
   "notes": [
     "The 'web' block defines all settings for 'codefreedom tools web'.",
