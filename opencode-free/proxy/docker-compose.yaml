@@ -46,6 +46,7 @@ services:
       LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
       LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
       LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
+      SEARXNG_API_BASE: ${SEARXNG_API_BASE:-http://web-bridge:8500}
       OPENCODE_ZEN_BASE_URL: ${OPENCODE_ZEN_BASE_URL:-https://opencode.ai/zen/v1}
       OPENCODE_ZEN_API_KEY: ${OPENCODE_ZEN_API_KEY:-}
     networks:
@@ -54,6 +55,29 @@ services:
       - ./config:/app/litellm-config
       - ${POSTGRES_HOST_DATA_DIR:-${HOME}/.codefreedom/pg/data}:/var/lib/postgresql/data
       - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
+
+  # ——— Web search bridge (SearXNG-shaped → MCP) ————————————————————————
+  # Replaces Claude Code’s native WebSearch with calls to the local Camoufox
+  # MCP web_search tool. Started together with the proxy via
+  # ‘codefreedom proxy start’.
+  # Reachable on the shared ‘codefreedom’ network at http://web-bridge:8500.
+  web-bridge:
+    image: ${WEB_BRIDGE_IMAGE:-docker.io/nilayparikh/codefreedom:web-bridge}
+    container_name: ${WEB_BRIDGE_CONTAINER_NAME:-codefreedom-web-bridge}
+    restart: unless-stopped
+    profiles:
+      - litellm
+      - all
+    labels:
+      "codefreedom.component": "web-search-bridge"
+    environment:
+      MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:8420/mcp}
+      WEB_BRIDGE_COOLDOWN_SECONDS: ${WEB_BRIDGE_COOLDOWN_SECONDS:-2.0}
+      MCP_TIMEOUT_SECONDS: ${MCP_TIMEOUT_SECONDS:-60}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - codefreedom
 
 networks:
   codefreedom:
