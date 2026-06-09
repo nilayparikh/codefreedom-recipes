@@ -1,43 +1,45 @@
-description: Claude Code profiles for codefreedom — completely free models from NVIDIA,
+description:
+  Claude Code profiles for codefreedom — completely free models from NVIDIA,
   OpenRouter, and OpenCode Zen, routing through LiteLLM proxy.
 notes:
-- In sandbox mode (--sandbox), each profile gets its own isolated ~/.codefreedom/{profile}/.claude
-  directory.
-- '''default'' is the base profile — ''ultra'', ''pro'', ''flash'', and ''air'' inherit
-  from it.'
-- '''bare'' is standalone: minimal profile with no model aliases, sandbox settings,
-  or preferences.'
-- All models route through the local LiteLLM proxy to free-tier endpoints.
-- No API keys required — models across NVIDIA, OpenRouter, and OpenCode Zen are all
-  free.
-- 'sandbox_images maps GPU type to Docker image references. Keys: default, cuda, rocm
-  (used by --cuda / --rocm flags).'
-- Use sandbox.env to declare env vars that should only be forwarded in --sandbox mode.
-- Use local.env to declare env vars that should only apply in native mode.
+  - In sandbox mode (--sandbox), each profile gets its own isolated ~/.codefreedom/{profile}/.claude
+    directory.
+  - "'default' is the base profile — 'ultra', 'pro', 'flash', and 'air' inherit
+    from it."
+  - "'bare' is standalone: minimal profile with no model aliases, sandbox settings,
+    or preferences."
+  - All models route through the local LiteLLM proxy to free-tier endpoints.
+  - No API keys required — models across NVIDIA, OpenRouter, and OpenCode Zen are all
+    free.
+  - "sandbox_images maps GPU type to Docker image references. Keys: default, cuda, rocm
+    (used by --cuda / --rocm flags)."
+  - Use sandbox.env to declare env vars that should only be forwarded in --sandbox mode.
+  - Use local.env to declare env vars that should only apply in native mode.
 profiles:
   default:
-    description: Base profile — routes through local LiteLLM proxy to free-tier providers.
+    description:
+      Base profile — routes through local LiteLLM proxy to free-tier providers.
       Other profiles inherit from this.
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:latest
       cuda: docker.io/nilayparikh/codefreedom:cuda-latest
       rocm: docker.io/nilayparikh/codefreedom:rocm-latest
     tools:
-    - chrome
-    - web
-    - github
+      - chrome
+      - web
+      - github
     env:
-      CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: '1'
+      CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: "1"
       CLAUDE_MODEL: CodeFreedom/Flash
       ANTHROPIC_BASE_URL: http://localhost:4000
       ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
-      CLAUDE_CODE_ATTRIBUTION_HEADER: '0'
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1'
-      CLAUDE_CODE_IDE_SKIP_AUTO_INSTALL: '1'
-      CLAUDE_CODE_AUTO_CONNECT_IDE: 'false'
-      CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL: '1'
-      CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: '1'
-      DISABLE_INSTALLATION_CHECKS: '1'
+      CLAUDE_CODE_ATTRIBUTION_HEADER: "0"
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+      CLAUDE_CODE_IDE_SKIP_AUTO_INSTALL: "1"
+      CLAUDE_CODE_AUTO_CONNECT_IDE: "false"
+      CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL: "1"
+      CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1"
+      DISABLE_INSTALLATION_CHECKS: "1"
       ANTHROPIC_DEFAULT_OPUS_MODEL: CodeFreedom/Ultra
       ANTHROPIC_DEFAULT_OPUS_MODEL_NAME: CodeFreedom/Ultra
       ANTHROPIC_DEFAULT_OPUS_MODEL_DESCRIPTION: Ultra via LiteLLM (OpenCode Free)
@@ -50,22 +52,25 @@ profiles:
       ANTHROPIC_CUSTOM_MODEL_OPTION: CodeFreedom/Air
       ANTHROPIC_CUSTOM_MODEL_OPTION_NAME: CodeFreedom/Air
       ANTHROPIC_CUSTOM_MODEL_OPTION_DESCRIPTION: Air via LiteLLM (OpenRouter)
+      ANTHROPIC_DEFAULT_FABLE_MODEL: CodeFreedom/Ultra
     sandbox:
       env:
-        IS_SANDBOX: '1'
+        IS_SANDBOX: "1"
         GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
         GH_TOKEN: ${GH_TOKEN}
   bare:
-    description: 'Standalone — minimal: no model aliases, no sandbox settings, no
-      preferences. Still routes through LiteLLM proxy.'
+    description:
+      "Standalone — minimal: no model aliases, no sandbox settings, no
+      preferences. Still routes through LiteLLM proxy."
     env:
-      CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: '0'
-      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1'
-      DISABLE_INSTALLATION_CHECKS: '1'
+      CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: "0"
+      CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"
+      DISABLE_INSTALLATION_CHECKS: "1"
       ANTHROPIC_BASE_URL: http://localhost:4000
       ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
   ultra:
-    description: Inherits from 'default' — overrides CLAUDE_MODEL to CodeFreedom/Ultra
+    description:
+      Inherits from 'default' — overrides CLAUDE_MODEL to CodeFreedom/Ultra
       for architecture and planning
     env:
       CLAUDE_MODEL: CodeFreedom/Ultra
@@ -74,7 +79,8 @@ profiles:
     env:
       CLAUDE_MODEL: CodeFreedom/Pro
   flash:
-    description: Inherits from 'default' — uses CodeFreedom/Flash for fast, cheap
+    description:
+      Inherits from 'default' — uses CodeFreedom/Flash for fast, cheap
       tasks
     env:
       CLAUDE_MODEL: CodeFreedom/Flash
