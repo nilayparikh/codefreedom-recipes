@@ -62,5 +62,4 @@ services:
   # ‘codefreedom proxy start’.
 networks:
   codefreedom:
-    name: codefreedom
     driver: bridge

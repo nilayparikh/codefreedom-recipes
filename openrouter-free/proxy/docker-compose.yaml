@@ -58,5 +58,4 @@ services:
 
 networks:
   codefreedom:
-    name: codefreedom
     driver: bridge
