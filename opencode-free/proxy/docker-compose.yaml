@@ -56,5 +56,5 @@ services:
 
 networks:
   codefreedom:
-    name: codefreedom-net
-    driver: bridge
+    name: codefreedom
+    external: true
