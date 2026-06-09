@@ -10,8 +10,6 @@
 # running `docker compose` directly (ignores CODEFREEDOM_HOME).
 # ───────────────────────────────────────────────────────────────────────────
 
-name: codefreedom
-
 services:
   litellm:
     image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}

@@ -7,8 +7,6 @@
 # when running `docker compose` directly.
 # ───────────────────────────────────────────────────────────────────────────
 
-name: codefreedom
-
 services:
   litellm:
     image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
@@ -56,10 +54,7 @@ services:
       - ${POSTGRES_HOST_DATA_DIR:-${HOME}/.codefreedom/pg/data}:/var/lib/postgresql/data
       - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
 
-  # ——— Web search bridge (SearXNG-shaped → MCP) ————————————————————————
-  # Replaces Claude Code’s native WebSearch with calls to the local Camoufox
-  # MCP web_search tool. Started together with the proxy via
-  # ‘codefreedom proxy start’.
+
 networks:
   codefreedom:
     driver: bridge

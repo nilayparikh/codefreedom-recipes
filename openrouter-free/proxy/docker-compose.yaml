@@ -7,8 +7,6 @@
 # when running `docker compose` directly.
 # ───────────────────────────────────────────────────────────────────────────
 
-name: codefreedom
-
 services:
   litellm:
     image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
