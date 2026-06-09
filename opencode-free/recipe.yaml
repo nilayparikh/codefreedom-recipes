@@ -7,7 +7,6 @@
 #   - Proxy provider config for OpenCode Zen free-tier models
 #   - Slimmed reasoning-efforts mapping (5 rules only)
 # ──────────────────────────────────────────────────────────────────────────────
-# yaml-language-server: $schema=../recipe.schema.json
 
 name: opencode-free
 extends: _default
@@ -24,8 +23,8 @@ files:
     merge: env
 
   # ── Claude Code profile (recipe-specific model aliases) ─────────────────
-  - path: profiles/claude-code.json
-    target: profiles/claude-code.json
+  - path: profiles/claude-code.yaml
+    target: profiles/claude-code.yaml
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────

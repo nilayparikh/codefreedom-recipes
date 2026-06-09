@@ -12,7 +12,6 @@
 # No API keys needed — all models are free tier.
 # Set OPENCODE_ZEN_API_KEY_MNP if you want higher rate limits on OpenCode.
 # ──────────────────────────────────────────────────────────────────────────────
-# yaml-language-server: $schema=../recipe.schema.json
 
 name: free
 extends: _default
@@ -29,8 +28,8 @@ files:
     merge: env
 
   # ── Claude Code profile (recipe-specific model aliases) ─────────────────
-  - path: profiles/claude-code.json
-    target: profiles/claude-code.json
+  - path: profiles/claude-code.yaml
+    target: profiles/claude-code.yaml
     merge: deepdiff
 
   # ── Proxy providers ────────────────────────────────────────────────────

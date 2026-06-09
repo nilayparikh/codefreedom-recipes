@@ -12,7 +12,6 @@
 #     (vLLM, llama.cpp, Ollama, etc.)
 #   - Default ports: 8000 (primary), 8001 (fast/vision)
 # ──────────────────────────────────────────────────────────────────────────────
-# yaml-language-server: $schema=../recipe.schema.json
 
 name: local
 extends: _default
@@ -29,8 +28,8 @@ files:
     merge: env
 
   # ── Claude Code profile (recipe-specific model aliases) ─────────────────
-  - path: profiles/claude-code.json
-    target: profiles/claude-code.json
+  - path: profiles/claude-code.yaml
+    target: profiles/claude-code.yaml
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────

@@ -11,7 +11,6 @@
 # Note: Uses the same OPENCODE_ZEN_API_KEY_NPG for both free and GO models.
 # Get a GO subscription at https://opencode.ai/zen/go
 # ──────────────────────────────────────────────────────────────────────────────
-# yaml-language-server: $schema=../recipe.schema.json
 
 name: opencode-go
 extends: _default
@@ -28,8 +27,8 @@ files:
     merge: env
 
   # ── Claude Code profile (recipe-specific model aliases) ─────────────────
-  - path: profiles/claude-code.json
-    target: profiles/claude-code.json
+  - path: profiles/claude-code.yaml
+    target: profiles/claude-code.yaml
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────
