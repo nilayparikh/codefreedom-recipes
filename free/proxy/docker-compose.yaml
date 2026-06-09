@@ -61,4 +61,5 @@ services:
 
 networks:
   codefreedom:
+    name: codefreedom-net
     driver: bridge
