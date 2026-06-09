@@ -60,25 +60,6 @@ services:
   # Replaces Claude Code’s native WebSearch with calls to the local Camoufox
   # MCP web_search tool. Started together with the proxy via
   # ‘codefreedom proxy start’.
-  # Reachable on the shared ‘codefreedom’ network at http://web-bridge:8500.
-  web-bridge:
-    image: ${WEB_BRIDGE_IMAGE:-docker.io/nilayparikh/codefreedom:web-bridge}
-    container_name: ${WEB_BRIDGE_CONTAINER_NAME:-codefreedom-web-bridge}
-    restart: unless-stopped
-    profiles:
-      - litellm
-      - all
-    labels:
-      "codefreedom.component": "web-search-bridge"
-    environment:
-      MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:8420/mcp}
-      WEB_BRIDGE_COOLDOWN_SECONDS: ${WEB_BRIDGE_COOLDOWN_SECONDS:-2.0}
-      MCP_TIMEOUT_SECONDS: ${MCP_TIMEOUT_SECONDS:-60}
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    networks:
-      - codefreedom
-
 networks:
   codefreedom:
     name: codefreedom
