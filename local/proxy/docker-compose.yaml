@@ -48,7 +48,7 @@ services:
       LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
       LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
       LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
-      SEARXNG_API_BASE: ${SEARXNG_API_BASE:-http://web-bridge:8500}
+      SEARXNG_API_BASE: ${SEARXNG_API_BASE:-http://host.docker.internal:8500}
       LOCAL_M_BASE_URL: ${LOCAL_M_BASE_URL:-http://host.docker.internal:8000/v1}
       LOCAL_M_API_KEY: ${LOCAL_M_API_KEY:-sk-dummy}
       LOCAL_S_BASE_URL: ${LOCAL_S_BASE_URL:-http://host.docker.internal:8001/v1}

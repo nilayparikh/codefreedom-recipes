@@ -1,0 +1,20 @@
+description:
+  Web search bridge tool profile for codefreedom — configures container
+  image, port, data directory, and environment.
+notes:
+  - The 'web_bridge' block defines all settings for 'codefreedom tools web-bridge'.
+  - "'image' is the Docker image to use — 'docker.io/nilayparikh/codefreedom:web-bridge'."
+  - "'container_name' is the Docker container name."
+  - "'port' is the host port (8500 by default). Override via CODEFREEDOM_WEB_BRIDGE_PORT env var."
+  - "'data_dir' (optional) is the host path mounted to /app/data inside the container."
+  - "'env' are environment variables forwarded to the container."
+  - "The proxy connects to the web-bridge at http://host.docker.internal:{port}."
+  - "Run 'cf tools web-bridge start' before 'cf proxy start' so WebSearch works."
+web_bridge:
+  image: docker.io/nilayparikh/codefreedom:web-bridge
+  container_name: codefreedom-web-bridge
+  port: 8500
+  env:
+    MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:8420/mcp}
+    WEB_BRIDGE_COOLDOWN_SECONDS: ${WEB_BRIDGE_COOLDOWN_SECONDS:-2.0}
+    MCP_TIMEOUT_SECONDS: ${MCP_TIMEOUT_SECONDS:-60}

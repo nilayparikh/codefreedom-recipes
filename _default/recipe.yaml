@@ -38,6 +38,9 @@ files:
   - path: profiles/github.yaml
     target: profiles/github.yaml
     merge: deepdiff
+  - path: profiles/web-bridge.yaml
+    target: profiles/web-bridge.yaml
+    merge: deepdiff
 
   # ── Proxy compose (shared) ──────────────────────────────────────────────
   - path: proxy/docker-compose.yaml
@@ -62,3 +65,4 @@ tools_optional:
   - chrome
   - web
   - github
+  - web-bridge

@@ -49,7 +49,7 @@ services:
       LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
       LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
       LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
-      SEARXNG_API_BASE: ${SEARXNG_API_BASE:-http://web-bridge:8500}
+      SEARXNG_API_BASE: ${SEARXNG_API_BASE:-http://host.docker.internal:8500}
     networks:
       - codefreedom
     volumes:
