@@ -1,0 +1,32 @@
+# ── CodeFreedom reasoning-efforts mapping v2 ────────────────────────────
+# Rule-based reasoning-effort translation for the LiteLLM proxy.
+#
+# THIS IS THE RECIPE-SPECIFIC VERSION for native DeepSeek API.
+# Only rules referenced by models in providers/deepseek.yaml are included.
+# For the full rule library, see the _default recipe.
+# ─────────────────────────────────────────────────────────────────────────────
+
+rules:
+  # ── DeepSeek V4 family ────────────────────────────────────────────────
+
+  deepseek-v4-pro:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: high
+      high: high
+      xhigh: max
+      max: max
+
+  deepseek-v4-flash:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: high
+      medium: high
+      high: high
+      xhigh: high
+      max: high

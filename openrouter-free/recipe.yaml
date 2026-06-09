@@ -1,17 +1,17 @@
-# ── Recipe: opencode-free ─────────────────────────────────────────────────────
-# OpenCode Zen free-tier models via LiteLLM proxy.
+# ── Recipe: openrouter-free ───────────────────────────────────────────────────
+# OpenRouter free-tier models via LiteLLM proxy.
 # Extends _default for shared profiles, compose, and proxy config.
 #
 # This recipe adds:
-#   - Claude Code profile with OpenCode Zen model aliases
-#   - Proxy provider config for OpenCode Zen free-tier models
-#   - Slimmed reasoning-efforts mapping (5 rules only)
+#   - Claude Code profile with OpenRouter free model aliases
+#   - Proxy provider config for OpenRouter free models
+#   - Slimmed reasoning-efforts mapping (2 openrouter rules only)
 # ──────────────────────────────────────────────────────────────────────────────
 # yaml-language-server: $schema=../recipe.schema.json
 
-name: opencode-free
+name: openrouter-free
 extends: _default
-description: "OpenCode Zen free-tier models via LiteLLM proxy"
+description: "OpenRouter free-tier models via LiteLLM proxy"
 version: 1
 
 files:
@@ -29,11 +29,11 @@ files:
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────
-  - path: proxy/config/providers/opencode.yaml
-    target: proxy/config/providers/opencode.yaml
+  - path: proxy/config/providers/openrouter.yaml
+    target: proxy/config/providers/openrouter.yaml
     merge: deepdiff
 
-  # ── Compose override (adds OpenCode Zen env vars) ──────────────────────
+  # ── Compose override (adds OpenRouter env vars) ────────────────────────
   - path: proxy/docker-compose.yaml
     target: proxy/docker-compose.yaml
     merge: deepdiff
@@ -43,15 +43,15 @@ files:
     target: proxy/config/config.yaml
     merge: deepdiff
 
-  # ── Slimmed reasoning-efforts (5 opencode-free rules) ─────────────────
+  # ── Slimmed reasoning-efforts (2 openrouter rules) ────────────────────
   - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
 
 required_secrets:
-  - var: OPENCODE_ZEN_API_KEY
-    prompt: "OpenCode Zen API key"
-    hint: "Get free key at https://opencode.ai/zen"
+  - var: OPENROUTER_API_KEY
+    prompt: "OpenRouter API key"
+    hint: "Get free key at https://openrouter.ai/keys"
   - var: LITELLM_MASTER_KEY
     prompt: "LiteLLM proxy master key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
@@ -59,10 +59,10 @@ required_secrets:
 
 optional_config:
   - var: LITELLM_MODEL_ALIAS_ULTRA
-    default: "OpenCode/MiMo-V2.5-FREE"
+    default: "OpenRouter/Nemotron-3-Ultra-550B-A55B"
   - var: LITELLM_MODEL_ALIAS_PRO
-    default: "OpenCode/DeepSeek-V4-Flash-FREE"
+    default: "OpenRouter/Nemotron-3-Ultra-550B-A55B"
   - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "OpenCode/Big-Pickle"
+    default: "OpenRouter/FreeRouter"
   - var: LITELLM_MODEL_ALIAS_AIR
-    default: "OpenCode/Nemotron-3-Ultra-FREE"
+    default: "OpenRouter/FreeRouter"

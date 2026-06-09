@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/recipe.schema.json
 # ── Recipe: _default ─────────────────────────────────────────────────────────
 # Base recipe providing shared configuration for all other recipes.
 # Other recipes extend this via the `extends: _default` field.
@@ -6,6 +5,7 @@
 # This recipe is NOT shown in `cf init --list-recipes` (name starts with _).
 # Install it directly with: cf init --recipe _default
 # ──────────────────────────────────────────────────────────────────────────────
+# yaml-language-server: $schema=../recipe.schema.json
 
 name: _default
 description: "Base recipe — shared profiles, compose, and proxy config"

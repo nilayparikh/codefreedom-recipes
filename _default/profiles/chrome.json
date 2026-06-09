@@ -1,5 +1,4 @@
 {
-  "$schema": "https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/chrome.schema.json",
   "description": "Chrome browser tool profile for codefreedom — configures container image, ports, data directory, and environment.",
   "notes": [
     "The 'chrome' block defines all settings for 'codefreedom tools chrome'.",

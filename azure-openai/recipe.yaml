@@ -1,17 +1,17 @@
-# ── Recipe: opencode-free ─────────────────────────────────────────────────────
-# OpenCode Zen free-tier models via LiteLLM proxy.
+# ── Recipe: azure-openai ──────────────────────────────────────────────────────
+# Microsoft Azure AI Foundry / Azure OpenAI via LiteLLM proxy.
 # Extends _default for shared profiles, compose, and proxy config.
 #
 # This recipe adds:
-#   - Claude Code profile with OpenCode Zen model aliases
-#   - Proxy provider config for OpenCode Zen free-tier models
-#   - Slimmed reasoning-efforts mapping (5 rules only)
+#   - Claude Code profile with Azure model aliases (GPT-5.4 family)
+#   - Proxy provider config for Azure AI Foundry
+#   - Slimmed reasoning-efforts mapping (3 azure rules only)
 # ──────────────────────────────────────────────────────────────────────────────
 # yaml-language-server: $schema=../recipe.schema.json
 
-name: opencode-free
+name: azure-openai
 extends: _default
-description: "OpenCode Zen free-tier models via LiteLLM proxy"
+description: "Microsoft Azure AI Foundry / Azure OpenAI via LiteLLM proxy"
 version: 1
 
 files:
@@ -29,11 +29,11 @@ files:
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────
-  - path: proxy/config/providers/opencode.yaml
-    target: proxy/config/providers/opencode.yaml
+  - path: proxy/config/providers/azure-foundry.yaml
+    target: proxy/config/providers/azure-foundry.yaml
     merge: deepdiff
 
-  # ── Compose override (adds OpenCode Zen env vars) ──────────────────────
+  # ── Compose override (adds Azure env vars) ─────────────────────────────
   - path: proxy/docker-compose.yaml
     target: proxy/docker-compose.yaml
     merge: deepdiff
@@ -43,15 +43,18 @@ files:
     target: proxy/config/config.yaml
     merge: deepdiff
 
-  # ── Slimmed reasoning-efforts (5 opencode-free rules) ─────────────────
+  # ── Slimmed reasoning-efforts (3 azure rules) ─────────────────────────
   - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
 
 required_secrets:
-  - var: OPENCODE_ZEN_API_KEY
-    prompt: "OpenCode Zen API key"
-    hint: "Get free key at https://opencode.ai/zen"
+  - var: MICROSOFT_FOUNDRY_API_KEY
+    prompt: "Azure AI Foundry API key"
+    hint: "Get from Azure AI Foundry portal → Deployments → Keys"
+  - var: MICROSOFT_FOUNDRY_API_BASE
+    prompt: "Azure AI Foundry endpoint base URL"
+    hint: "Format: https://<resource>.services.ai.azure.com/openai/v1"
   - var: LITELLM_MASTER_KEY
     prompt: "LiteLLM proxy master key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
@@ -59,10 +62,10 @@ required_secrets:
 
 optional_config:
   - var: LITELLM_MODEL_ALIAS_ULTRA
-    default: "OpenCode/MiMo-V2.5-FREE"
+    default: "Azure/GPT-5.4"
   - var: LITELLM_MODEL_ALIAS_PRO
-    default: "OpenCode/DeepSeek-V4-Flash-FREE"
+    default: "Azure/GPT-5.4-Mini"
   - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "OpenCode/Big-Pickle"
+    default: "Azure/GPT-5.4-Nano"
   - var: LITELLM_MODEL_ALIAS_AIR
-    default: "OpenCode/Nemotron-3-Ultra-FREE"
+    default: "Azure/GPT-5.4-Nano"

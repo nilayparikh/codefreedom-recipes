@@ -1,0 +1,43 @@
+# ── CodeFreedom reasoning-efforts mapping v2 ────────────────────────────
+# Rule-based reasoning-effort translation for the LiteLLM proxy.
+#
+# THIS IS THE RECIPE-SPECIFIC VERSION for Azure AI Foundry.
+# Only rules referenced by models in providers/azure-foundry.yaml are included.
+# For the full rule library, see the _default recipe.
+# ─────────────────────────────────────────────────────────────────────────────
+
+rules:
+  # ── Azure / Microsoft Foundry (OpenAI gpt-5.4 family) ──────────────────
+
+  azure-gpt-5-4:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: xhigh
+      xhigh: xhigh
+      max: xhigh
+
+  azure-gpt-5-4-mini:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: medium
+      xhigh: medium
+      max: medium
+
+  azure-gpt-5-4-nano:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none

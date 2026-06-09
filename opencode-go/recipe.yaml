@@ -1,17 +1,21 @@
-# ── Recipe: opencode-free ─────────────────────────────────────────────────────
-# OpenCode Zen free-tier models via LiteLLM proxy.
+# ── Recipe: opencode-go ───────────────────────────────────────────────────────
+# OpenCode GO subscription models + free-tier models via LiteLLM proxy.
 # Extends _default for shared profiles, compose, and proxy config.
 #
 # This recipe adds:
-#   - Claude Code profile with OpenCode Zen model aliases
-#   - Proxy provider config for OpenCode Zen free-tier models
-#   - Slimmed reasoning-efforts mapping (5 rules only)
+#   - Claude Code profile with OpenCode GO + free model aliases
+#   - Proxy provider config for OpenCode GO (NPG) — includes both
+#     free (OCZ) and subscription (OCG) models
+#   - Slimmed reasoning-efforts mapping for GO and free rules
+#
+# Note: Uses the same OPENCODE_ZEN_API_KEY_NPG for both free and GO models.
+# Get a GO subscription at https://opencode.ai/zen/go
 # ──────────────────────────────────────────────────────────────────────────────
 # yaml-language-server: $schema=../recipe.schema.json
 
-name: opencode-free
+name: opencode-go
 extends: _default
-description: "OpenCode Zen free-tier models via LiteLLM proxy"
+description: "OpenCode GO subscription + free models via LiteLLM proxy"
 version: 1
 
 files:
@@ -29,11 +33,11 @@ files:
     merge: deepdiff
 
   # ── Proxy provider ─────────────────────────────────────────────────────
-  - path: proxy/config/providers/opencode.yaml
-    target: proxy/config/providers/opencode.yaml
+  - path: proxy/config/providers/opencode-npg.yaml
+    target: proxy/config/providers/opencode-npg.yaml
     merge: deepdiff
 
-  # ── Compose override (adds OpenCode Zen env vars) ──────────────────────
+  # ── Compose override (adds OpenCode GO env vars) ───────────────────────
   - path: proxy/docker-compose.yaml
     target: proxy/docker-compose.yaml
     merge: deepdiff
@@ -43,15 +47,15 @@ files:
     target: proxy/config/config.yaml
     merge: deepdiff
 
-  # ── Slimmed reasoning-efforts (5 opencode-free rules) ─────────────────
+  # ── Slimmed reasoning-efforts (opencode rules) ─────────────────────────
   - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
 
 required_secrets:
-  - var: OPENCODE_ZEN_API_KEY
-    prompt: "OpenCode Zen API key"
-    hint: "Get free key at https://opencode.ai/zen"
+  - var: OPENCODE_ZEN_API_KEY_NPG
+    prompt: "OpenCode Zen API key (NPG — used for both free and GO)"
+    hint: "Get free key at https://opencode.ai/zen ; GO sub at https://opencode.ai/zen/go"
   - var: LITELLM_MASTER_KEY
     prompt: "LiteLLM proxy master key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
@@ -59,10 +63,10 @@ required_secrets:
 
 optional_config:
   - var: LITELLM_MODEL_ALIAS_ULTRA
-    default: "OpenCode/MiMo-V2.5-FREE"
+    default: "OCG/NPG/DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_PRO
-    default: "OpenCode/DeepSeek-V4-Flash-FREE"
+    default: "OCG/NPG/DeepSeek-V4-Flash"
   - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "OpenCode/Big-Pickle"
+    default: "OCZ/NPG/DeepSeek-V4-Flash-FREE"
   - var: LITELLM_MODEL_ALIAS_AIR
-    default: "OpenCode/Nemotron-3-Ultra-FREE"
+    default: "OCZ/NPG/Big-Pickle"

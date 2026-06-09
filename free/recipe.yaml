@@ -1,0 +1,76 @@
+# ── Recipe: free ──────────────────────────────────────────────────────────────
+# Completely free models from NVIDIA, OpenRouter, and OpenCode Zen — no
+# API keys required. All models are free-tier.
+#
+# Extends _default for shared profiles, compose, and proxy config.
+#
+# This recipe adds:
+#   - Claude Code profile with free model aliases across three providers
+#   - Proxy provider configs for NVIDIA, OpenRouter, and OpenCode Zen (MNP)
+#   - Combined reasoning-efforts mapping
+#
+# No API keys needed — all models are free tier.
+# Set OPENCODE_ZEN_API_KEY_MNP if you want higher rate limits on OpenCode.
+# ──────────────────────────────────────────────────────────────────────────────
+# yaml-language-server: $schema=../recipe.schema.json
+
+name: free
+extends: _default
+description: "Completely free models from NVIDIA, OpenRouter, and OpenCode Zen"
+version: 1
+
+files:
+  # ── Proxy config (recipe-specific) ──────────────────────────────────────
+  - path: .env.proxy
+    target: .env.proxy
+    merge: env
+  - path: .env.proxy.secrets
+    target: .env.proxy.secrets
+    merge: env
+
+  # ── Claude Code profile (recipe-specific model aliases) ─────────────────
+  - path: profiles/claude-code.json
+    target: profiles/claude-code.json
+    merge: deepdiff
+
+  # ── Proxy providers ────────────────────────────────────────────────────
+  - path: proxy/config/providers/nvidia.yaml
+    target: proxy/config/providers/nvidia.yaml
+    merge: deepdiff
+  - path: proxy/config/providers/openrouter.yaml
+    target: proxy/config/providers/openrouter.yaml
+    merge: deepdiff
+  - path: proxy/config/providers/opencode-mnp.yaml
+    target: proxy/config/providers/opencode-mnp.yaml
+    merge: deepdiff
+
+  # ── Compose override (adds provider env vars) ──────────────────────────
+  - path: proxy/docker-compose.yaml
+    target: proxy/docker-compose.yaml
+    merge: deepdiff
+
+  # ── Config override (adds provider includes) ──────────────────────────
+  - path: proxy/config/config.yaml
+    target: proxy/config/config.yaml
+    merge: deepdiff
+
+  # ── Combined reasoning-efforts mapping ─────────────────────────────────
+  - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
+    merge: deepdiff
+
+required_secrets:
+  - var: LITELLM_MASTER_KEY
+    prompt: "LiteLLM proxy master key"
+    hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
+    default: "sk-codefreedom-local"
+
+optional_config:
+  - var: LITELLM_MODEL_ALIAS_ULTRA
+    default: "OCZ/MNP/Nemotron-3-Ultra-FREE"
+  - var: LITELLM_MODEL_ALIAS_PRO
+    default: "NVIDIA/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_FLASH
+    default: "NVIDIA/DeepSeek-V4-Flash"
+  - var: LITELLM_MODEL_ALIAS_AIR
+    default: "OpenRouter/FreeRouter"

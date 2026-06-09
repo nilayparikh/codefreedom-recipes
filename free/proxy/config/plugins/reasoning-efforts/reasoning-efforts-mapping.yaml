@@ -1,0 +1,148 @@
+# ── CodeFreedom reasoning-efforts mapping v2 ────────────────────────────
+# Rule-based reasoning-effort translation for the LiteLLM proxy.
+#
+# THIS IS THE RECIPE-SPECIFIC VERSION for free-tier multi-provider.
+# Only rules referenced by models in providers/ are included.
+# For the full rule library, see the _default recipe.
+# ─────────────────────────────────────────────────────────────────────────────
+
+rules:
+  # ── NVIDIA-hosted models ──────────────────────────────────────────────
+
+  nvidia-deepseek-v4-pro:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: high
+      high: high
+      xhigh: max
+      max: max
+
+  nvidia-deepseek-v4-flash:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: high
+      medium: high
+      high: high
+      xhigh: high
+      max: high
+
+  nvidia-glm-5-1:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  nvidia-kimi-k2-6:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  nvidia-step-3-7-flash:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  # ── OpenRouter free-tier ─────────────────────────────────────────────
+
+  openrouter-freerouter:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  openrouter-nemotron-3-ultra:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  # ── OpenCode Zen free-tier models ────────────────────────────────────
+
+  ocz-mimo-v2-5:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  ocz-nemotron-3-ultra:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  ocz-nemotron-3-super:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  ocz-big-pickle:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  # ── DeepSeek V4 Flash (via OpenCode) ─────────────────────────────────
+
+  deepseek-v4-flash:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: high
+      medium: high
+      high: high
+      xhigh: high
+      max: high

@@ -1,0 +1,184 @@
+---
+# ── NVIDIA AI Endpoints Provider ──────────────────────────────────────────────
+# Routes to NVIDIA's API catalog (nvidia.com).
+# Set NVIDIA_API_KEY to enable.
+# ──────────────────────────────────────────────────────────────────────────────
+
+model_list:
+  # https://build.nvidia.com/deepseek-ai/deepseek-v4-flash/modelcard
+  - model_name: NVIDIA/DeepSeek-V4-Flash
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-flash
+      api_base: os.environ/NVIDIA_BASE_URL
+      api_key: os.environ/NVIDIA_API_KEY
+      timeout: 300
+      drop_params: true
+      extra_body:
+        stream_options:
+          include_usage: true
+    model_info:
+      id: "nvidia-deepseek-v4-flash"
+      db_model: false
+      supports_reasoning: true
+      mode: chat
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 616000
+      max_output_tokens: 384000
+      limit:
+        context: 1000000
+        output: 384000
+      supports_system_messages: true
+      supports_native_streaming: true
+      supports_vision: false
+      supported_openai_params: &nvidia_supported_openai_params
+        - tools
+        - tool_choice
+        - parallel_tool_calls
+        - response_format
+        - max_tokens
+        - max_completion_tokens
+        - stream
+        - stream_options
+        - temperature
+        - top_p
+        - stop
+        - thinking
+        - reasoning_effort
+
+    # https://build.nvidia.com/deepseek-ai/deepseek-v4-pro/modelcard
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: nvidia-deepseek-v4-flash
+  - model_name: NVIDIA/DeepSeek-V4-Pro
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-pro
+      api_base: os.environ/NVIDIA_BASE_URL
+      api_key: os.environ/NVIDIA_API_KEY
+      timeout: 300
+      drop_params: true
+      extra_body:
+        stream_options:
+          include_usage: true
+    model_info:
+      id: "nvidia-deepseek-v4-pro"
+      db_model: false
+      supports_reasoning: true
+      mode: chat
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 616000
+      max_output_tokens: 384000
+      limit:
+        context: 1000000
+        output: 384000
+      supports_system_messages: true
+      supports_native_streaming: true
+      supports_vision: false
+      supported_openai_params: *nvidia_supported_openai_params
+
+    # https://build.nvidia.com/z-ai/glm-5.1/modelcard
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: nvidia-deepseek-v4-pro
+  - model_name: NVIDIA/GLM-5.1
+    litellm_params:
+      model: openai/z-ai/glm-5.1
+      api_base: os.environ/NVIDIA_BASE_URL
+      api_key: os.environ/NVIDIA_API_KEY
+      timeout: 300
+      drop_params: true
+      extra_body:
+        temperature: 1.0
+        top_p: 0.95
+        top_k: 40
+        stream_options:
+          include_usage: true
+    model_info:
+      id: "nvidia-glm-5-1"
+      db_model: false
+      supports_reasoning: true
+      mode: chat
+      context_window: 204800
+      max_tokens: 204800
+      max_input_tokens: 196608
+      max_output_tokens: 8192
+      limit:
+        context: 204800
+        output: 8192
+      supports_system_messages: true
+      supports_native_streaming: true
+      supports_vision: false
+      supported_openai_params: *nvidia_supported_openai_params
+
+    # https://build.nvidia.com/moonshotai/kimi-k2.6/modelcard
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: nvidia-glm-5-1
+  - model_name: NVIDIA/Kimi-K2.6
+    litellm_params:
+      model: openai/moonshotai/kimi-k2.6
+      api_base: os.environ/NVIDIA_BASE_URL
+      api_key: os.environ/NVIDIA_API_KEY
+      timeout: 300
+      drop_params: true
+      extra_body:
+        chat_template_kwargs:
+          thinking: true
+        stream_options:
+          include_usage: true
+    model_info:
+      id: "nvidia-openai-kimi-k2-6"
+      db_model: false
+      supports_reasoning: true
+      mode: chat
+      context_window: 256000
+      max_tokens: 256000
+      max_input_tokens: 256000
+      max_output_tokens: 16384
+      limit:
+        context: 256000
+        output: 16384
+      supports_system_messages: true
+      supports_native_streaming: true
+      supports_vision: true
+      supported_openai_params: *nvidia_supported_openai_params
+
+    # https://build.nvidia.com/stepfun-ai/step-3.7-flash/modelcard
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: nvidia-kimi-k2-6
+  - model_name: NVIDIA/Step-3.7-Flash
+    litellm_params:
+      model: openai/stepfun-ai/step-3.7-flash
+      api_base: os.environ/NVIDIA_BASE_URL
+      api_key: os.environ/NVIDIA_API_KEY
+      timeout: 300
+      drop_params: true
+      extra_body:
+        stream_options:
+          include_usage: true
+    model_info:
+      id: "nvidia-step-3-7-flash"
+      db_model: false
+      supports_reasoning: true
+      mode: chat
+      context_window: 262144
+      max_tokens: 262144
+      max_input_tokens: 245760
+      max_output_tokens: 16384
+      limit:
+        context: 262144
+        output: 16384
+      supports_system_messages: true
+      supports_native_streaming: true
+      supports_vision: true
+      supported_openai_params: *nvidia_supported_openai_params
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: nvidia-step-3-7-flash
