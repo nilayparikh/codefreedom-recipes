@@ -57,11 +57,19 @@ required_secrets:
     default: "sk-codefreedom-local"
 
 optional_config:
-  - var: LITELLM_MODEL_ALIAS_ULTRA
+  - var: LITELLM_MODEL_ALIAS_BEST
     default: "DeepSeek/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_PRO
+  - var: LITELLM_MODEL_ALIAS_FABLE
     default: "DeepSeek/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_FLASH
+  - var: LITELLM_MODEL_ALIAS_SONNET
+    default: "DeepSeek/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUS
+    default: "DeepSeek/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_HAIKU
     default: "DeepSeek/DeepSeek-V4-Flash"
-  - var: LITELLM_MODEL_ALIAS_AIR
-    default: "DeepSeek/DeepSeek-V4-Flash"
+  - var: LITELLM_MODEL_ALIAS_SONNET_1M
+    default: "DeepSeek/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUS_1M
+    default: "DeepSeek/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
+    default: "DeepSeek/DeepSeek-V4-Pro"

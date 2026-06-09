@@ -24,13 +24,14 @@ router_settings:
   retry_after: 0
   allowed_fails: 3
   model_group_alias:
-    "CodeFreedom/Ultra": os.environ/LITELLM_MODEL_ALIAS_ULTRA
-    "CodeFreedom/Pro": os.environ/LITELLM_MODEL_ALIAS_PRO
-    "CodeFreedom/Flash": os.environ/LITELLM_MODEL_ALIAS_FLASH
-    "CodeFreedom/Air": os.environ/LITELLM_MODEL_ALIAS_AIR
-    "opus": os.environ/LITELLM_MODEL_ALIAS_ULTRA
-    "sonnet": os.environ/LITELLM_MODEL_ALIAS_PRO
-    "haiku": os.environ/LITELLM_MODEL_ALIAS_FLASH
+    "best": os.environ/LITELLM_MODEL_ALIAS_BEST
+    "fable": os.environ/LITELLM_MODEL_ALIAS_FABLE
+    "sonnet": os.environ/LITELLM_MODEL_ALIAS_SONNET
+    "opus": os.environ/LITELLM_MODEL_ALIAS_OPUS
+    "haiku": os.environ/LITELLM_MODEL_ALIAS_HAIKU
+    "sonnet[1m]": os.environ/LITELLM_MODEL_ALIAS_SONNET_1M
+    "opus[1m]": os.environ/LITELLM_MODEL_ALIAS_OPUS_1M
+    "opusplan": os.environ/LITELLM_MODEL_ALIAS_OPUSPLAN
   retry_policy:
     AuthenticationErrorRetries: 0
     TimeoutErrorRetries: os.environ/LITELLM_TIMEOUT_ERROR_RETRIES

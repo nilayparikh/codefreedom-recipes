@@ -58,11 +58,19 @@ required_secrets:
     default: "sk-codefreedom-local"
 
 optional_config:
-  - var: LITELLM_MODEL_ALIAS_ULTRA
+  - var: LITELLM_MODEL_ALIAS_BEST
     default: "NVIDIA/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_PRO
+  - var: LITELLM_MODEL_ALIAS_FABLE
     default: "NVIDIA/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "NVIDIA/DeepSeek-V4-Flash"
-  - var: LITELLM_MODEL_ALIAS_AIR
+  - var: LITELLM_MODEL_ALIAS_SONNET
+    default: "NVIDIA/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUS
+    default: "NVIDIA/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_HAIKU
     default: "NVIDIA/Step-3.7-Flash"
+  - var: LITELLM_MODEL_ALIAS_SONNET_1M
+    default: "NVIDIA/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUS_1M
+    default: "NVIDIA/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
+    default: "NVIDIA/DeepSeek-V4-Pro"

@@ -61,11 +61,19 @@ required_secrets:
     default: "sk-codefreedom-local"
 
 optional_config:
-  - var: LITELLM_MODEL_ALIAS_ULTRA
+  - var: LITELLM_MODEL_ALIAS_BEST
     default: "OCG/NPG/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_PRO
+  - var: LITELLM_MODEL_ALIAS_FABLE
+    default: "OCG/NPG/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_SONNET
     default: "OCG/NPG/DeepSeek-V4-Flash"
-  - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "OCZ/NPG/DeepSeek-V4-Flash-FREE"
-  - var: LITELLM_MODEL_ALIAS_AIR
+  - var: LITELLM_MODEL_ALIAS_OPUS
+    default: "OCG/NPG/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_HAIKU
     default: "OCZ/NPG/Big-Pickle"
+  - var: LITELLM_MODEL_ALIAS_SONNET_1M
+    default: "OCG/NPG/DeepSeek-V4-Flash"
+  - var: LITELLM_MODEL_ALIAS_OPUS_1M
+    default: "OCG/NPG/DeepSeek-V4-Pro"
+  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
+    default: "OCG/NPG/DeepSeek-V4-Pro"

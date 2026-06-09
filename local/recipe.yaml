@@ -67,14 +67,22 @@ required_secrets:
     default: "sk-dummy"
 
 optional_config:
-  - var: LITELLM_MODEL_ALIAS_ULTRA
+  - var: LITELLM_MODEL_ALIAS_BEST
     default: "DGX/Qwen3.6-27B"
-  - var: LITELLM_MODEL_ALIAS_PRO
+  - var: LITELLM_MODEL_ALIAS_FABLE
     default: "DGX/Qwen3.6-27B"
-  - var: LITELLM_MODEL_ALIAS_FLASH
+  - var: LITELLM_MODEL_ALIAS_SONNET
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_OPUS
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_HAIKU
     default: "DGX/Qwen3.6-35B-A3B"
-  - var: LITELLM_MODEL_ALIAS_AIR
-    default: "DGX/Qwen3.6-35B-A3B"
+  - var: LITELLM_MODEL_ALIAS_SONNET_1M
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_OPUS_1M
+    default: "DGX/Qwen3.6-27B"
+  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
+    default: "DGX/Qwen3.6-27B"
   - var: LOCAL_M_BASE_URL
     default: "http://host.docker.internal:8000/v1"
   - var: LOCAL_S_BASE_URL

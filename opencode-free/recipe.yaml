@@ -58,11 +58,19 @@ required_secrets:
     default: "sk-codefreedom-local"
 
 optional_config:
-  - var: LITELLM_MODEL_ALIAS_ULTRA
+  - var: LITELLM_MODEL_ALIAS_BEST
     default: "OpenCode/MiMo-V2.5-FREE"
-  - var: LITELLM_MODEL_ALIAS_PRO
+  - var: LITELLM_MODEL_ALIAS_FABLE
+    default: "OpenCode/MiMo-V2.5-FREE"
+  - var: LITELLM_MODEL_ALIAS_SONNET
     default: "OpenCode/DeepSeek-V4-Flash-FREE"
-  - var: LITELLM_MODEL_ALIAS_FLASH
-    default: "OpenCode/Big-Pickle"
-  - var: LITELLM_MODEL_ALIAS_AIR
+  - var: LITELLM_MODEL_ALIAS_OPUS
+    default: "OpenCode/MiMo-V2.5-FREE"
+  - var: LITELLM_MODEL_ALIAS_HAIKU
     default: "OpenCode/Nemotron-3-Ultra-FREE"
+  - var: LITELLM_MODEL_ALIAS_SONNET_1M
+    default: "OpenCode/DeepSeek-V4-Flash-FREE"
+  - var: LITELLM_MODEL_ALIAS_OPUS_1M
+    default: "OpenCode/MiMo-V2.5-FREE"
+  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
+    default: "OpenCode/MiMo-V2.5-FREE"
