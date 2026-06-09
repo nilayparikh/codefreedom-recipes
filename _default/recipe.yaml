@@ -1,3 +1,4 @@
+---
 # ── Recipe: _default ─────────────────────────────────────────────────────────
 # Base recipe providing shared configuration for all other recipes.
 # Other recipes extend this via the `extends: _default` field.

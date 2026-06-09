@@ -1,3 +1,4 @@
+---
 # ── Recipe: nvidia ─────────────────────────────────────────────────────────────
 # NVIDIA AI Endpoints via LiteLLM proxy.
 # Extends _default for shared profiles, compose, and proxy config.
