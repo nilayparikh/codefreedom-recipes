@@ -6,6 +6,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: costeffective-coding-with-local
+extends: _default
 description: "Universal config — profiles, proxy, and env files for CodeFreedom"
 version: 1
 
