@@ -110,7 +110,7 @@ model_list:
       model: openai/deepseek-v4-flash-free
       litellm_provider: openai
       cooldown_time: 43200
-      priority: 1
+      order: 1
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-zen-deepseek-v4-flash-free"
@@ -272,7 +272,7 @@ model_list:
       model: openai/deepseek-v4-flash
       litellm_provider: openai
       cooldown_time: 60
-      priority: 2
+      order: 2
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-go-deepseek-v4-flash"

@@ -31,6 +31,10 @@ general_settings:
 # Router Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 router_settings:
+  # ── Routing Strategy ──────────────────────────────────────────────────────
+  routing_strategy: simple-shuffle
+
+  # ── Failover and Retry Settings ───────────────────────────────────────────
   num_retries: 3
   retry_delay: 5
 
