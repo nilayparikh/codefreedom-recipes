@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/recipe.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/recipe-branch/schema/recipe.schema.json
 ---
 # ── Recipe: costeffective-coding-with-local ────────────────────────────────────────────────────────
 # Coding configuration recipe — profiles, proxy config, and env files
