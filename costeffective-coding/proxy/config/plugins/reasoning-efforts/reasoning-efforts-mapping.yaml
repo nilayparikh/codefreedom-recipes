@@ -1,0 +1,174 @@
+# ── CodeFreedom reasoning-efforts mapping v2 ────────────────────────────
+# Rule-based reasoning-effort translation for the LiteLLM proxy.
+#
+# This file is a RULE LIBRARY. Each rule is named by the model it targets
+# (no provider prefix — same model = same rule across all providers).
+#
+# Two rule types:
+#
+#   mapping — maps reasoning-level strings from upstream apps
+#   (Claude Code, Cursor, etc.) to values the downstream model
+#   accepts.  The ``values`` dict is a direct incoming→outgoing map.
+#   NO interpolation, NO clamping, NO guess.
+#
+#   thinking_budget — maps reasoning-level strings to a numeric
+#   thinking-token budget.  The ``field`` is a dotted path
+#   (e.g. ``extra_body.max_thinking_tokens``) that determines where
+#   in the request the value gets set.
+#
+# A model with no rule falls back to ``auto`` — pure field rename
+# (``output_config.effort`` ↔ ``reasoning_effort``).
+# ─────────────────────────────────────────────────────────────────────────────
+
+rules:
+  # ── DeepSeek V4 family ────────────────────────────────────────────────
+  # DeepSeek's API accepts low/medium/high/xhigh/max.
+
+  deepseek-v4-pro:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: high
+      high: high
+      xhigh: max
+      max: max
+
+  deepseek-v4-flash:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: high
+      medium: high
+      high: high
+      xhigh: high
+      max: high
+
+  # ── GPT-5.4 family (Azure / Microsoft Foundry) ────────────────────────
+
+  gpt-5-4:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: xhigh
+      xhigh: xhigh
+      max: xhigh
+
+  gpt-5-4-mini:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: medium
+      xhigh: medium
+      max: medium
+
+  gpt-5-4-nano:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none
+
+  # ── OpenCode Zen / CommandCode models ────────────────────────────────
+  # All use the OpenAI reasoning_effort surface with full range.
+
+  mimo-v2-5:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  kimi-k2-6:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  glm-5-1:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  minimax-m3:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  qwen3-7-max:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  qwen3-7-plus:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  nemotron-3-ultra:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  # No reasoning support — force none at all levels.
+  big-pickle:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: none
+      medium: none
+      high: none
+      xhigh: none
+      max: none

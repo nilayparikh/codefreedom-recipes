@@ -78,11 +78,11 @@ services:
       LITELLM_MODEL_ALIAS_FABLE: ${LITELLM_MODEL_ALIAS_FABLE:-OpenCode/Qwen3.7-Max}
       LITELLM_MODEL_ALIAS_SONNET: ${LITELLM_MODEL_ALIAS_SONNET:-OpenCode/DeepSeek-V4-Flash}
       LITELLM_MODEL_ALIAS_OPUS: ${LITELLM_MODEL_ALIAS_OPUS:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_HAIKU: ${LITELLM_MODEL_ALIAS_HAIKU:-DGX/Qwen3.6-35B-A3B}
+      LITELLM_MODEL_ALIAS_HAIKU: ${LITELLM_MODEL_ALIAS_HAIKU:-OpenCode/DeepSeek-V4-Flash}
       LITELLM_MODEL_ALIAS_SONNET_1M: ${LITELLM_MODEL_ALIAS_SONNET_1M:-OpenCode/DeepSeek-V4-Flash}
       LITELLM_MODEL_ALIAS_OPUS_1M: ${LITELLM_MODEL_ALIAS_OPUS_1M:-DeepSeek/DeepSeek-V4-Pro}
       LITELLM_MODEL_ALIAS_OPUSPLAN: ${LITELLM_MODEL_ALIAS_OPUSPLAN:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_CUSTOM: ${LITELLM_MODEL_ALIAS_CUSTOM:-DGX/Qwen3.6-27B}
+      LITELLM_MODEL_ALIAS_CUSTOM: ${LITELLM_MODEL_ALIAS_CUSTOM:-OpenCode/DeepSeek-V4-Flash}
 
       # Other LiteLLM settings
       LITELLM_JSON_LOGS: ${LITELLM_JSON_LOGS:-true}
@@ -102,14 +102,10 @@ services:
       # Set API keys in .env or .env.secrets; leave empty to disable that provider.
       # To fully disable a cloud provider, also comment out its include line
       # in litellm/config/config.yaml. See docs/configuration.md.
-
+      #
       # DeepSeek
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
-
-      # Microsoft Foundry (Azure)
-      MICROSOFT_FOUNDRY_API_BASE: ${MICROSOFT_FOUNDRY_API_BASE:-https://ergox-ca-resource.services.ai.azure.com/openai/v1}
-      MICROSOFT_FOUNDRY_API_KEY: ${MICROSOFT_FOUNDRY_API_KEY:-}
 
       # OpenCode Zen
       OPENCODE_ZEN_BASE_URL: ${OPENCODE_ZEN_BASE_URL:-https://opencode.ai/zen/v1}
@@ -119,14 +115,6 @@ services:
       # Command Code
       COMMAND_CODE_BASE_URL: ${COMMAND_CODE_BASE_URL:-https://api.commandcode.ai/provider/v1/}
       COMMAND_CODE_API_KEY: ${COMMAND_CODE_API_KEY:-}
-
-      # ── Local backends (optional) ──────────────────────────────────────
-      # Cloud-only users: comment out this entire block or leave keys empty.
-      # Leave LOCAL_M_API_KEY / LOCAL_S_API_KEY empty to disable local models.
-      LOCAL_M_BASE_URL: ${LOCAL_M_BASE_URL:-http://host.docker.internal:8000/v1}
-      LOCAL_M_API_KEY: ${LOCAL_M_API_KEY:-sk-dummy}
-      LOCAL_S_BASE_URL: ${LOCAL_S_BASE_URL:-http://host.docker.internal:8001/v1}
-      LOCAL_S_API_KEY: ${LOCAL_S_API_KEY:-sk-dummy}
 
     networks:
       - codefreedom
