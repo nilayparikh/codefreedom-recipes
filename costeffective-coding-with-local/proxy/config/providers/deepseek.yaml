@@ -4,7 +4,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 model_list:
-  - model_name: DeepSeek-V4-Flash
+  - model_name: DeepSeek/DeepSeek-V4-Flash
     litellm_params:
       model: deepseek/deepseek-v4-flash
       litellm_provider: openai
