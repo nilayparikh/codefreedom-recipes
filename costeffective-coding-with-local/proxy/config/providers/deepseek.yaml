@@ -7,6 +7,7 @@ model_list:
   - model_name: DeepSeek-V4-Flash
     litellm_params:
       model: deepseek/deepseek-v4-flash
+      litellm_provider: openai
       api_base: os.environ/DEEPSEEK_BASE_URL
       api_key: os.environ/DEEPSEEK_API_KEY
       timeout: 300
@@ -53,6 +54,7 @@ model_list:
   - model_name: DeepSeek/DeepSeek-V4-Pro
     litellm_params:
       model: deepseek/deepseek-v4-pro
+      litellm_provider: openai
       api_base: os.environ/DEEPSEEK_BASE_URL
       api_key: os.environ/DEEPSEEK_API_KEY
       timeout: 300

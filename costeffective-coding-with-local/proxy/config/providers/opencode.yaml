@@ -108,6 +108,7 @@ model_list:
     litellm_params:
       <<: *opencode_openai_params
       model: openai/deepseek-v4-flash-free
+      litellm_provider: openai
       cooldown_time: 43200
       priority: 1
     model_info:
@@ -269,6 +270,7 @@ model_list:
       <<: *opencode_openai_params
       api_base: os.environ/OPENCODE_GO_BASE_URL
       model: openai/deepseek-v4-flash
+      litellm_provider: openai
       cooldown_time: 60
       priority: 2
     model_info:
