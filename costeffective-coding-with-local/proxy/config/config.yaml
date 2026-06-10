@@ -23,13 +23,32 @@ general_settings:
   # ── Forward Client Headers ───────────────────────────────────────────────
   forward_client_headers_to_llm_api: true
 
+  # ── Health Checks ────────────────────────────────────────────────────────
+  background_health_checks: false
+  enable_health_check_routing: false
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Router Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 router_settings:
-  num_retries: 5
-  retry_after: 0
-  allowed_fails: 3
+  num_retries: 3
+  retry_delay: 5
+
+  # ── Explicit Error Specific Cooldown Policy ───────────────────────────────
+  allowed_fails_policy:
+    RateLimitErrorAllowedFails: 0 # Cooldown on the 1st rate limit (0 failures tolerated)
+    AuthenticationErrorAllowedFails: 2 # Cooldown on the 3rd auth failure
+    TimeoutErrorAllowedFails: 10 # Cooldown on the 11th timeout
+    BadRequestErrorAllowedFails: 10 # Cooldown on the 11th malformed request
+
+  # ── Retry Policy ─────────────────────────────────────────────────────────
+  retry_policy:
+    AuthenticationErrorRetries: 2 # Retry up to 2 times on auth errors, which may be transient (e.g. token refresh)
+    TimeoutErrorRetries: 5 # Retry up to 5 times on timeouts, which are often transient
+    RateLimitErrorRetries: 0 # Immediately moves to cooldown/failover on 429
+    ContentPolicyViolationErrorRetries: 0 # Don't retry on content policy violations
+    InternalServerErrorRetries: 5 # Retry on 5xx errors, which may be transient
+    BadRequestErrorRetries: 0 # Don't retry on 400 errors, which indicate a malformed request
 
   # ── Model Group Aliases ──────────────────────────────────────────────────
   # Each alias maps to a model group. Override via the corresponding
@@ -64,14 +83,6 @@ router_settings:
   context_window_fallbacks:
     - "DGX/Qwen3.6-27B": [os.environ/LITELLM_MODEL_ALIAS_OPUS]
     - "DGX/Qwen3.6-35B-a3b": [os.environ/LITELLM_MODEL_ALIAS_HAIKU]
-
-  # ── Retry Policy ─────────────────────────────────────────────────────────
-  retry_policy:
-    AuthenticationErrorRetries: 0 # never retry bad credentials
-    TimeoutErrorRetries: os.environ/LITELLM_TIMEOUT_ERROR_RETRIES
-    RateLimitErrorRetries: os.environ/LITELLM_RATE_LIMIT_ERROR_RETRIES
-    ContentPolicyViolationErrorRetries: 0 # never retry content violations
-    InternalServerErrorRetries: os.environ/LITELLM_INTERNAL_ERROR_RETRIES
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LiteLLM Settings

@@ -4,7 +4,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 model_list:
-  - model_name: DeepSeek/DeepSeek-V4-Flash
+  - model_name: DeepSeek-V4-Flash
     litellm_params:
       model: deepseek/deepseek-v4-flash
       api_base: os.environ/DEEPSEEK_BASE_URL
@@ -12,6 +12,7 @@ model_list:
       timeout: 300
       drop_params: true
       modify_params: true
+      priority: 3
     model_info:
       id: "deepseek-openai-deepseek-v4-flash"
       db_model: false
