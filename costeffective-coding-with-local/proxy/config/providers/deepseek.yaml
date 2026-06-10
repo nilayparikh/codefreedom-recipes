@@ -7,13 +7,11 @@ model_list:
   - model_name: DeepSeek/DeepSeek-V4-Flash
     litellm_params:
       model: deepseek/deepseek-v4-flash
-      litellm_provider: openai
       api_base: os.environ/DEEPSEEK_BASE_URL
       api_key: os.environ/DEEPSEEK_API_KEY
       timeout: 300
       drop_params: true
       modify_params: true
-      priority: 3
     model_info:
       id: "deepseek-api-deepseek-v4-flash"
       db_model: false
@@ -54,7 +52,6 @@ model_list:
   - model_name: DeepSeek/DeepSeek-V4-Pro
     litellm_params:
       model: deepseek/deepseek-v4-pro
-      litellm_provider: openai
       api_base: os.environ/DEEPSEEK_BASE_URL
       api_key: os.environ/DEEPSEEK_API_KEY
       timeout: 300
