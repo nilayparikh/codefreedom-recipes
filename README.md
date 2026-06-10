@@ -33,6 +33,7 @@ cf cc
 
 | Recipe | Description | API Keys Needed |
 |--------|-------------|-----------------|
+| [costeffective-coding-with-local](costeffective-coding-with-local/) | Universal: cloud providers + local inference, graduated recipe | `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `OPENCODE_ZEN_API_KEY` |
 | [free](free/) | Free models from NVIDIA, OpenRouter, and OpenCode Zen | None (optional for higher rate limits) |
 | [deepseek](deepseek/) | Native DeepSeek API via LiteLLM proxy | `DEEPSEEK_API_KEY` |
 | [nvidia](nvidia/) | NVIDIA AI Endpoints | `NVIDIA_API_KEY` (free at build.nvidia.com) |
@@ -145,6 +146,17 @@ recipe-name/
 3. Include the config files referenced in the manifest
 4. Make sure `required_secrets` lists every API key the user needs
 5. Set sensible defaults in `optional_config` for model aliases
+6. Write a `README.md` following the [costeffective-coding-with-local template](costeffective-coding-with-local/README.md):
+   - Overview with who-this-is-for section
+   - Prerequisites checklist
+   - Quick start with numbered steps
+   - Secrets flow table
+   - Architecture diagram (ASCII)
+   - Provider API keys table
+   - Model alias routing with explanation
+   - Verification commands
+   - Troubleshooting section
+   - Cleanup instructions
 
 ### Guidelines
 
