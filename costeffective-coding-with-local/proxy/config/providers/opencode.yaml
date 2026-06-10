@@ -69,6 +69,7 @@ model_list:
         - stop
         - thinking
         - reasoning_effort
+        - response_format
     codefreedom:
       plugins:
         reasoning-efforts:
@@ -103,7 +104,7 @@ model_list:
   # DeepSeek V4-Flash — 1M context, 384K output
   # Capabilities: reasoning, tools, thinking, temperature
   # Vision: NO — models.dev shows no Image icon
-  - model_name: DeepSeek-V4-Flash
+  - model_name: OpenCode/DeepSeek-V4-Flash
     litellm_params:
       <<: *opencode_openai_params
       model: openai/deepseek-v4-flash-free
@@ -264,7 +265,7 @@ model_list:
   # DeepSeek V4-Flash — 1M context, 384K output
   # Capabilities: tools, reasoning, structured, temperature
   # Vision: NO
-  - model_name: DeepSeek-V4-Flash
+  - model_name: OpenCode/DeepSeek-V4-Flash
     litellm_params: &opencode_go_openai_params
       <<: *opencode_openai_params
       api_base: os.environ/OPENCODE_GO_BASE_URL
