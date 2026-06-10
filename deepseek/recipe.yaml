@@ -47,6 +47,14 @@ files:
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
 
+dirs:
+  # Host mount directories for embedded PostgreSQL (docker-compose.yaml
+  # volume binds these paths).  Must exist before `docker compose up`
+  # runs so that a subsequent permission fix (e.g. `chown 1000:1000`)
+  # can set the correct owner for the in-container 'codefreedom' user.
+  - pg/data
+  - pg/backup
+
 required_secrets:
   - var: DEEPSEEK_API_KEY
     prompt: "DeepSeek API key"
