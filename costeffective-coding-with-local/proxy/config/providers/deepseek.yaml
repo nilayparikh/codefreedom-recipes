@@ -14,7 +14,7 @@ model_list:
       modify_params: true
       priority: 3
     model_info:
-      id: "deepseek-openai-deepseek-v4-flash"
+      id: "deepseek-v4-flash"
       db_model: false
       supports_reasoning: true
       mode: chat
