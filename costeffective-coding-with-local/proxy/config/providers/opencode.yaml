@@ -69,7 +69,6 @@ model_list:
         - stop
         - thinking
         - reasoning_effort
-        - response_format
     codefreedom:
       plugins:
         reasoning-efforts:
