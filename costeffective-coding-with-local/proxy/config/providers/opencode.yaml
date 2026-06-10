@@ -112,7 +112,7 @@ model_list:
       priority: 1
     model_info:
       <<: *opencode_openai_model_info
-      id: "deepseek-v4-flash"
+      id: "opencode-zen-deepseek-v4-flash-free"
       provider: opencode-zen-free
       supports_vision: false
       context_window: 1000000
@@ -273,7 +273,7 @@ model_list:
       priority: 2
     model_info:
       <<: *opencode_openai_model_info
-      id: "deepseek-v4-flash"
+      id: "opencode-go-deepseek-v4-flash"
       provider: opencode-go
       supports_vision: false
       context_window: 1000000
