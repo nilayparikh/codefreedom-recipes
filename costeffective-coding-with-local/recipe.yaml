@@ -1,11 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/main/schema/recipe.schema.json
 ---
-# ── Recipe: costeffective ────────────────────────────────────────────────────────
+# ── Recipe: costeffective-coding-with-local ────────────────────────────────────────────────────────
 # Coding configuration recipe — profiles, proxy config, and env files
 # for a complete CodeFreedom setup. This is a standalone recipe (no extends).
 # ──────────────────────────────────────────────────────────────────────────────
 
-name: costeffective
+name: costeffective-coding-with-local
 description: "Universal config — profiles, proxy, and env files for CodeFreedom"
 version: 1
 
