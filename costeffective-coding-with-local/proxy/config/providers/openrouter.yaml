@@ -8,10 +8,11 @@ openrouter_litellm_params: &openrouter_litellm_params
   drop_params: true
   stream_options:
     include_usage: true
-  extra_body:
-    temperature: 0.0
-    top_p: 1.0
-    reasoning_effort: "high"
+
+extra_body: &openrouter_extra_body
+  temperature: 0.0
+  top_p: 1.0
+  reasoning_effort: "high"
 
 openrouter_model_info: &openrouter_model_info
   db_model: false
@@ -56,13 +57,18 @@ model_list:
   # OpenRouter API: https://openrouter.ai/deepseek/deepseek-v4-pro#api
   - model_name: DeepSeek-V4-Pro
     litellm_params:
-      model: openai/deepseek/deepseek-v4-pro
+      model: openrouter/deepseek/deepseek-v4-pro
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["deepseek"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-deepseek-v4-pro"
       custom_llm_provider: openrouter
@@ -86,13 +92,18 @@ model_list:
   # https://openrouter.ai/deepseek/deepseek-v4-flash?provider=DeepSeek
   - model_name: DeepSeek-V4-Flash
     litellm_params:
-      model: openai/deepseek/deepseek-v4-flash
+      model: openrouter/deepseek/deepseek-v4-flash
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["deepseek"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-deepseek-v4-flash"
       custom_llm_provider: openrouter
@@ -116,13 +127,18 @@ model_list:
   # https://openrouter.ai/xiaomi/mimo-v2.5
   - model_name: MiMo-V2.5
     litellm_params:
-      model: openai/xiaomi/mimo-v2.5
+      model: openrouter/xiaomi/mimo-v2.5
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["xiaomi"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-mimo-v2-5"
       custom_llm_provider: openrouter
@@ -146,13 +162,18 @@ model_list:
   # https://openrouter.ai/xiaomi/mimo-v2.5-pro
   - model_name: MiMo-V2.5-Pro
     litellm_params:
-      model: openai/xiaomi/mimo-v2.5-pro
+      model: openrouter/xiaomi/mimo-v2.5-pro
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["xiaomi"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-mimo-v2-5-pro"
       custom_llm_provider: openrouter
@@ -180,13 +201,18 @@ model_list:
   # | > 256K | $0.96 | $3.84 | $0.192 | $1.20 | $0.096 |
   - model_name: Qwen3.7-Plus
     litellm_params:
-      model: openai/qwen/qwen3.7-plus
+      model: openrouter/qwen/qwen3.7-plus
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["qwen"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-qwen3-7-plus"
       custom_llm_provider: openrouter
@@ -222,13 +248,18 @@ model_list:
   # | $1.25 | $3.75 | $0.25 | $1.563 | $0.125 |
   - model_name: Qwen3.7-Max
     litellm_params:
-      model: openai/qwen/qwen3.7-max
+      model: openrouter/qwen/qwen3.7-max
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["qwen"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-qwen3-7-max"
       custom_llm_provider: openrouter
@@ -256,13 +287,18 @@ model_list:
   # | MiniMax | $0.30 | $1.20 | $0.06 |
   - model_name: MiniMax-M3
     litellm_params:
-      model: openai/minimax/minimax-m3
+      model: openrouter/minimax/minimax-m3
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["minimax"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-minimax-m3"
       custom_llm_provider: openrouter
@@ -290,13 +326,18 @@ model_list:
   # | Kimi K2.6 | $0.95 | $4.00 | $0.16 |
   - model_name: Kimi-K2.6
     litellm_params:
-      model: openai/moonshotai/kimi-k2.6
+      model: openrouter/moonshotai/kimi-k2.6
       <<:
         [
           *openrouter_api_params,
           *openrouter_litellm_params,
           *open_routing_params,
         ]
+      extra_body:
+        <<: *openrouter_extra_body
+        provider:
+          only: ["moonshotai"]
+          allow_fallbacks: false
     model_info:
       id: "openrouter-kimi-k2-6"
       custom_llm_provider: openrouter
