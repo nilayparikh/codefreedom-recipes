@@ -155,7 +155,7 @@ model_list:
 
   # ── Anthropic-format GO models ──────────────────────────────────────────────
 
-  - model_name: Minimax-M3
+  - model_name: MiniMax-M3
     litellm_params:
       model: anthropic/minimax-m3
       <<:
@@ -309,7 +309,7 @@ model_list:
         reasoning-efforts:
           rule: kimi-k2-6
 
-  - model_name: Mimo-V2.5
+  - model_name: MiMo-V2.5
     litellm_params:
       model: openai/mimo-v2.5
       <<:
