@@ -30,9 +30,20 @@ files:
     target: .env.proxy.secrets
     merge: env
 
+  # ── MiMoCode config ────────────────────────────────────────────────────
+  - path: .env.mimo
+    target: .env.mimo
+    merge: env
+  - path: .env.mimo.secrets
+    target: .env.mimo.secrets
+    merge: env
+
   # ── Profiles ────────────────────────────────────────────────────────────
   - path: profiles/claude-code.yaml
     target: profiles/claude-code.yaml
+    merge: deepdiff
+  - path: profiles/mimo-code.yaml
+    target: profiles/mimo-code.yaml
     merge: deepdiff
   - path: profiles/chrome.yaml
     target: profiles/chrome.yaml
