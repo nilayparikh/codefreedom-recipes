@@ -362,7 +362,7 @@ model_list:
 
   - model_name: FreeRouter
     litellm_params:
-      model: openrouter/free
+      model: openrouter/openrouter/free
       <<:
         [
           *openrouter_api_params,
