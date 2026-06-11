@@ -20,15 +20,19 @@
 
 # ──────────────────────────────────────────────────────────────────────────────
 
-opencode_zen_api_params: &opencode_zen_api_params
+opencode_openai_zen_api_params: &opencode_openai_zen_api_params
   api_base: os.environ/OPENCODE_ZEN_BASE_URL
   api_key: os.environ/OPENCODE_ZEN_API_KEY
 
-opencode_go_api_params: &opencode_go_api_params
+opencode_openai_go_api_params: &opencode_openai_go_api_params
   api_base: os.environ/OPENCODE_GO_BASE_URL
   api_key: os.environ/OPENCODE_ZEN_API_KEY
 
-opencode_openai_params: &opencode_openai_params
+opencode_anthropic_go_api_params: &opencode_anthropic_go_api_params
+  api_base: os.environ/OPENCODE_GO_ANTHROPIC_BASE_URL
+  api_key: os.environ/OPENCODE_ZEN_API_KEY
+
+opencode_params: &opencode_params
   drop_params: true
   stream_options:
     include_usage: true
@@ -92,8 +96,8 @@ model_list:
       model: openai/mimo-v2.5-free
       <<:
         [
-          *opencode_openai_params,
-          *opencode_zen_api_params,
+          *opencode_params,
+          *opencode_openai_zen_api_params,
           *free_model_routing_params,
         ]
     model_info:
@@ -118,8 +122,8 @@ model_list:
       model: openai/deepseek-v4-flash-free
       <<:
         [
-          *opencode_openai_params,
-          *opencode_zen_api_params,
+          *opencode_params,
+          *opencode_openai_zen_api_params,
           *free_model_routing_params,
         ]
     model_info:
@@ -152,12 +156,14 @@ model_list:
   # ── Anthropic-format GO models ──────────────────────────────────────────────
 
   - model_name: Minimax-M3
-    litellm_params: &opencode_anthropic_params
-      api_base: os.environ/OPENCODE_GO_ANTHROPIC_BASE_URL
-      api_key: os.environ/OPENCODE_ZEN_API_KEY
-      timeout: 300
-      drop_params: true
+    litellm_params:
       model: anthropic/minimax-m3
+      <<:
+        [
+          *opencode_params,
+          *opencode_anthropic_go_api_params,
+          *sub_model_routing_params,
+        ]
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-minimax-m3"
@@ -178,58 +184,70 @@ model_list:
         reasoning-efforts:
           rule: minimax-m3
 
-  - model_name: Qwen3.7-Plus
-    litellm_params:
-      <<: *opencode_anthropic_params
-      model: anthropic/qwen3.7-plus
-    model_info:
-      <<: *opencode_openai_model_info
-      id: "opencode-qwen3-7-plus"
-      supports_vision: false
-      context_window: 512000
-      max_tokens: 512000
-      max_input_tokens: 384000
-      max_output_tokens: 128000
-      # Pricing: ≤ 256K tokens
-      input_cost_per_token: 0.00000040
-      output_cost_per_token: 0.00000160
-      cache_read_input_token_cost: 0.00000004
-      cache_creation_input_token_cost: 0.00000050
-      # Pricing: > 256K tokens (beyond context window)
-      input_cost_per_token_above_256k_tokens: 0.00000120
-      output_cost_per_token_above_256k_tokens: 0.00000480
-      cache_read_input_token_cost_above_272k_tokens: 0.00000012
-      limit:
-        context: 512000
-        output: 128000
-    codefreedom:
-      plugins:
-        reasoning-efforts:
-          rule: qwen3-7-plus
-
   - model_name: Qwen3.7-Max
     litellm_params:
-      <<: *opencode_anthropic_params
       model: anthropic/qwen3.7-max
+      <<:
+        [
+          *opencode_params,
+          *opencode_anthropic_go_api_params,
+          *sub_model_routing_params,
+        ]
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-max"
       supports_vision: true
       context_window: 1000000
       max_tokens: 1000000
-      max_input_tokens: 934464
-      max_output_tokens: 65536
-      input_cost_per_token: 0.00000250
-      output_cost_per_token: 0.00000750
-      cache_read_input_token_cost: 0.00000050
-      cache_creation_input_token_cost: 0.000003125
+      max_input_tokens: 934000
+      max_output_tokens: 66000
+      input_cost_per_token: 0.00000125
+      output_cost_per_token: 0.00000375
+      cache_read_input_token_cost: 0.00000025
+      cache_creation_input_token_cost: 0.000001563
       limit:
         context: 1000000
-        output: 65536
+        output: 66000
     codefreedom:
       plugins:
         reasoning-efforts:
           rule: qwen3-7-max
+
+  - model_name: Qwen3.7-Plus
+    litellm_params:
+      model: anthropic/qwen3.7-plus
+      <<:
+        [
+          *opencode_params,
+          *opencode_anthropic_go_api_params,
+          *sub_model_routing_params,
+        ]
+    model_info:
+      <<: *opencode_openai_model_info
+      id: "opencode-qwen3-7-plus"
+      supports_vision: true
+      tiered_pricing:
+        - max_tokens: 256000
+          input_cost_per_token: 0.00000032
+          output_cost_per_token: 0.00000128
+          cache_read_cost_per_token: 0.000000064
+          cache_creation_cost_per_token: 0.00000040
+        - max_tokens: 1000000
+          input_cost_per_token: 0.00000096
+          output_cost_per_token: 0.00000384
+          cache_read_cost_per_token: 0.000000192
+          cache_creation_cost_per_token: 0.00000120
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 934000
+      max_output_tokens: 66000
+      limit:
+        context: 1000000
+        output: 66000
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: qwen3-7-plus
 
   # ── OpenAI-format GO models ─────────────────────────────────────────────────
 
@@ -238,8 +256,8 @@ model_list:
       model: openai/deepseek-v4-flash
       <<:
         [
-          *opencode_openai_params,
-          *opencode_go_api_params,
+          *opencode_params,
+          *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
     model_info:
@@ -267,8 +285,8 @@ model_list:
       model: openai/kimi-k2.6
       <<:
         [
-          *opencode_openai_params,
-          *opencode_go_api_params,
+          *opencode_params,
+          *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
     model_info:
@@ -291,42 +309,13 @@ model_list:
         reasoning-efforts:
           rule: kimi-k2-6
 
-  - model_name: GLM-5.1
-    litellm_params:
-      model: openai/glm-5.1
-      <<:
-        [
-          *opencode_openai_params,
-          *opencode_go_api_params,
-          *sub_model_routing_params,
-        ]
-    model_info:
-      id: "opencode-go-glm-5-1"
-      custom_llm_provider: opencode-go
-      <<: *opencode_openai_model_info
-      input_cost_per_token: 0.00000140
-      output_cost_per_token: 0.00000440
-      cache_read_input_token_cost: 0.00000026
-      supports_vision: false
-      context_window: 203000
-      max_tokens: 203000
-      max_input_tokens: 203000
-      max_output_tokens: 131000
-      limit:
-        context: 203000
-        output: 131000
-    codefreedom:
-      plugins:
-        reasoning-efforts:
-          rule: glm-5-1
-
   - model_name: Mimo-V2.5
     litellm_params:
       model: openai/mimo-v2.5
       <<:
         [
-          *opencode_openai_params,
-          *opencode_go_api_params,
+          *opencode_params,
+          *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
     model_info:
@@ -354,8 +343,8 @@ model_list:
       model: openai/mimo-v2.5-pro
       <<:
         [
-          *opencode_openai_params,
-          *opencode_go_api_params,
+          *opencode_params,
+          *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
     model_info:

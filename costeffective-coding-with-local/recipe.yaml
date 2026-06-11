@@ -2,12 +2,15 @@
 ---
 # ── Recipe: costeffective-coding-with-local ────────────────────────────────────────────────────────
 # Coding configuration recipe — profiles, proxy config, and env files
-# for a complete CodeFreedom setup. This is a standalone recipe (no extends).
+# for cloud providers (DeepSeek, Azure, OpenCode, OpenRouter) plus local
+# inference backends, routing through a LiteLLM proxy.
+#
+# Extends _default for shared tool profiles, compose, and base proxy config.
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: costeffective-coding-with-local
 extends: _default
-description: "Universal config — profiles, proxy, and env files for CodeFreedom"
+description: "Cloud + local inference — DeepSeek, Azure, OpenCode, OpenRouter, and local backends via LiteLLM proxy"
 version: 1
 
 files:
@@ -67,8 +70,8 @@ files:
   - path: proxy/config/providers/opencode.yaml
     target: proxy/config/providers/opencode.yaml
     merge: deepdiff
-  - path: proxy/config/providers/command-code.yaml
-    target: proxy/config/providers/command-code.yaml
+  - path: proxy/config/providers/openrouter.yaml
+    target: proxy/config/providers/openrouter.yaml
     merge: deepdiff
   - path: proxy/config/providers/local.yaml
     target: proxy/config/providers/local.yaml
@@ -93,9 +96,6 @@ required_secrets:
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Microsoft Foundry API key"
     hint: "Set in Azure AI Foundry portal"
-  - var: NVIDIA_API_KEY
-    prompt: "NVIDIA API key"
-    hint: "Get key at https://build.nvidia.com"
   - var: OPENCODE_ZEN_API_KEY
     prompt: "OpenCode Zen API key"
     hint: "Get key from OpenCode dashboard"

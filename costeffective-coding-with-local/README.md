@@ -22,7 +22,7 @@ cloud automatically.
 ### Who is this for?
 
 - Developers who want **multiple provider options** (DeepSeek, Azure, OpenCode,
-  Command Code, local) without reconfiguring
+  OpenRouter, local) without reconfiguring
 - Teams optimizing for **cost-to-capability ratio** -- cheap daily drivers,
   expensive models for hard tasks
 - Users who self-host local models (vLLM, Ollama, SGLang) and want them as
@@ -85,21 +85,15 @@ cf init recipe --staging --plan costeffective-coding-with-local
 
 When you run `--plan`, the recipe engine prompts for each required secret:
 
-| Secret                       | Prompt                                    | Default                   |
-| ---------------------------- | ----------------------------------------- | ------------------------- |
-| `LITELLM_MASTER_KEY`         | LiteLLM proxy master key                  | `sk-codefreedom-local`    |
-| `DEEPSEEK_API_KEY`           | DeepSeek API key                          | (empty -- must provide)   |
-| `MICROSOFT_FOUNDRY_API_KEY`  | Microsoft Foundry API key                 | (empty -- must provide)   |
-| `NVIDIA_API_KEY`             | NVIDIA API key (template only, see note)  | (empty -- unused)         |
-| `OPENCODE_ZEN_API_KEY`       | OpenCode Zen API key                      | (empty -- must provide)   |
+| Secret                      | Prompt                    | Default                 |
+| --------------------------- | ------------------------- | ----------------------- |
+| `LITELLM_MASTER_KEY`        | LiteLLM proxy master key  | `sk-codefreedom-local`  |
+| `DEEPSEEK_API_KEY`          | DeepSeek API key          | (empty -- must provide) |
+| `MICROSOFT_FOUNDRY_API_KEY` | Microsoft Foundry API key | (empty -- must provide) |
+| `OPENCODE_ZEN_API_KEY`      | OpenCode Zen API key      | (empty -- must provide) |
 
 Keys are written to `~/.codefreedom/.env.proxy.secrets`. Leave a key empty to
 skip that provider -- LiteLLM will not load its config.
-
-> **NVIDIA note:** The `NVIDIA_API_KEY` prompt exists in the recipe `required_secrets`
-> list, but this recipe does **not** ship an NVIDIA provider config. Setting the key
-> has no effect unless you add your own `providers/nvidia.yaml` to `config.yaml`.
-> This is a template artifact from the parent recipe.
 
 ---
 
@@ -113,7 +107,7 @@ skip that provider -- LiteLLM will not load its config.
                      LiteLLM Proxy (:4000)
                      /    |    |    |    \
                     /     |    |    |     \
-             DeepSeek  Azure  OpenCode  Cmd  Local
+             DeepSeek  Azure  OpenCode  OR   Local
              (cloud)  (cloud) (cloud)  (cloud) (:8000/8001)
 
     Tools (auto-started with proxy):
@@ -128,8 +122,7 @@ skip that provider -- LiteLLM will not load its config.
 1. Claude Code sends a request with a model alias (`sonnet`, `opus`, etc.)
 2. LiteLLM resolves the alias to a model group (e.g. `sonnet` -> `OpenCode/DeepSeek-V4-Flash`)
 3. LiteLLM load-balances across provider models in that group
-4. If context exceeds the selected model's limit, the configured fallback kicks in
-   (`DGX/Qwen3.6-27B` falls back to `opus` for cloud overflow)
+4. Reasoning-effort translation runs automatically via the plugin
 
 ---
 
@@ -143,7 +136,7 @@ skip that provider -- LiteLLM will not load its config.
 | **Proxy compose**      | `docker-compose.yaml` with embedded PostgreSQL                                  |
 | **Proxy config**       | `config.yaml` with LiteLLM routing                                              |
 | **Plugins**            | Reasoning-efforts mapping (full rule library)                                   |
-| **Providers**          | DeepSeek, Azure Foundry, OpenCode, Command Code, Local                          |
+| **Providers**          | DeepSeek, Azure Foundry, OpenCode, OpenRouter, Local                            |
 | **Mount dirs**         | `pg/data`, `pg/backup` (embedded PostgreSQL host volumes)                       |
 
 ---
@@ -153,15 +146,15 @@ skip that provider -- LiteLLM will not load its config.
 Each provider config reads its key from an environment variable. Set the ones
 you want to use. Unset providers are skipped automatically by LiteLLM.
 
-| Provider config         | Key env var                 | Default endpoint                                                     |
-| ----------------------- | --------------------------- | -------------------------------------------------------------------- |
-| **DeepSeek**            | `DEEPSEEK_API_KEY`          | `https://api.deepseek.com`                                           |
-| **Azure Foundry**       | `MICROSOFT_FOUNDRY_API_KEY` | `https://ergox-ca-resource.services.ai.azure.com/openai/v1`         |
-| **OpenCode Zen**        | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/v1`                                        |
-| **OpenCode GO**         | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/go/v1`                                     |
-| **Command Code**        | `COMMAND_CODE_API_KEY`      | `https://api.commandcode.ai/provider/v1/`                           |
-| **Local M** (port 8000) | `LOCAL_M_API_KEY`           | `http://host.docker.internal:8000/v1` (any key value works)          |
-| **Local S** (port 8001) | `LOCAL_S_API_KEY`           | `http://host.docker.internal:8001/v1` (any key value works)          |
+| Provider config         | Key env var                 | Default endpoint                                                                |
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| **DeepSeek**            | `DEEPSEEK_API_KEY`          | `https://api.deepseek.com`                                                      |
+| **Azure Foundry**       | `MICROSOFT_FOUNDRY_API_KEY` | Region-specific — set in `.env.user`; see commented placeholder in `.env.proxy` |
+| **OpenCode Zen**        | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/v1`                                                    |
+| **OpenCode GO**         | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/go/v1`                                                 |
+| **OpenRouter**          | `OPENROUTER_API_KEY`        | `https://openrouter.ai/api/v1`                                                  |
+| **Local M** (port 8000) | `LOCAL_M_API_KEY`           | `http://host.docker.internal:8000/v1` (any key value works)                     |
+| **Local S** (port 8001) | `LOCAL_S_API_KEY`           | `http://host.docker.internal:8001/v1` (any key value works)                     |
 
 Set keys in `~/.codefreedom/.env.secrets` or `~/.codefreedom/.env.user`:
 
@@ -176,20 +169,29 @@ Or export them as environment variables (highest priority).
 
 ## Model alias routing
 
-These are the actual values written to `~/.codefreedom/.env.proxy` by the recipe.
-Override any in `~/.codefreedom/.env.user`.
+Aliases are defined in `proxy/config/config.yaml` and map directly to model groups.
+Override any by setting the corresponding `LITELLM_MODEL_ALIAS_*` env var
+(included in `recipe.yaml` `optional_config` with defaults).
 
-| Variable                        | Installed value              | Provider     | Format     | Cost tier  | Purpose                  |
-| ------------------------------- | ---------------------------- | ------------ | ---------- | ---------- | ------------------------ |
-| `LITELLM_MODEL_ALIAS_BEST`      | `OpenCode/Qwen3.7-Max`       | OpenCode GO  | Anthropic  | $$$        | Primary coding           |
-| `LITELLM_MODEL_ALIAS_FABLE`     | `OpenCode/Qwen3.7-Max`       | OpenCode GO  | Anthropic  | $$$        | Hard reasoning           |
-| `LITELLM_MODEL_ALIAS_SONNET`    | `OpenCode/DeepSeek-V4-Flash` | OpenCode GO  | OpenAI     | $          | Daily coding             |
-| `LITELLM_MODEL_ALIAS_OPUS`      | `DeepSeek/DeepSeek-V4-Pro`   | DeepSeek     | OpenAI     | $$         | Complex reasoning        |
-| `LITELLM_MODEL_ALIAS_HAIKU`     | `DGX/Qwen3.6-35B-A3B`        | Local S      | OpenAI     | Free       | Fast / lightweight       |
-| `LITELLM_MODEL_ALIAS_SONNET_1M` | `OpenCode/DeepSeek-V4-Flash` | OpenCode GO  | OpenAI     | $          | 1M context daily coding  |
-| `LITELLM_MODEL_ALIAS_OPUS_1M`   | `DeepSeek/DeepSeek-V4-Pro`   | DeepSeek     | OpenAI     | $$         | 1M context complex       |
-| `LITELLM_MODEL_ALIAS_OPUSPLAN`  | `DeepSeek/DeepSeek-V4-Pro`   | DeepSeek     | OpenAI     | $$         | Plan mode (opus/exec)    |
-| `LITELLM_MODEL_ALIAS_CUSTOM`    | `DGX/Qwen3.6-27B`            | Local M      | OpenAI     | Free       | Custom model slot        |
+| Alias in config.yaml | Routes to model group        | Provider    | Format    | Purpose                 |
+| -------------------- | ---------------------------- | ----------- | --------- | ----------------------- |
+| `fable`              | `OpenCode/Qwen3.7-Max`       | OpenCode GO | Anthropic | Hard reasoning, primary |
+| `opus`               | `OpenCode/Kimi-K2.6`         | OpenCode GO | OpenAI    | Complex reasoning       |
+| `sonnet`             | `OpenCode/DeepSeek-V4-Flash` | OpenCode GO | OpenAI    | Daily coding            |
+| `haiku`              | `DGX/Qwen3.6-35B-A3B`        | Local S     | OpenAI    | Fast / lightweight      |
+| `custom`             | `DGX/Qwen3.6-27B`            | Local M     | OpenAI    | Custom model slot       |
+
+**Override an alias** -- set `LITELLM_MODEL_ALIAS_*` in `~/.codefreedom/.env.user`:
+
+```bash
+LITELLM_MODEL_ALIAS_OPUS=DeepSeek/DeepSeek-V4-Pro
+LITELLM_MODEL_ALIAS_HAIKU=OpenCode/DeepSeek-V4-Flash
+```
+
+The `recipe.yaml` `optional_config` block provides default override values for
+all standard Claude Code aliases (`best`, `fable`, `sonnet`, `opus`, `haiku`,
+`sonnet_1m`, `opus_1m`, `opusplan`, `custom`). These env vars are available for
+reference even though `config.yaml` currently uses hardcoded aliases.
 
 **How aliases resolve at request time:**
 
@@ -199,34 +201,28 @@ Override any in `~/.codefreedom/.env.user`.
 4. LiteLLM routes the request to one of the models with that `model_name`
 5. Reasoning-effort translation runs automatically via the plugin
 
-**Override an alias** -- `~/.codefreedom/.env.user`:
-
-```bash
-LITELLM_MODEL_ALIAS_BEST=DeepSeek/DeepSeek-V4-Pro
-LITELLM_MODEL_ALIAS_HAIKU=OpenCode/DeepSeek-V4-Flash-FREE
-```
-
 ---
 
 ## Proxy environment
 
 Key settings written to `~/.codefreedom/.env.proxy`:
 
-| Variable                      | Value                                     | Purpose                                    |
-| ----------------------------- | ----------------------------------------- | ------------------------------------------ |
-| `LITELLM_IMAGE`               | `nilayparikh/codefreedom:litellm-latest`  | Proxy container image                      |
-| `LITELLM_PORT`                | `4000`                                    | Proxy listen port                          |
-| `LITELLM_DROP_PARAMS`         | `true`                                    | Strip unsupported params before forwarding |
-| `LITELLM_STREAM_USAGE`        | `true`                                    | Emit token usage in streaming responses    |
-| `DEEPSEEK_BASE_URL`           | `https://api.deepseek.com`                | DeepSeek API endpoint                      |
-| `MICROSOFT_FOUNDRY_API_BASE`  | `https://ergox-ca-resource.../openai/v1`  | Azure AI Foundry endpoint                  |
-| `OPENCODE_ZEN_BASE_URL`       | `https://opencode.ai/zen/v1`              | OpenCode Zen API                           |
-| `OPENCODE_GO_BASE_URL`        | `https://opencode.ai/zen/go/v1`           | OpenCode GO API                            |
-| `COMMAND_CODE_BASE_URL`       | `https://api.commandcode.ai/provider/v1/` | Command Code API                           |
-| `LOCAL_M_BASE_URL`            | `http://host.docker.internal:8000/v1`     | Local primary backend                      |
-| `LOCAL_S_BASE_URL`            | `http://host.docker.internal:8001/v1`     | Local secondary backend                    |
-| `WEB_BRIDGE_COOLDOWN_SECONDS` | `2.0`                                     | Web search rate-limit cooldown             |
-| `MCP_TIMEOUT_SECONDS`         | `60`                                      | Web search MCP timeout                     |
+| Variable                | Value                                    | Purpose                                    |
+| ----------------------- | ---------------------------------------- | ------------------------------------------ |
+| `LITELLM_IMAGE`         | `nilayparikh/codefreedom:litellm-latest` | Proxy container image                      |
+| `LITELLM_PORT`          | `4000`                                   | Proxy listen port                          |
+| `LITELLM_DROP_PARAMS`   | `true`                                   | Strip unsupported params before forwarding |
+| `DEEPSEEK_BASE_URL`     | `https://api.deepseek.com`               | DeepSeek API endpoint                      |
+| `OPENCODE_ZEN_BASE_URL` | `https://opencode.ai/zen/v1`             | OpenCode Zen API                           |
+| `OPENCODE_GO_BASE_URL`  | `https://opencode.ai/zen/go/v1`          | OpenCode GO API                            |
+| `OPENROUTER_BASE_URL`   | `https://openrouter.ai/api/v1`           | OpenRouter API endpoint                    |
+| `LOCAL_M_BASE_URL`      | `http://host.docker.internal:8000/v1`    | Local primary backend                      |
+| `LOCAL_S_BASE_URL`      | `http://host.docker.internal:8001/v1`    | Local secondary backend                    |
+
+> **Microsoft Foundry:** The `MICROSOFT_FOUNDRY_API_BASE` variable is set in the
+> docker-compose environment but **not** defined in `.env.proxy` — it's expected
+> to be set per-workspace in `~/.codefreedom/.env.user` with your region-specific
+> Azure AI Foundry endpoint.
 
 ---
 
@@ -234,16 +230,16 @@ Key settings written to `~/.codefreedom/.env.proxy`:
 
 After `cf px start`, the following services are available:
 
-| Tool        | Endpoint                              | Purpose                                    |
-| ----------- | ------------------------------------- | ------------------------------------------ |
-| Proxy       | `http://localhost:4000`               | LiteLLM API proxy                          |
-| Proxy Admin | `http://localhost:4000/ui`            | LiteLLM Admin UI (spend, models, keys)     |
-| Chrome CDP  | `http://127.0.0.1:9222`              | Headless Chromium browser automation       |
-| Chrome MCP  | `http://127.0.0.1:9223/mcp`          | Browser automation MCP interface           |
-| Web MCP     | `http://127.0.0.1:8420/mcp`          | Camoufox stealth web search / scraping     |
-| GitHub MCP  | `http://127.0.0.1:8129/mcp`          | GitHub API via MCP                         |
-| Web-bridge  | `http://127.0.0.1:8500/search`       | SearXNG-shaped search -> Camoufox bridge   |
-| Web-bridge  | `http://127.0.0.1:8500/healthz`      | Web bridge health check                    |
+| Tool        | Endpoint                        | Purpose                                  |
+| ----------- | ------------------------------- | ---------------------------------------- |
+| Proxy       | `http://localhost:4000`         | LiteLLM API proxy                        |
+| Proxy Admin | `http://localhost:4000/ui`      | LiteLLM Admin UI (spend, models, keys)   |
+| Chrome CDP  | `http://127.0.0.1:9222`         | Headless Chromium browser automation     |
+| Chrome MCP  | `http://127.0.0.1:9223/mcp`     | Browser automation MCP interface         |
+| Web MCP     | `http://127.0.0.1:8420/mcp`     | Camoufox stealth web search / scraping   |
+| GitHub MCP  | `http://127.0.0.1:8129/mcp`     | GitHub API via MCP                       |
+| Web-bridge  | `http://127.0.0.1:8500/search`  | SearXNG-shaped search -> Camoufox bridge |
+| Web-bridge  | `http://127.0.0.1:8500/healthz` | Web bridge health check                  |
 
 ---
 
@@ -273,10 +269,10 @@ push, and connects LiteLLM automatically -- no user configuration needed.
 
 **Data persistence:**
 
-| Directory                  | Purpose                    |
-| -------------------------- | -------------------------- |
-| `~/.codefreedom/pg/data`   | PostgreSQL data directory  |
-| `~/.codefreedom/pg/backup` | Backup directory           |
+| Directory                  | Purpose                   |
+| -------------------------- | ------------------------- |
+| `~/.codefreedom/pg/data`   | PostgreSQL data directory |
+| `~/.codefreedom/pg/backup` | Backup directory          |
 
 **External PostgreSQL:** To use an external database instead of embedded, set
 `DATABASE_URL` in `.env.proxy` and remove the three PG volume mounts from
@@ -288,10 +284,10 @@ push, and connects LiteLLM automatically -- no user configuration needed.
 
 The recipe reserves two ports for self-hosted inference:
 
-| Port  | Alias             | Used by model alias |
-| ----- | ----------------- | ------------------- |
-| 8000  | `LOCAL_M_BASE_URL` | `custom` (Qwen3.6-27B) |
-| 8001  | `LOCAL_S_BASE_URL` | `haiku` (Qwen3.6-35B-A3B) |
+| Port | Alias              | Used by model alias       |
+| ---- | ------------------ | ------------------------- |
+| 8000 | `LOCAL_M_BASE_URL` | `custom` (Qwen3.6-27B)    |
+| 8001 | `LOCAL_S_BASE_URL` | `haiku` (Qwen3.6-35B-A3B) |
 
 Run any OpenAI-compatible inference server on these ports:
 
@@ -498,9 +494,9 @@ base proxy compose, LiteLLM config, and reasoning-efforts plugin from the
 
 ## Recipe metadata
 
-| Field        | Value                              |
-| ------------ | ---------------------------------- |
-| **Name**     | `costeffective-coding-with-local`  |
-| **Extends**  | `_default`                         |
-| **Version**  | 1                                  |
-| **Type**     | Universal (cloud + local)          |
+| Field       | Value                             |
+| ----------- | --------------------------------- |
+| **Name**    | `costeffective-coding-with-local` |
+| **Extends** | `_default`                        |
+| **Version** | 1                                 |
+| **Type**    | Universal (cloud + local)         |
