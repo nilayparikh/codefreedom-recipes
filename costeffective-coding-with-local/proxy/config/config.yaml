@@ -7,7 +7,6 @@ include:
   - providers/deepseek.yaml
   - providers/azure-foundry.yaml
   - providers/opencode.yaml
-  - providers/command-code.yaml
 
   # ── Local self-hosted ────────────────────────────────────────────────────
   - providers/local.yaml
@@ -36,7 +35,6 @@ router_settings:
 
   # ── Failover and Retry Settings ───────────────────────────────────────────
   num_retries: 3
-  retry_delay: 5
 
   # ── Explicit Error Specific Cooldown Policy ───────────────────────────────
   allowed_fails_policy:
@@ -60,43 +58,35 @@ router_settings:
   #
   # | Model alias | Behavior |
   # |---|---|
-  # | default | Special value that clears any model override and reverts to the recommended model for your account type. Not itself a model alias |
-  # | best | Uses Fable 5 where your organization has access to it, otherwise the latest Opus model |
   # | fable | Uses Claude Fable 5 for your hardest and longest-running tasks |
   # | sonnet | Uses the latest Sonnet model for daily coding tasks |
   # | opus | Uses the latest Opus model for complex reasoning tasks |
   # | haiku | Uses the fast and efficient Haiku model for simple tasks |
-  # | sonnet[1m] | Uses Sonnet with a 1 million token context window for long sessions |
-  # | opus[1m] | Uses Opus with a 1 million token context window for long sessions |
-  # | opusplan | Special mode that uses opus during plan mode, then switches to sonnet for execution |
+  # | custom | Routes to the model of your choice |
 
   # ──────────────────────────────────────────────────────────────────────────
   model_group_alias:
-    "best": os.environ/LITELLM_MODEL_ALIAS_BEST
-    "fable": os.environ/LITELLM_MODEL_ALIAS_FABLE
-    "sonnet": os.environ/LITELLM_MODEL_ALIAS_SONNET
-    "opus": os.environ/LITELLM_MODEL_ALIAS_OPUS
-    "haiku": os.environ/LITELLM_MODEL_ALIAS_HAIKU
-    "sonnet[1m]": os.environ/LITELLM_MODEL_ALIAS_SONNET_1M
-    "opus[1m]": os.environ/LITELLM_MODEL_ALIAS_OPUS_1M
-    "opusplan": os.environ/LITELLM_MODEL_ALIAS_OPUSPLAN
-    "custom": os.environ/LITELLM_MODEL_ALIAS_CUSTOM
+    "fable": "OpenCode/Qwen3.7-Max"
+    "opus": "OpenCode/Kimi-K2.6"
+    "sonnet": "OpenCode/DeepSeek-V4-Flash"
+    "haiku": "DGX/Qwen3.6-35B-A3B"
+    "custom": "DGX/Qwen3.6-27B"
 
   # ── Context Window Fallbacks ─────────────────────────────────────────────
   # If a local model can't fit the context, fall back to cloud.
-  context_window_fallbacks:
-    - "DGX/Qwen3.6-27B": [os.environ/LITELLM_MODEL_ALIAS_OPUS]
-    - "DGX/Qwen3.6-35B-a3b": [os.environ/LITELLM_MODEL_ALIAS_HAIKU]
+  # context_window_fallbacks:
+  #   - "DGX/Qwen3.6-27B": ["OpenCode/GLM-5.1"]
+  #   - "DGX/Qwen3.6-35B-a3b": ["DGX/Qwen3.6-35B-A3B"]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LiteLLM Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 litellm_settings:
-  always_include_stream_usage: os.environ/LITELLM_STREAM_USAGE
-  drop_params: os.environ/LITELLM_DROP_PARAMS
-  redact_user_api_key_info: os.environ/LITELLM_REDACT_USER_API_KEY
-  turn_off_message_logging: os.environ/LITELLM_TURN_OFF_MSG_LOGGING
-  json_logs: os.environ/LITELLM_JSON_LOGS
+  always_include_stream_usage: true
+  drop_params: true
+  redact_user_api_key_info: true
+  turn_off_message_logging: false
+  json_logs: true
 
   modify_params: true
 
@@ -126,7 +116,7 @@ litellm_settings:
   search_tool_name: codefreedom-web
 
   # Require auth for the /metrics/ endpoint (set to true for production)
-  require_auth_for_metrics_endpoint: os.environ/LITELLM_REQUIRE_AUTH_METRICS
+  require_auth_for_metrics_endpoint: false
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Web Search Bridge — SearXNG-shaped provider for the Camoufox MCP

@@ -60,37 +60,15 @@ services:
       # System env vars override .env (highest priority).
       # .env.secrets is loaded at runtime by codefreedom CLI.
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
-      LITELLM_LOG_LEVEL: ${LITELLM_LOG_LEVEL:-INFO}
+      LITELLM_LOG: ${LITELLM_LOG:-INFO}
 
       # LiteLLM config flags
       NO_DOCS: ${LITELLM_NO_DOCS:-True}
       NO_REDOC: ${LITELLM_NO_REDOC:-True}
+      JSON_LOGS: ${JSON_LOGS:-true}
 
-      # LiteLLM Router Settings
-      LITELLM_NUM_RETRIES: ${LITELLM_NUM_RETRIES:-5}
-      LITELLM_RETRY_AFTER: ${LITELLM_RETRY_AFTER:-0}
-      LITELLM_TIMEOUT_ERROR_RETRIES: ${LITELLM_TIMEOUT_ERROR_RETRIES:-5}
-      LITELLM_RATE_LIMIT_ERROR_RETRIES: ${LITELLM_RATE_LIMIT_ERROR_RETRIES:-5}
-      LITELLM_INTERNAL_ERROR_RETRIES: ${LITELLM_INTERNAL_ERROR_RETRIES:-5}
-
-      # Model Aliases — each corresponds to a Claude Code alias.
-      LITELLM_MODEL_ALIAS_BEST: ${LITELLM_MODEL_ALIAS_BEST:-OpenCode/Qwen3.7-Max}
-      LITELLM_MODEL_ALIAS_FABLE: ${LITELLM_MODEL_ALIAS_FABLE:-OpenCode/Qwen3.7-Max}
-      LITELLM_MODEL_ALIAS_SONNET: ${LITELLM_MODEL_ALIAS_SONNET:-OpenCode/DeepSeek-V4-Flash}
-      LITELLM_MODEL_ALIAS_OPUS: ${LITELLM_MODEL_ALIAS_OPUS:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_HAIKU: ${LITELLM_MODEL_ALIAS_HAIKU:-DGX/Qwen3.6-35B-A3B}
-      LITELLM_MODEL_ALIAS_SONNET_1M: ${LITELLM_MODEL_ALIAS_SONNET_1M:-OpenCode/DeepSeek-V4-Flash}
-      LITELLM_MODEL_ALIAS_OPUS_1M: ${LITELLM_MODEL_ALIAS_OPUS_1M:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_OPUSPLAN: ${LITELLM_MODEL_ALIAS_OPUSPLAN:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_CUSTOM: ${LITELLM_MODEL_ALIAS_CUSTOM:-DGX/Qwen3.6-27B}
-
-      # Other LiteLLM settings
-      LITELLM_JSON_LOGS: ${LITELLM_JSON_LOGS:-true}
+      # LiteLLM runtime settings (also set in config.yaml)
       LITELLM_DROP_PARAMS: ${LITELLM_DROP_PARAMS:-true}
-      LITELLM_REDACT_USER_API_KEY: ${LITELLM_REDACT_USER_API_KEY:-true}
-      LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
-      LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
-      LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
 
       # ── Web Search Bridge ──────────────────────────────────────────────
       # The websearch_interception callback (in config.yaml) uses LiteLLM's
@@ -108,17 +86,14 @@ services:
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
 
       # Microsoft Foundry (Azure)
-      MICROSOFT_FOUNDRY_API_BASE: ${MICROSOFT_FOUNDRY_API_BASE:-https://ergox-ca-resource.services.ai.azure.com/openai/v1}
+      MICROSOFT_FOUNDRY_API_BASE: ${MICROSOFT_FOUNDRY_API_BASE:-}
       MICROSOFT_FOUNDRY_API_KEY: ${MICROSOFT_FOUNDRY_API_KEY:-}
 
-      # OpenCode Zen
+      # OpenCode Zen (also used for GO subscription models)
       OPENCODE_ZEN_BASE_URL: ${OPENCODE_ZEN_BASE_URL:-https://opencode.ai/zen/v1}
       OPENCODE_GO_BASE_URL: ${OPENCODE_GO_BASE_URL:-https://opencode.ai/zen/go/v1}
-      OPENCODE_ZEN_API_KEY: ${OPENCODE_ZEN_API_KEY_NPG:-}
-
-      # Command Code
-      COMMAND_CODE_BASE_URL: ${COMMAND_CODE_BASE_URL:-https://api.commandcode.ai/provider/v1/}
-      COMMAND_CODE_API_KEY: ${COMMAND_CODE_API_KEY:-}
+      OPENCODE_GO_ANTHROPIC_BASE_URL: ${OPENCODE_GO_ANTHROPIC_BASE_URL:-https://opencode.ai/zen/go}
+      OPENCODE_ZEN_API_KEY: ${OPENCODE_ZEN_API_KEY:-}
 
       # ── Local backends (optional) ──────────────────────────────────────
       # Cloud-only users: comment out this entire block or leave keys empty.

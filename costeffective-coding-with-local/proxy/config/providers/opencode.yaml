@@ -20,101 +20,112 @@
 
 # ──────────────────────────────────────────────────────────────────────────────
 
+opencode_zen_api_params: &opencode_zen_api_params
+  api_base: os.environ/OPENCODE_ZEN_BASE_URL
+  api_key: os.environ/OPENCODE_ZEN_API_KEY
+
+opencode_go_api_params: &opencode_go_api_params
+  api_base: os.environ/OPENCODE_GO_BASE_URL
+  api_key: os.environ/OPENCODE_ZEN_API_KEY
+
+opencode_openai_params: &opencode_openai_params
+  drop_params: true
+  stream_options:
+    include_usage: true
+  extra_body:
+    temperature: 0.0
+    top_p: 1.0
+    reasoning_effort: "high"
+
+opencode_openai_model_info: &opencode_openai_model_info
+  db_model: false
+  supports_reasoning: true
+  mode: chat
+  supports_system_messages: true
+  supports_native_streaming: true
+  supported_openai_params:
+    - tools
+    - tool_choice
+    - parallel_tool_calls
+    - max_tokens
+    - max_completion_tokens
+    - stream
+    - stream_options
+    - temperature
+    - top_p
+    - stop
+    - thinking
+    - reasoning_effort
+    - response_format
+
+free_model_cost_params: &free_model_cost_params
+  input_cost_per_token: 0
+  output_cost_per_token: 0
+  cache_read_input_token_cost: 0
+  cache_creation_input_token_cost: 0
+
+# Free models, with 12H cooldown after encountering rate limits.
+free_model_routing_params: &free_model_routing_params
+  cooldown_time: 43200
+  order: 1
+  timeout: 120
+
+# Routing params for subscription models that we want to use more aggressively since they're more cost effective than the direct API after rate limiting on free models.
+sub_model_routing_params: &sub_model_routing_params
+  cooldown_time: 60
+  order: 2
+  timeout: 120
+
 model_list:
-  # https://models.dev/models/xiaomi/mimo-v2.5
-  # MiMo V2.5 — Xiaomi, 1M context, 131K output
-  # Capabilities: reasoning, tools, temperature
-  # Vision: YES — models.dev shows Image icon (data-tooltip="Image")
-  - model_name: OpenCode/MiMo-V2.5-FREE
-    litellm_params: &opencode_openai_params
+  # ── OpenCode ZEN Provider ────────────────────────────────────────────────────
+  # Subscription models from OpenCode GO.
+  # Set OPENCODE_ZEN_API_KEY to enable.
+  #
+  # GO has TWO API surfaces — some models are Anthropic-format, some OpenAI:
+  #
+  # Set OPENCODE_ZEN_BASE_URL to https://opencode.ai/zen/v1
+  # LiteLLM's openai/ provider appends /chat/completions automatically.
+  # ──────────────────────────────────────────────────────────────────────────────
+
+  - model_name: MiMo-V2.5
+    litellm_params:
       model: openai/mimo-v2.5-free
-      api_base: os.environ/OPENCODE_ZEN_BASE_URL
-      api_key: os.environ/OPENCODE_ZEN_API_KEY
-      timeout: 300
-      drop_params: true
-      stream_options:
-        include_usage: true
-      extra_body:
-        temperature: 0.0
-        top_p: 1.0
-        reasoning_effort: "high"
-    model_info: &opencode_openai_model_info
-      id: "opencode-mimo-v2.5-free"
-      db_model: false
-      supports_reasoning: true
-      mode: chat
-      supports_system_messages: true
-      supports_native_streaming: true
-      supports_vision: true
-      context_window: 1048576
-      max_tokens: 1048576
-      max_input_tokens: 917504
-      max_output_tokens: 131072
-      input_cost_per_token: 0
-      output_cost_per_token: 0
-      cache_read_input_token_cost: 0
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_zen_api_params,
+          *free_model_routing_params,
+        ]
+    model_info:
+      id: "opencode-zen-mimo-v2.5-free"
+      custom_llm_provider: opencode-zen-free
+      <<: [*opencode_openai_model_info, *free_model_cost_params]
+      supports_vision: false
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 870912
+      max_output_tokens: 131000
       limit:
-        context: 1048576
-        output: 131072
-      supported_openai_params:
-        - tools
-        - tool_choice
-        - parallel_tool_calls
-        - max_tokens
-        - max_completion_tokens
-        - stream
-        - stream_options
-        - temperature
-        - top_p
-        - stop
-        - thinking
-        - reasoning_effort
-        - response_format
+        context: 1000000
+        output: 131000
     codefreedom:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5
 
-  # https://models.dev/models/deepseek/deepseek-v4-flash
-  # DeepSeek V4-Flash — 1M context, 384K output
-  # Capabilities: reasoning, tools, thinking, temperature
-  # Vision: NO — models.dev shows no Image icon
-  - model_name: OpenCode/Nemotron-3-Ultra-FREE
+  - model_name: DeepSeek-V4-Flash
     litellm_params:
-      <<: *opencode_openai_params
-      model: openai/nemotron-3-ultra-free
-    model_info:
-      <<: *opencode_openai_model_info
-      id: "opencode-nemotron-3-ultra-free"
-      provider: opencode-zen-free
-      supports_vision: true
-      context_window: 1048576
-      max_tokens: 1048576
-      max_input_tokens: 917504
-      max_output_tokens: 131072
-      limit:
-        context: 1048576
-        output: 131072
-    codefreedom:
-      plugins:
-        reasoning-efforts:
-          rule: nemotron-3-ultra
-
-  # https://models.dev/models/deepseek/deepseek-v4-flash
-  # DeepSeek V4-Flash — 1M context, 384K output
-  # Capabilities: reasoning, tools, thinking, temperature
-  # Vision: NO — models.dev shows no Image icon
-  - model_name: OpenCode/DeepSeek-V4-Flash
-    litellm_params:
-      <<: *opencode_openai_params
       model: openai/deepseek-v4-flash-free
-      litellm_provider: openai
-      cooldown_time: 43200
-      order: 1
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_zen_api_params,
+          *free_model_routing_params,
+        ]
     model_info:
-      <<: *opencode_openai_model_info
       id: "opencode-zen-deepseek-v4-flash-free"
-      provider: opencode-zen-free
+      custom_llm_provider: opencode-zen-free
+      <<: [*opencode_openai_model_info, *free_model_cost_params]
       supports_vision: false
       context_window: 1000000
       max_tokens: 1000000
@@ -128,31 +139,6 @@ model_list:
         reasoning-efforts:
           rule: deepseek-v4-flash
 
-  # Big Pickle — general purpose, reasoning + tools
-  # Spec not independently verified on models.dev; using conservative defaults
-  # Vision: NO — text-only model (no vision data found)
-  - model_name: OpenCode/Big-Pickle
-    litellm_params:
-      <<: *opencode_openai_params
-      model: openai/big-pickle
-    model_info:
-      <<: *opencode_openai_model_info
-      id: "opencode-big-pickle"
-      provider: opencode-zen-free
-      supports_vision: false
-      # Conservative: similar to mid-tier models
-      context_window: 262144
-      max_tokens: 262144
-      max_input_tokens: 131072
-      max_output_tokens: 65536
-      limit:
-        context: 262144
-        output: 65536
-    codefreedom:
-      plugins:
-        reasoning-efforts:
-          rule: big-pickle
-
   # ── OpenCode Go Provider ────────────────────────────────────────────────────
   # Subscription models from OpenCode GO.
   # Set OPENCODE_ZEN_API_KEY to enable.
@@ -165,11 +151,7 @@ model_list:
 
   # ── Anthropic-format GO models ──────────────────────────────────────────────
 
-  # https://models.dev/models/minimax/MiniMax-M3
-  # MiniMax-M3 — 512K context, 128K output
-  # Capabilities: reasoning, tools, temperature
-  # Vision: YES — models.dev shows Image icon (data-tooltip="Image")
-  - model_name: OpenCode/Minimax-M3
+  - model_name: Minimax-M3
     litellm_params: &opencode_anthropic_params
       api_base: os.environ/OPENCODE_GO_ANTHROPIC_BASE_URL
       api_key: os.environ/OPENCODE_ZEN_API_KEY
@@ -179,7 +161,6 @@ model_list:
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-minimax-m3"
-      provider: opencode-go
       supports_vision: true
       context_window: 512000
       max_tokens: 512000
@@ -197,17 +178,13 @@ model_list:
         reasoning-efforts:
           rule: minimax-m3
 
-  # https://models.dev/models/alibaba/qwen3.7-plus/
-  # Capabilities: tools, reasoning, temperature
-  # Text Only
-  - model_name: OpenCode/Qwen3.7-Plus
+  - model_name: Qwen3.7-Plus
     litellm_params:
       <<: *opencode_anthropic_params
       model: anthropic/qwen3.7-plus
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-plus"
-      provider: opencode-go
       supports_vision: false
       context_window: 512000
       max_tokens: 512000
@@ -230,18 +207,13 @@ model_list:
         reasoning-efforts:
           rule: qwen3-7-plus
 
-  # https://models.dev/models/alibaba/qwen3.7-max
-  # Qwen3.7 Max — 1M context, 65K output
-  # Capabilities: tools, reasoning, temperature
-  # Vision: YES — models.dev shows Image icon
-  - model_name: OpenCode/Qwen3.7-Max
+  - model_name: Qwen3.7-Max
     litellm_params:
       <<: *opencode_anthropic_params
       model: anthropic/qwen3.7-max
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-max"
-      provider: opencode-go
       supports_vision: true
       context_window: 1000000
       max_tokens: 1000000
@@ -261,138 +233,147 @@ model_list:
 
   # ── OpenAI-format GO models ─────────────────────────────────────────────────
 
-  # https://models.dev/models/deepseek/deepseek-v4-flash
-  # DeepSeek V4-Flash — 1M context, 384K output
-  # Capabilities: tools, reasoning, structured, temperature
-  # Vision: NO
-  - model_name: OpenCode/DeepSeek-V4-Flash
-    litellm_params: &opencode_go_openai_params
-      <<: *opencode_openai_params
-      api_base: os.environ/OPENCODE_GO_BASE_URL
+  - model_name: DeepSeek-V4-Flash
+    litellm_params:
       model: openai/deepseek-v4-flash
-      litellm_provider: openai
-      cooldown_time: 60
-      order: 2
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_go_api_params,
+          *sub_model_routing_params,
+        ]
     model_info:
-      <<: *opencode_openai_model_info
       id: "opencode-go-deepseek-v4-flash"
-      provider: opencode-go
+      custom_llm_provider: opencode-go
+      <<: *opencode_openai_model_info
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_read_input_token_cost: 0.0000000028
       supports_vision: false
       context_window: 1000000
       max_tokens: 1000000
       max_input_tokens: 616000
       max_output_tokens: 384000
-      input_cost_per_token: 0.00000014
-      output_cost_per_token: 0.00000028
-      cache_read_input_token_cost: 0.0000000028
       limit:
         context: 1000000
         output: 384000
-      supported_openai_params: &opencode_go_deepseek_v4_openai_supported_params
-        - tools
-        - tool_choice
-        - parallel_tool_calls
-        - max_tokens
-        - max_completion_tokens
-        - stream
-        - stream_options
-        - temperature
-        - top_p
-        - stop
-        - thinking
-        - reasoning_effort
     codefreedom:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
 
-  # https://models.dev/models/deepseek/deepseek-v4-pro
-  # DeepSeek V4-Pro — 1M context, 384K output
-  # Capabilities: tools, reasoning, structured, temperature
-  # Vision: NO
-  - model_name: OpenCode/DeepSeek-V4-Pro
+  - model_name: Kimi-K2.6
     litellm_params:
-      <<: *opencode_go_openai_params
-      model: openai/deepseek-v4-pro
-    model_info:
-      <<: *opencode_openai_model_info
-      id: "ocg-npg-deepseek-v4-pro"
-      provider: opencode-go
-      supports_vision: false
-      context_window: 1000000
-      max_tokens: 1000000
-      max_input_tokens: 616000
-      max_output_tokens: 384000
-      input_cost_per_token: 0.00000174
-      output_cost_per_token: 0.00000348
-      cache_read_input_token_cost: 0.0000000145
-      limit:
-        context: 1000000
-        output: 384000
-      supported_openai_params: *opencode_go_deepseek_v4_openai_supported_params
-    codefreedom:
-      plugins:
-        reasoning-efforts:
-          rule: deepseek-v4-pro
-
-  # https://models.dev/models/moonshotai/kimi-k2.6
-  # Kimi K2.6 — 262K context, 262K output
-  # Capabilities: tools, reasoning, structured, temperature
-  # Vision: YES
-  - model_name: OpenCode/Kimi-K2.6
-    litellm_params:
-      <<: *opencode_go_openai_params
       model: openai/kimi-k2.6
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_go_api_params,
+          *sub_model_routing_params,
+        ]
     model_info:
+      id: "opencode-go-kimi-k2-6"
+      custom_llm_provider: opencode-go
       <<: *opencode_openai_model_info
-      id: "ocg-npg-kimi-k2-6"
-      provider: opencode-go
-      supports_vision: true
-      mode: chat
-      supports_reasoning: true
-      supports_system_messages: true
-      supports_native_streaming: true
-      context_window: 262144
-      max_tokens: 262144
-      max_output_tokens: 262144
       input_cost_per_token: 0.00000095
       output_cost_per_token: 0.00000400
       cache_read_input_token_cost: 0.00000016
+      supports_vision: true
+      context_window: 262000
+      max_tokens: 262000
+      max_input_tokens: 262000
+      max_output_tokens: 262000
       limit:
-        context: 262144
-        output: 262144
+        context: 262000
+        output: 262000
     codefreedom:
       plugins:
         reasoning-efforts:
           rule: kimi-k2-6
 
-  # https://models.dev/models/zhipuai/glm-5.1
-  # GLM-5.1 — 200K context, 131K output
-  # Capabilities: tools, reasoning, structured, temperature
-  # Vision: NO
-  - model_name: OpenCode/GLM-5.1
+  - model_name: GLM-5.1
     litellm_params:
-      <<: *opencode_go_openai_params
       model: openai/glm-5.1
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_go_api_params,
+          *sub_model_routing_params,
+        ]
     model_info:
+      id: "opencode-go-glm-5-1"
+      custom_llm_provider: opencode-go
       <<: *opencode_openai_model_info
-      id: "ocg-npg-glm-5-1"
-      provider: opencode-go
-      supports_vision: false
-      mode: chat
-      supports_reasoning: true
-      supports_system_messages: true
-      supports_native_streaming: true
-      context_window: 200000
-      max_tokens: 200000
-      max_output_tokens: 131072
       input_cost_per_token: 0.00000140
       output_cost_per_token: 0.00000440
       cache_read_input_token_cost: 0.00000026
+      supports_vision: false
+      context_window: 203000
+      max_tokens: 203000
+      max_input_tokens: 203000
+      max_output_tokens: 131000
       limit:
-        context: 200000
-        output: 131072
+        context: 203000
+        output: 131000
     codefreedom:
       plugins:
         reasoning-efforts:
           rule: glm-5-1
+
+  - model_name: Mimo-V2.5
+    litellm_params:
+      model: openai/mimo-v2.5
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_go_api_params,
+          *sub_model_routing_params,
+        ]
+    model_info:
+      id: "opencode-go-mimo-v2-5"
+      custom_llm_provider: opencode-go
+      <<: *opencode_openai_model_info
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_read_input_token_cost: 0.0000000028
+      supports_vision: false
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 870912
+      max_output_tokens: 131000
+      limit:
+        context: 1000000
+        output: 131000
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: mimo-v2-5
+
+  - model_name: MiMo-V2.5-Pro
+    litellm_params:
+      model: openai/mimo-v2.5-pro
+      <<:
+        [
+          *opencode_openai_params,
+          *opencode_go_api_params,
+          *sub_model_routing_params,
+        ]
+    model_info:
+      id: "opencode-go-mimo-v2-5-pro"
+      custom_llm_provider: opencode-go
+      <<: *opencode_openai_model_info
+      input_cost_per_token: 0.00000174
+      output_cost_per_token: 0.00000348
+      cache_read_input_token_cost: 0.0000000145
+      supports_vision: false
+      context_window: 1000000
+      max_tokens: 1000000
+      max_input_tokens: 870912
+      max_output_tokens: 131000
+      limit:
+        context: 1000000
+        output: 131000
+    codefreedom:
+      plugins:
+        reasoning-efforts:
+          rule: mimo-v2-5
