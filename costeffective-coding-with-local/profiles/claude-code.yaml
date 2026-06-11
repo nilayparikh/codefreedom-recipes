@@ -30,7 +30,7 @@ profiles:
       - github
     env:
       CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: "1"
-      CLAUDE_MODEL: CodeFreedom/Flash
+      CLAUDE_MODEL: haiku
       ANTHROPIC_BASE_URL: http://localhost:4000
       ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
       CLAUDE_CODE_ATTRIBUTION_HEADER: "0"

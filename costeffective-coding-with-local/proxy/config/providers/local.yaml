@@ -68,6 +68,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: qwen3-6-27b
+        system-message-merger:
+          enabled: true
 
   - model_name: Qwen3.6-35B-A3B
     litellm_params:
@@ -106,3 +108,5 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: qwen3-6-35b-a3b
+        system-message-merger:
+          enabled: true
