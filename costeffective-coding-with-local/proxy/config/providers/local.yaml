@@ -11,7 +11,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 model_list:
-  - model_name: DGX/Qwen3.6-27B
+  - model_name: Qwen3.6-27B
     litellm_params: &local_params
       model: openai/qwen3.6_27b
       api_base: os.environ/LOCAL_M_BASE_URL
@@ -69,7 +69,7 @@ model_list:
         reasoning-efforts:
           rule: qwen3-6-27b
 
-  - model_name: DGX/Qwen3.6-35B-A3B
+  - model_name: Qwen3.6-35B-A3B
     litellm_params:
       <<: *local_params
       model: openai/qwen3.6_35b_a3b

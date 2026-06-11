@@ -4,7 +4,6 @@ include:
   # ── Cloud providers ─────────────────────────────────────────────────────
   # Enabled by default — set the API key in .env.secrets to activate.
   # Leave the key empty and LiteLLM skips the provider automatically.
-  - providers/deepseek.yaml
   - providers/azure-foundry.yaml
   - providers/opencode.yaml
   - providers/openrouter.yaml
@@ -67,17 +66,17 @@ router_settings:
 
   # ──────────────────────────────────────────────────────────────────────────
   model_group_alias:
-    "fable": "OpenCode/Qwen3.7-Max"
-    "opus": "OpenCode/Kimi-K2.6"
-    "sonnet": "OpenCode/DeepSeek-V4-Flash"
-    "haiku": "DGX/Qwen3.6-35B-A3B"
-    "custom": "DGX/Qwen3.6-27B"
+    "fable": "Qwen3.7-Max"
+    "opus": "Qwen3.7-Plus"
+    "sonnet": "DeepSeek-V4-Pro"
+    "haiku": "DeepSeek-V4-Flash"
+    "custom": "Qwen3.6-27B"
 
   # ── Context Window Fallbacks ─────────────────────────────────────────────
   # If a local model can't fit the context, fall back to cloud.
   # context_window_fallbacks:
-  #   - "DGX/Qwen3.6-27B": ["OpenCode/GLM-5.1"]
-  #   - "DGX/Qwen3.6-35B-a3b": ["DGX/Qwen3.6-35B-A3B"]
+  #   - "Qwen3.6-27B": ["OpenCode/GLM-5.1"]
+  #   - "Qwen3.6-35B-A3B": ["Qwen3.6-35B-A3B"]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LiteLLM Settings
@@ -113,6 +112,9 @@ litellm_settings:
         "opencode-zen",
         "openrouter",
         "minimax",
+        "qwen",
+        "moonshotai",
+        "xiaomi",
       ]
   search_tool_name: codefreedom-web
 

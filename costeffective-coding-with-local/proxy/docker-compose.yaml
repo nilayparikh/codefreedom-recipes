@@ -81,10 +81,6 @@ services:
       # To fully disable a cloud provider, also comment out its include line
       # in litellm/config/config.yaml. See docs/configuration.md.
 
-      # DeepSeek
-      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
-
       # Microsoft Foundry (Azure)
       MICROSOFT_FOUNDRY_API_BASE: ${MICROSOFT_FOUNDRY_API_BASE:-}
       MICROSOFT_FOUNDRY_API_KEY: ${MICROSOFT_FOUNDRY_API_KEY:-}
