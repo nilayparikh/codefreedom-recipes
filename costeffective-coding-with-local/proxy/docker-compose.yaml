@@ -51,6 +51,9 @@ services:
       - "0.0.0.0"
     ports:
       - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     extra_hosts:
       # Allows LiteLLM to reach local backends on host ports
       - host.docker.internal:host-gateway

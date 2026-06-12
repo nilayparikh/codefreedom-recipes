@@ -123,6 +123,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   # https://openrouter.ai/xiaomi/mimo-v2.5
   - model_name: MiMo-V2.5

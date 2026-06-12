@@ -1,0 +1,19 @@
+# ── Image Router Plugin Config ───────────────────────────────────────────
+# Routes image-bearing requests through VLMs before delivering clean text
+# to text-only models.  Each VLM is tried in sequence; the first one that
+# succeeds provides the transcription.
+#
+# To opt a model IN, add this block to its provider YAML entry:
+#
+#   codefreedom:
+#     plugins:
+#       route-image-request:
+#         enabled: true
+# ──────────────────────────────────────────────────────────────────────────
+
+image-router-for-text-only:
+  enabled: true
+  models:
+    - "OpenCode/MiMo-V2.5"
+    - "OpenCode/Kimi-K2.6"
+    - "OpenCode/Qwen3.7-Max"
