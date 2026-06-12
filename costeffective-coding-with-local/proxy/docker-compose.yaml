@@ -15,7 +15,7 @@
 #   and sets DATABASE_URL=postgresql://litellm@/litellm?host=/var/run/postgresql
 #   before exec'ing litellm. NO user configuration is needed for the
 #   embedded PG — just provide a host directory for the data + socket
-#   bind mounts below (the codefreedom proxy init helper creates them
+#   bind mounts below (cf init creates them
 #   at ~/.codefreedom/pg/{data,backup,socket} with ownership uid 1000).
 #   To point at an EXTERNAL PG instead, set DATABASE_URL in .env.proxy
 #   and remove the three PG volume mounts below.
@@ -114,7 +114,7 @@ services:
       # the Unix socket. No DATABASE_URL to set, no migrations to run.
       #
       # The host dirs must be owned by uid 1000 (the in-container
-      # 'codefreedom' user). codefreedom proxy init creates them.
+      # 'codefreedom' user). cf init creates them.
       #
       # When using `cf proxy start`, the CLI injects POSTGRES_HOST_DATA_DIR
       # from $CODEFREEDOM_HOME automatically, respecting any custom

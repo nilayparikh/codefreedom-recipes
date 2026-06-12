@@ -83,6 +83,7 @@ router_settings:
 # ═══════════════════════════════════════════════════════════════════════════════
 litellm_settings:
   always_include_stream_usage: true
+  get_cost_from_provider: true
   drop_params: true
   redact_user_api_key_info: true
   turn_off_message_logging: false

@@ -6,10 +6,10 @@ Graduated CodeFreedom recipe — a universal configuration for coding with a mix
 
 ```
 # 1. Preview what will be installed
-cf init recipe --plan costeffective-coding-with-local
+cf init --plan costeffective-coding-with-local
 
 # 2. Apply the plan
-cf init recipe --apply <plan_id>
+cf init --apply <plan_id>
 
 # 3. Fix ownership (Linux/WSL only)
 sudo chown -R $(id -u):$(id -g) ~/.codefreedom
@@ -120,8 +120,8 @@ The recipe's `claude-code.yaml` configures Claude Code to:
 
 | Command                                                 | Outcome                                                                      |
 | ------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `cf init recipe --plan costeffective-coding-with-local` | Preview: shows files to create/replace with diffs and dirs to create         |
-| `cf init recipe --apply <plan-id>`                      | Apply: writes config files, creates `pg/data` and `pg/backup` mount dirs     |
+| `cf init --plan costeffective-coding-with-local` | Preview: shows files to create/replace with diffs and dirs to create         |
+| `cf init --apply <plan-id>`                      | Apply: writes config files, creates `pg/data` and `pg/backup` mount dirs     |
 | `cf px start`                                           | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
 | `cf px status`                                          | Proxy health check                                                           |
 | `cf px stop`                                            | Stop proxy and tools                                                         |
