@@ -62,6 +62,7 @@ services:
       # Docker Compose reads .env for ${VAR} interpolation (lowest priority).
       # System env vars override .env (highest priority).
       # .env.secrets is loaded at runtime by codefreedom CLI.
+      LITELLM_PORT: ${LITELLM_PORT:-4000}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
       LITELLM_LOG: ${LITELLM_LOG:-INFO}
 
