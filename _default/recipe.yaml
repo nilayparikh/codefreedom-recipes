@@ -12,15 +12,12 @@ description: "Base recipe — shared profiles, compose, and proxy config"
 version: 1
 
 files:
-  # ── Claude Code config (secrets only — config lives in profiles) ─────────
+  # ── Claude Code secrets ─────────────────────────────────────────────────
   - path: .env.claude.secrets
     target: .env.claude.secrets
     merge: env
 
-  # ── Proxy config ────────────────────────────────────────────────────────
-  - path: .env.proxy
-    target: .env.proxy
-    merge: env
+  # ── Proxy secrets ───────────────────────────────────────────────────────
   - path: .env.proxy.secrets
     target: .env.proxy.secrets
     merge: env

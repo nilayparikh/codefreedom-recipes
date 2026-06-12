@@ -1,0 +1,27 @@
+# ── CodeFreedom system-message-merger ─────────────────────────────────────
+# Merges multiple system messages into a single system message before
+# forwarding requests to the backend.
+#
+# Models with Jinja chat templates that enforce "system message must be
+# at the beginning" (e.g. Qwen3.6 family) need this plugin when the
+# upstream client (MiMo Code, Claude Code, etc.) sends multiple system
+# messages.
+#
+# Per-model opt-in is configured in the model entry's codefreedom block:
+#
+#   codefreedom:
+#     plugins:
+#       system-message-merger:
+#         enabled: true
+#
+# Alternatively, list models here for global opt-in.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Models that need system message merging.
+# Only add models here that have Jinja templates rejecting multiple
+# system messages.  Models not listed here are pass-through.
+#
+# Format: either a plain string (model name) or { name: ..., enabled: true }
+models:
+  - Qwen3.6-27B
+  - Qwen3.6-35B-A3B

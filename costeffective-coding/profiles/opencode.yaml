@@ -1,0 +1,52 @@
+description: OpenCode profiles for codefreedom — terminal-native AI coding agent
+  launched via CodeFreedom's proxy auto-config.
+notes:
+  - "'cf opencode' drives proxy auto-config: reads LITELLM_BASE_URL and
+    PROXY_API_KEY from profile env, fetches /v1/models, generates
+    opencode.json, and points OPENCODE_CONFIG at it."
+  - "'default' is the base profile — 'ui-ux' inherits from it."
+  - "'bare' is standalone: minimal profile with no proxy config or sandbox."
+  - "In sandbox mode (--sandbox), each profile gets its own isolated
+    ~/.codefreedom/opencode/sandbox/{profile}/ directory."
+  - "sandbox_images maps to Docker image reference for --sandbox mode."
+  - "Use sandbox.env to declare env vars that should only be forwarded in
+    --sandbox mode."
+  - "Use local.env to declare env vars that should only apply in native mode."
+profiles:
+  default:
+    description:
+      Base profile — OpenCode agent launched via CodeFreedom's proxy auto-config.
+      LITELLM_BASE_URL and PROXY_API_KEY drive opencode.json generation.
+    sandbox_images:
+      default: docker.io/nilayparikh/codefreedom:opencode
+    tools:
+      - chrome
+      - web
+      - github
+    env:
+      # Proxy auto-config (consumed by cf opencode to generate opencode.json)
+      LITELLM_BASE_URL: http://localhost:4000
+      PROXY_API_KEY: ${LITELLM_MASTER_KEY}
+      # OpenCode: disable auto-update checks
+      OPENCODE_DISABLE_AUTOUPDATE: "1"
+      # OpenCode: disable Claude Code config inheritance
+      # Prevents reading .claude/, ~/.claude/CLAUDE.md, .claude/skills
+      OPENCODE_DISABLE_CLAUDE_CODE: "1"
+    sandbox:
+      env:
+        IS_SANDBOX: "1"
+        GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+        GH_TOKEN: ${GH_TOKEN}
+  bare:
+    description: "Standalone — minimal: no proxy config, no sandbox settings.
+      Just the opencode binary."
+    env:
+      OPENCODE_DISABLE_AUTOUPDATE: "1"
+      OPENCODE_PURE: "1"
+      OPENCODE_DISABLE_CLAUDE_CODE: "1"
+  ui-ux:
+    description: >
+      UI/UX design profile — optimized for frontend development, visual
+      design, and design system work.
+    env:
+      OPENCODE_EXPERIMENTAL: "1"

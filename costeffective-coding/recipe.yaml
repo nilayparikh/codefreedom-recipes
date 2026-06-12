@@ -1,20 +1,20 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nilayparikh/codefreedom/recipe-branch/schema/recipe.schema.json
 ---
-# ── Recipe: costeffective-coding-with-local ────────────────────────────────────────────────────────
+# ── Recipe: costeffective-coding ────────────────────────────────────────────────────────
 # Coding configuration recipe — profiles, proxy config, and env files
-# for a complete CodeFreedom setup. This is a standalone recipe (no extends).
+# for cloud providers (DeepSeek, Azure, OpenCode, OpenRouter)
+# routing through a LiteLLM proxy.
+#
+# Extends _default for shared tool profiles, compose, and base proxy config.
 # ──────────────────────────────────────────────────────────────────────────────
 
-name: costeffective-coding-with-local
+name: costeffective-coding
 extends: _default
-description: "Universal config — profiles, proxy, and env files for CodeFreedom"
+description: "Cloud inference — DeepSeek, Azure, OpenCode, OpenRouter via LiteLLM proxy"
 version: 1
 
 files:
-  # ── Claude Code config ──────────────────────────────────────────────────
-  - path: .env.claude
-    target: .env.claude
-    merge: env
+  # ── Claude Code config (secrets only — config lives in profiles) ─────────
   - path: .env.claude.secrets
     target: .env.claude.secrets
     merge: env
@@ -27,9 +27,25 @@ files:
     target: .env.proxy.secrets
     merge: env
 
+  # ── MiMoCode config (secrets only — config lives in profiles) ───────────
+  - path: .env.mimo.secrets
+    target: .env.mimo.secrets
+    merge: env
+
+  # ── OpenCode config (secrets only — config lives in profiles) ───────────
+  - path: .env.opencode.secrets
+    target: .env.opencode.secrets
+    merge: env
+
   # ── Profiles ────────────────────────────────────────────────────────────
   - path: profiles/claude-code.yaml
     target: profiles/claude-code.yaml
+    merge: deepdiff
+  - path: profiles/mimo-code.yaml
+    target: profiles/mimo-code.yaml
+    merge: deepdiff
+  - path: profiles/opencode.yaml
+    target: profiles/opencode.yaml
     merge: deepdiff
   - path: profiles/chrome.yaml
     target: profiles/chrome.yaml
@@ -67,11 +83,8 @@ files:
   - path: proxy/config/providers/opencode.yaml
     target: proxy/config/providers/opencode.yaml
     merge: deepdiff
-  - path: proxy/config/providers/command-code.yaml
-    target: proxy/config/providers/command-code.yaml
-    merge: deepdiff
-  - path: proxy/config/providers/local.yaml
-    target: proxy/config/providers/local.yaml
+  - path: proxy/config/providers/openrouter.yaml
+    target: proxy/config/providers/openrouter.yaml
     merge: deepdiff
 
 dirs:
@@ -93,9 +106,6 @@ required_secrets:
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Microsoft Foundry API key"
     hint: "Set in Azure AI Foundry portal"
-  - var: NVIDIA_API_KEY
-    prompt: "NVIDIA API key"
-    hint: "Get key at https://build.nvidia.com"
   - var: OPENCODE_ZEN_API_KEY
     prompt: "OpenCode Zen API key"
     hint: "Get key from OpenCode dashboard"

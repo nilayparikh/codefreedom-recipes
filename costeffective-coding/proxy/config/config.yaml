@@ -4,9 +4,9 @@ include:
   # ── Cloud providers ─────────────────────────────────────────────────────
   # Enabled by default — set the API key in .env.secrets to activate.
   # Leave the key empty and LiteLLM skips the provider automatically.
-  - providers/deepseek.yaml
+  - providers/azure-foundry.yaml
   - providers/opencode.yaml
-  - providers/command-code.yaml
+  - providers/openrouter.yaml
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # General Settings
@@ -19,13 +19,35 @@ general_settings:
   # ── Forward Client Headers ───────────────────────────────────────────────
   forward_client_headers_to_llm_api: true
 
+  # ── Health Checks ────────────────────────────────────────────────────────
+  background_health_checks: false
+  enable_health_check_routing: false
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Router Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 router_settings:
-  num_retries: 5
-  retry_after: 0
-  allowed_fails: 3
+  # ── Routing Strategy ──────────────────────────────────────────────────────
+  routing_strategy: simple-shuffle
+
+  # ── Failover and Retry Settings ───────────────────────────────────────────
+  num_retries: 3
+
+  # ── Explicit Error Specific Cooldown Policy ───────────────────────────────
+  allowed_fails_policy:
+    RateLimitErrorAllowedFails: 0 # Cooldown on the 1st rate limit (0 failures tolerated)
+    AuthenticationErrorAllowedFails: 2 # Cooldown on the 3rd auth failure
+    TimeoutErrorAllowedFails: 10 # Cooldown on the 11th timeout
+    BadRequestErrorAllowedFails: 10 # Cooldown on the 11th malformed request
+
+  # ── Retry Policy ─────────────────────────────────────────────────────────
+  retry_policy:
+    AuthenticationErrorRetries: 2 # Retry up to 2 times on auth errors, which may be transient (e.g. token refresh)
+    TimeoutErrorRetries: 5 # Retry up to 5 times on timeouts, which are often transient
+    RateLimitErrorRetries: 0 # Immediately moves to cooldown/failover on 429
+    ContentPolicyViolationErrorRetries: 0 # Don't retry on content policy violations
+    InternalServerErrorRetries: 5 # Retry on 5xx errors, which may be transient
+    BadRequestErrorRetries: 0 # Don't retry on 400 errors, which indicate a malformed request
 
   # ── Model Group Aliases ──────────────────────────────────────────────────
   # Each alias maps to a model group. Override via the corresponding
@@ -33,45 +55,36 @@ router_settings:
   #
   # | Model alias | Behavior |
   # |---|---|
-  # | default | Special value that clears any model override and reverts to the recommended model for your account type. Not itself a model alias |
-  # | best | Uses Fable 5 where your organization has access to it, otherwise the latest Opus model |
   # | fable | Uses Claude Fable 5 for your hardest and longest-running tasks |
   # | sonnet | Uses the latest Sonnet model for daily coding tasks |
   # | opus | Uses the latest Opus model for complex reasoning tasks |
   # | haiku | Uses the fast and efficient Haiku model for simple tasks |
-  # | sonnet[1m] | Uses Sonnet with a 1 million token context window for long sessions |
-  # | opus[1m] | Uses Opus with a 1 million token context window for long sessions |
-  # | opusplan | Special mode that uses opus during plan mode, then switches to sonnet for execution |
+  # | custom | Routes to the model of your choice |
 
   # ──────────────────────────────────────────────────────────────────────────
   model_group_alias:
-    "best": os.environ/LITELLM_MODEL_ALIAS_BEST
-    "fable": os.environ/LITELLM_MODEL_ALIAS_FABLE
-    "sonnet": os.environ/LITELLM_MODEL_ALIAS_SONNET
-    "opus": os.environ/LITELLM_MODEL_ALIAS_OPUS
-    "haiku": os.environ/LITELLM_MODEL_ALIAS_HAIKU
-    "sonnet[1m]": os.environ/LITELLM_MODEL_ALIAS_SONNET_1M
-    "opus[1m]": os.environ/LITELLM_MODEL_ALIAS_OPUS_1M
-    "opusplan": os.environ/LITELLM_MODEL_ALIAS_OPUSPLAN
-    "custom": os.environ/LITELLM_MODEL_ALIAS_CUSTOM
+    "fable": "Qwen3.7-Max"
+    "opus": "Qwen3.7-Plus"
+    "sonnet": "DeepSeek-V4-Pro"
+    "haiku": "DeepSeek-V4-Flash"
+    "custom": "Qwen3.6-27B"
 
-  # ── Retry Policy ─────────────────────────────────────────────────────────
-  retry_policy:
-    AuthenticationErrorRetries: 0 # never retry bad credentials
-    TimeoutErrorRetries: os.environ/LITELLM_TIMEOUT_ERROR_RETRIES
-    RateLimitErrorRetries: os.environ/LITELLM_RATE_LIMIT_ERROR_RETRIES
-    ContentPolicyViolationErrorRetries: 0 # never retry content violations
-    InternalServerErrorRetries: os.environ/LITELLM_INTERNAL_ERROR_RETRIES
+  # ── Context Window Fallbacks ─────────────────────────────────────────────
+  # If a model can't fit the context, fall back to cloud.
+  # context_window_fallbacks:
+  #   - "Qwen3.6-27B": ["OpenCode/GLM-5.1"]
+  #   - "Qwen3.6-35B-A3B": ["Qwen3.6-35B-A3B"]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LiteLLM Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 litellm_settings:
-  always_include_stream_usage: os.environ/LITELLM_STREAM_USAGE
-  drop_params: os.environ/LITELLM_DROP_PARAMS
-  redact_user_api_key_info: os.environ/LITELLM_REDACT_USER_API_KEY
-  turn_off_message_logging: os.environ/LITELLM_TURN_OFF_MSG_LOGGING
-  json_logs: os.environ/LITELLM_JSON_LOGS
+  always_include_stream_usage: true
+  get_cost_from_provider: true
+  drop_params: true
+  redact_user_api_key_info: true
+  turn_off_message_logging: false
+  json_logs: true
 
   modify_params: true
 
@@ -83,6 +96,7 @@ litellm_settings:
     - prometheus
     - websearch_interception
     - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
+    - plugins.system-message-merger.system_message_merger.instance
     - plugins.image-router.image_router.instance
 
   websearch_interception_params:
@@ -98,17 +112,20 @@ litellm_settings:
         "opencode-zen",
         "openrouter",
         "minimax",
+        "qwen",
+        "moonshotai",
+        "xiaomi",
       ]
   search_tool_name: codefreedom-web
 
   # Require auth for the /metrics/ endpoint (set to true for production)
-  require_auth_for_metrics_endpoint: os.environ/LITELLM_REQUIRE_AUTH_METRICS
+  require_auth_for_metrics_endpoint: false
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Web Search Bridge — SearXNG-shaped provider for the Camoufox MCP
 # ═══════════════════════════════════════════════════════════════════════════════
 # Uncomment this entire block to make LiteLLM's websearch_interception
-# callback route every Claude Code WebSearch to the local web-bridge, which
+# callback route every Claude Code WebSearch to the web-bridge, which
 # in turn calls the Camoufox MCP web_search tool. See
 # docs/proxy/websearch-interception.md.
 

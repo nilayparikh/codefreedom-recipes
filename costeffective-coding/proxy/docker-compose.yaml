@@ -22,8 +22,6 @@
 #
 # ── DISABLING PROVIDERS ───────────────────────────────────────────────────
 # To disable a provider, comment out or remove its env vars below.
-# Cloud-only users: remove the LOCAL_M_* and LOCAL_S_* blocks.
-# Local-only users: remove all cloud provider blocks, keep only local.
 # LiteLLM will skip any provider whose API key is empty, but removing
 # env vars from this file keeps it cleaner. See docs/configuration.md.
 # ───────────────────────────────────────────────────────────────────────────
@@ -51,46 +49,28 @@ services:
       - "0.0.0.0"
     ports:
       - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     extra_hosts:
-      # Allows LiteLLM to reach local backends on host ports
+      # Allows containers to reach host services (e.g. web-bridge on :8500)
       - host.docker.internal:host-gateway
     environment:
       # ── Auth ────────────────────────────────────────────────────────────
       # Docker Compose reads .env for ${VAR} interpolation (lowest priority).
       # System env vars override .env (highest priority).
       # .env.secrets is loaded at runtime by codefreedom CLI.
+      LITELLM_PORT: ${LITELLM_PORT:-4000}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
-      LITELLM_LOG_LEVEL: ${LITELLM_LOG_LEVEL:-INFO}
+      LITELLM_LOG: ${LITELLM_LOG:-INFO}
 
       # LiteLLM config flags
       NO_DOCS: ${LITELLM_NO_DOCS:-True}
       NO_REDOC: ${LITELLM_NO_REDOC:-True}
+      JSON_LOGS: ${JSON_LOGS:-true}
 
-      # LiteLLM Router Settings
-      LITELLM_NUM_RETRIES: ${LITELLM_NUM_RETRIES:-5}
-      LITELLM_RETRY_AFTER: ${LITELLM_RETRY_AFTER:-0}
-      LITELLM_TIMEOUT_ERROR_RETRIES: ${LITELLM_TIMEOUT_ERROR_RETRIES:-5}
-      LITELLM_RATE_LIMIT_ERROR_RETRIES: ${LITELLM_RATE_LIMIT_ERROR_RETRIES:-5}
-      LITELLM_INTERNAL_ERROR_RETRIES: ${LITELLM_INTERNAL_ERROR_RETRIES:-5}
-
-      # Model Aliases — each corresponds to a Claude Code alias.
-      LITELLM_MODEL_ALIAS_BEST: ${LITELLM_MODEL_ALIAS_BEST:-OpenCode/Qwen3.7-Max}
-      LITELLM_MODEL_ALIAS_FABLE: ${LITELLM_MODEL_ALIAS_FABLE:-OpenCode/Qwen3.7-Max}
-      LITELLM_MODEL_ALIAS_SONNET: ${LITELLM_MODEL_ALIAS_SONNET:-OpenCode/DeepSeek-V4-Flash}
-      LITELLM_MODEL_ALIAS_OPUS: ${LITELLM_MODEL_ALIAS_OPUS:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_HAIKU: ${LITELLM_MODEL_ALIAS_HAIKU:-OpenCode/DeepSeek-V4-Flash}
-      LITELLM_MODEL_ALIAS_SONNET_1M: ${LITELLM_MODEL_ALIAS_SONNET_1M:-OpenCode/DeepSeek-V4-Flash}
-      LITELLM_MODEL_ALIAS_OPUS_1M: ${LITELLM_MODEL_ALIAS_OPUS_1M:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_OPUSPLAN: ${LITELLM_MODEL_ALIAS_OPUSPLAN:-DeepSeek/DeepSeek-V4-Pro}
-      LITELLM_MODEL_ALIAS_CUSTOM: ${LITELLM_MODEL_ALIAS_CUSTOM:-OpenCode/DeepSeek-V4-Flash}
-
-      # Other LiteLLM settings
-      LITELLM_JSON_LOGS: ${LITELLM_JSON_LOGS:-true}
+      # LiteLLM runtime settings (also set in config.yaml)
       LITELLM_DROP_PARAMS: ${LITELLM_DROP_PARAMS:-true}
-      LITELLM_REDACT_USER_API_KEY: ${LITELLM_REDACT_USER_API_KEY:-true}
-      LITELLM_REQUIRE_AUTH_METRICS: ${LITELLM_REQUIRE_AUTH_METRICS:-false}
-      LITELLM_TURN_OFF_MSG_LOGGING: ${LITELLM_TURN_OFF_MSG_LOGGING:-false}
-      LITELLM_STREAM_USAGE: ${LITELLM_STREAM_USAGE:-true}
 
       # ── Web Search Bridge ──────────────────────────────────────────────
       # The websearch_interception callback (in config.yaml) uses LiteLLM's
@@ -102,19 +82,20 @@ services:
       # Set API keys in .env or .env.secrets; leave empty to disable that provider.
       # To fully disable a cloud provider, also comment out its include line
       # in litellm/config/config.yaml. See docs/configuration.md.
-      #
-      # DeepSeek
-      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
 
-      # OpenCode Zen
+      # Microsoft Foundry (Azure)
+      MICROSOFT_FOUNDRY_API_BASE: ${MICROSOFT_FOUNDRY_API_BASE:-}
+      MICROSOFT_FOUNDRY_API_KEY: ${MICROSOFT_FOUNDRY_API_KEY:-}
+
+      # OpenCode Zen (also used for GO subscription models)
       OPENCODE_ZEN_BASE_URL: ${OPENCODE_ZEN_BASE_URL:-https://opencode.ai/zen/v1}
       OPENCODE_GO_BASE_URL: ${OPENCODE_GO_BASE_URL:-https://opencode.ai/zen/go/v1}
-      OPENCODE_ZEN_API_KEY: ${OPENCODE_ZEN_API_KEY_NPG:-}
+      OPENCODE_GO_ANTHROPIC_BASE_URL: ${OPENCODE_GO_ANTHROPIC_BASE_URL:-https://opencode.ai/zen/go}
+      OPENCODE_ZEN_API_KEY: ${OPENCODE_ZEN_API_KEY:-}
 
-      # Command Code
-      COMMAND_CODE_BASE_URL: ${COMMAND_CODE_BASE_URL:-https://api.commandcode.ai/provider/v1/}
-      COMMAND_CODE_API_KEY: ${COMMAND_CODE_API_KEY:-}
+      # OpenRouter
+      OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
 
     networks:
       - codefreedom

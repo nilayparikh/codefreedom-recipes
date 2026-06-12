@@ -172,3 +172,27 @@ rules:
       high: none
       xhigh: none
       max: none
+
+  # ── Local DGX Qwen ────────────────────────────────────────────────────
+
+  qwen3-6-35b-a3b:
+    type: thinking_budget
+    field: extra_body.max_thinking_tokens
+    values:
+      none: 0
+      low: 1024
+      medium: 2048
+      high: 4096
+      xhigh: 8192
+      max: 16384
+
+  qwen3-6-27b:
+    type: thinking_budget
+    field: extra_body.max_thinking_tokens
+    values:
+      none: 0
+      low: 512
+      medium: 1024
+      high: 2048
+      xhigh: 4096
+      max: 8192
