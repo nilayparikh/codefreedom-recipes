@@ -29,6 +29,9 @@ profiles:
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # OpenCode: disable auto-update checks
       OPENCODE_DISABLE_AUTOUPDATE: "1"
+      # OpenCode: disable Claude Code config inheritance
+      # Prevents reading .claude/, ~/.claude/CLAUDE.md, .claude/skills
+      OPENCODE_DISABLE_CLAUDE_CODE: "1"
     sandbox:
       env:
         IS_SANDBOX: "1"
@@ -40,6 +43,7 @@ profiles:
     env:
       OPENCODE_DISABLE_AUTOUPDATE: "1"
       OPENCODE_PURE: "1"
+      OPENCODE_DISABLE_CLAUDE_CODE: "1"
   ui-ux:
     description: >
       UI/UX design profile — optimized for frontend development, visual

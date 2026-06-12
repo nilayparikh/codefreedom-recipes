@@ -34,6 +34,12 @@ profiles:
       MIMOCODE_DISABLE_AUTOUPDATE: "1"
       # MiMoCode: disable telemetry to remote
       MIMOCODE_ENABLE_ANALYSIS: "0"
+      # MiMoCode: show alias models (e.g. opus, sonnet) in proxy config
+      # Default: false — alias models are hidden unless explicitly enabled
+      MIMOCODE_SHOW_ALIAS_MODELS: ""
+      # MiMoCode: disable Claude Code config inheritance
+      # Prevents reading .claude/, ~/.claude/CLAUDE.md, .claude/skills
+      MIMOCODE_DISABLE_CLAUDE_CODE: "1"
     sandbox:
       env:
         IS_SANDBOX: "1"
@@ -48,6 +54,7 @@ profiles:
       MIMOCODE_DISABLE_AUTOUPDATE: "1"
       MIMOCODE_ENABLE_ANALYSIS: "0"
       MIMOCODE_PURE: "1"
+      MIMOCODE_DISABLE_CLAUDE_CODE: "1"
   ui-ux:
     description: >
       UI/UX design profile — optimized for frontend development, visual
