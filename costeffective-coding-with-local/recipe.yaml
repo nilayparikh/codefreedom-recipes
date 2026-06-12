@@ -14,10 +14,7 @@ description: "Cloud + local inference — DeepSeek, Azure, OpenCode, OpenRouter,
 version: 1
 
 files:
-  # ── Claude Code config ──────────────────────────────────────────────────
-  - path: .env.claude
-    target: .env.claude
-    merge: env
+  # ── Claude Code config (secrets only — config lives in profiles) ─────────
   - path: .env.claude.secrets
     target: .env.claude.secrets
     merge: env
@@ -30,12 +27,14 @@ files:
     target: .env.proxy.secrets
     merge: env
 
-  # ── MiMoCode config ────────────────────────────────────────────────────
-  - path: .env.mimo
-    target: .env.mimo
-    merge: env
+  # ── MiMoCode config (secrets only — config lives in profiles) ───────────
   - path: .env.mimo.secrets
     target: .env.mimo.secrets
+    merge: env
+
+  # ── OpenCode config (secrets only — config lives in profiles) ───────────
+  - path: .env.opencode.secrets
+    target: .env.opencode.secrets
     merge: env
 
   # ── Profiles ────────────────────────────────────────────────────────────
@@ -44,6 +43,9 @@ files:
     merge: deepdiff
   - path: profiles/mimo-code.yaml
     target: profiles/mimo-code.yaml
+    merge: deepdiff
+  - path: profiles/opencode.yaml
+    target: profiles/opencode.yaml
     merge: deepdiff
   - path: profiles/chrome.yaml
     target: profiles/chrome.yaml

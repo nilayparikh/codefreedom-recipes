@@ -12,10 +12,7 @@ description: "Base recipe — shared profiles, compose, and proxy config"
 version: 1
 
 files:
-  # ── Claude Code config ──────────────────────────────────────────────────
-  - path: .env.claude
-    target: .env.claude
-    merge: env
+  # ── Claude Code config (secrets only — config lives in profiles) ─────────
   - path: .env.claude.secrets
     target: .env.claude.secrets
     merge: env
@@ -28,10 +25,7 @@ files:
     target: .env.proxy.secrets
     merge: env
 
-  # ── MiMoCode config ────────────────────────────────────────────────────
-  - path: .env.mimo
-    target: .env.mimo
-    merge: env
+  # ── MiMoCode config (secrets only — config lives in profiles) ───────────
   - path: .env.mimo.secrets
     target: .env.mimo.secrets
     merge: env

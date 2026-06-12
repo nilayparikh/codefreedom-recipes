@@ -1,16 +1,14 @@
-description: MiMoCode profiles for codefreedom — cloud + local inference with
-  0-click proxy auto-config. All models from DeepSeek, Azure, OpenCode,
-  OpenRouter, and local backends are automatically available.
+description: MiMoCode profiles for codefreedom — terminal-native AI coding agent
+  with cross-session memory (fork of OpenCode), launched via CodeFreedom's
+  proxy auto-config.
 notes:
+  - "'cf mimo' drives proxy auto-config: reads LITELLM_BASE_URL and
+    PROXY_API_KEY from profile env, fetches /v1/models, generates
+    mimocode.json, and points MIMOCODE_CONFIG at it."
+  - "'default' is the base profile — 'ui-ux' inherits from it."
+  - "'bare' is standalone: minimal profile with no proxy config or sandbox."
   - "In sandbox mode (--sandbox), each profile gets its own isolated
     ~/.codefreedom/mimo-code/sandbox/{profile}/ directory."
-  - "'default' is the base profile — 'ultra', 'pro', 'flash', 'air',
-    and 'ui-ux' inherit from it."
-  - "'bare' is standalone: minimal profile with no model config, sandbox
-    settings, or preferences."
-  - "Proxy auto-config: on launch, mimo probes LITELLM_BASE_URL, fetches
-    /v1/models, and generates a complete mimocode.json with all models."
-  - "No API keys required in profiles — the proxy handles routing."
   - "sandbox_images maps to Docker image reference for --sandbox mode."
   - "Use sandbox.env to declare env vars that should only be forwarded in
     --sandbox mode."
@@ -18,19 +16,22 @@ notes:
 profiles:
   default:
     description:
-      Base profile — 0-click proxy auto-config with all models from the
-      running LiteLLM proxy. Other profiles inherit from this.
+      Base profile — MiMoCode agent launched via CodeFreedom's proxy auto-config.
+      LITELLM_BASE_URL and PROXY_API_KEY drive mimocode.json generation.
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:mimo-code
     tools:
       - web
     env:
+      # Proxy auto-config (consumed by cf mimo to generate mimocode.json)
       LITELLM_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
-      MIMOCODE_DISABLE_AUTOUPDATE: "1"
-      MIMOCODE_DISABLE_MODELS_FETCH: "1"
-      MIMOCODE_DISABLE_CLAUDE_CODE: "1"
+      # MiMoCode: pure mimo mode, no Claude Code inheritance
       MIMOCODE_MIMO_ONLY: "1"
+      # MiMoCode: disable auto-update checks (default true, explicit)
+      MIMOCODE_DISABLE_AUTOUPDATE: "1"
+      # MiMoCode: disable telemetry to remote
+      MIMOCODE_ENABLE_ANALYSIS: "0"
     sandbox:
       env:
         IS_SANDBOX: "1"
@@ -38,47 +39,13 @@ profiles:
         GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
         GH_TOKEN: ${GH_TOKEN}
   bare:
-    description: "Standalone — minimal: no model config, no proxy auto-config,
-      no sandbox settings. Just the mimo binary."
+    description: "Standalone — minimal: no proxy config, no sandbox settings,
+      no preferences. Just the mimo binary."
     env:
-      MIMOCODE_DISABLE_AUTOUPDATE: "1"
-      MIMOCODE_DISABLE_CLAUDE_CODE: "1"
       MIMOCODE_MIMO_ONLY: "1"
-  ultra:
-    description: "Maximum capability profile — best available models from all
-      providers via the proxy. Enables all experimental features
-      including workflow tool and LSP tool."
-    env:
-      MIMOCODE_EXPERIMENTAL: "1"
-      MIMOCODE_ENABLE_QUESTION_TOOL: "1"
-      MIMOCODE_EXPERIMENTAL_WORKFLOW_TOOL: "1"
-      MIMOCODE_EXPERIMENTAL_LSP_TOOL: "1"
-  pro:
-    description:
-      "Production profile — optimized for production coding tasks with
-      high-quality models and balanced feature set."
-    env:
-      MIMOCODE_PERMISSION: "build"
-      MIMOCODE_DISABLE_DEFAULT_PLUGINS: "0"
-  flash:
-    description:
-      "Speed-optimized profile — lightweight models for fast iterations.
-      Disables heavy plugins and experimental features."
-    env:
-      MIMOCODE_DISABLE_DEFAULT_PLUGINS: "1"
-      MIMOCODE_DISABLE_AUTOCOMPACT: "1"
-      MIMOCODE_DISABLE_MODELS_FETCH: "1"
-  air:
-    description: "Minimal-resource profile — suitable for low-power devices or
-      constrained environments. Minimizes background work."
-    env:
-      MIMOCODE_DISABLE_DEFAULT_PLUGINS: "1"
-      MIMOCODE_DISABLE_AUTOCOMPACT: "1"
-      MIMOCODE_DISABLE_MODELS_FETCH: "1"
-      MIMOCODE_DISABLE_PRUNE: "1"
-      MIMOCODE_DISABLE_LSP_DOWNLOAD: "1"
-      MIMOCODE_DISABLE_TERMINAL_TITLE: "1"
-      MIMOCODE_DISABLE_MOUSE: "1"
+      MIMOCODE_DISABLE_AUTOUPDATE: "1"
+      MIMOCODE_ENABLE_ANALYSIS: "0"
+      MIMOCODE_PURE: "1"
   ui-ux:
     description: >
       UI/UX design profile — optimized for frontend development, visual
