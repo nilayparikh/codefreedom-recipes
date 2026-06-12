@@ -14,7 +14,5 @@
 image-router-for-text-only:
   enabled: true
   models:
+    - "FreeRouter"
     - "Qwen3.6-35B-A3B"
-    - "MiMo-V2.5"
-    - "Kimi-K2.6"
-    - "Qwen3.7-Max"
