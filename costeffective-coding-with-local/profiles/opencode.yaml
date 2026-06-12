@@ -20,7 +20,9 @@ profiles:
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:opencode
     tools:
+      - chrome
       - web
+      - github
     env:
       # Proxy auto-config (consumed by cf opencode to generate opencode.json)
       LITELLM_BASE_URL: http://localhost:4000

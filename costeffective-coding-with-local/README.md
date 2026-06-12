@@ -101,6 +101,108 @@ skip that provider — LiteLLM will not load its config.
 
 ---
 
+## Environment variables reference
+
+All variables below can be set as machine env vars (with `CF_CLI_` prefix for
+highest priority), in `.env.*.secrets` files (secrets), or in `.env.user`
+(non-secrets). The `CF_CLI_` prefix is stripped automatically — e.g.
+`export CF_CLI_LITELLM_MASTER_KEY=sk-...` sets `LITELLM_MASTER_KEY`.
+
+### Secrets
+
+Secrets are split across three files by scope. Set via `CF_CLI_*` machine env
+vars (recommended) or fill in the `.env.*.secrets` files as fallbacks.
+
+| Variable | File | Used by | Description |
+| --- | --- | --- | --- |
+| `LITELLM_MASTER_KEY` | `.env.proxy.secrets` | Proxy, Claude, MiMo, OpenCode | Proxy auth token — all agents use this to talk to LiteLLM |
+| `DEEPSEEK_API_KEY` | `.env.proxy.secrets` | Proxy | DeepSeek direct API key |
+| `MICROSOFT_FOUNDRY_API_KEY` | `.env.proxy.secrets` | Proxy (Azure provider) | Azure AI Foundry API key |
+| `MICROSOFT_FOUNDRY_API_BASE` | `.env.proxy.secrets` | Proxy (Azure provider) | Azure endpoint URL (region-specific) |
+| `OPENCODE_ZEN_API_KEY` | `.env.proxy.secrets` | Proxy (OpenCode Zen + GO) | OpenCode API key — free tier + subscription |
+| `OPENROUTER_API_KEY` | `.env.proxy.secrets` | Proxy (OpenRouter) | OpenRouter API key |
+| `LOCAL_M_API_KEY` | `.env.proxy.secrets` | Proxy (local backend M) | Local model auth (any value works — default `sk-dummy`) |
+| `LOCAL_S_API_KEY` | `.env.proxy.secrets` | Proxy (local backend S) | Local model auth (any value works — default `sk-dummy`) |
+| `GITHUB_PERSONAL_ACCESS_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode | GitHub PAT for git push/pull in `--sandbox` |
+| `GH_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode | GitHub token alias (usually same as PAT above) |
+
+### Non-secrets (proxy container)
+
+Set in `.env.proxy` or `.env.user`. These control the proxy container and
+model routing — they are not sensitive.
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `LITELLM_IMAGE` | `docker.io/nilayparikh/codefreedom:litellm-latest` | Proxy container image |
+| `LITELLM_CONTAINER_NAME` | `litellm-codefreedom` | Docker container name |
+| `LITELLM_PORT` | `4000` | Proxy listen port |
+| `LITELLM_BIND_HOST` | `0.0.0.0` | Proxy bind address |
+| `LITELLM_LOG` | `INFO` | Log level (DEBUG/INFO/WARNING) |
+| `LITELLM_DROP_PARAMS` | `true` | Strip unsupported params before forwarding |
+| `JSON_LOGS` | `true` | JSON-formatted log output |
+| `SEARXNG_API_BASE` | `http://host.docker.internal:8500` | Web bridge SearXNG endpoint |
+| `OPENCODE_ZEN_BASE_URL` | `https://opencode.ai/zen/v1` | OpenCode Zen API endpoint |
+| `OPENCODE_GO_BASE_URL` | `https://opencode.ai/zen/go/v1` | OpenCode GO API endpoint |
+| `OPENCODE_GO_ANTHROPIC_BASE_URL` | `https://opencode.ai/zen/go` | OpenCode GO Anthropic-format endpoint |
+| `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenRouter API endpoint |
+| `LOCAL_M_BASE_URL` | `http://host.docker.internal:8000/v1` | Local primary backend URL |
+| `LOCAL_S_BASE_URL` | `http://host.docker.internal:8001/v1` | Local secondary backend URL |
+| `POSTGRES_HOST_DATA_DIR` | `~/.codefreedom/pg/data` | PostgreSQL data directory host path |
+| `POSTGRES_HOST_BACKUP_DIR` | `~/.codefreedom/pg/backup` | PostgreSQL backup directory host path |
+
+### Non-secrets (model alias overrides)
+
+Set in `.env.user` to override the default model for each alias. See
+[Model alias routing](#model-alias-routing) for details.
+
+| Variable | Default | Overrides alias |
+| --- | --- | --- |
+| `LITELLM_MODEL_ALIAS_BEST` | `DeepSeek/DeepSeek-V4-Pro` | `best` |
+| `LITELLM_MODEL_ALIAS_FABLE` | `DeepSeek/DeepSeek-V4-Pro` | `fable` |
+| `LITELLM_MODEL_ALIAS_SONNET` | `DGX/Qwen3.6-27B` | `sonnet` |
+| `LITELLM_MODEL_ALIAS_OPUS` | `DeepSeek/DeepSeek-V4-Pro` | `opus` |
+| `LITELLM_MODEL_ALIAS_HAIKU` | `DGX/Qwen3.6-35B-A3B` | `haiku` |
+| `LITELLM_MODEL_ALIAS_SONNET_1M` | `DGX/Qwen3.6-27B` | `sonnet` (1M context) |
+| `LITELLM_MODEL_ALIAS_OPUS_1M` | `DeepSeek/DeepSeek-V4-Pro` | `opus` (1M context) |
+| `LITELLM_MODEL_ALIAS_OPUSPLAN` | `DeepSeek/DeepSeek-V4-Pro` | `opusplan` |
+
+### Non-secrets (agent profiles)
+
+These are set in profile YAML `env:` blocks and resolved automatically. Override
+in `.env.user` only if you need to change agent behavior.
+
+| Variable | Agent | Description |
+| --- | --- | --- |
+| `ANTHROPIC_BASE_URL` | Claude Code | Proxy URL (`http://localhost:4000`) |
+| `ANTHROPIC_AUTH_TOKEN` | Claude Code | Proxy auth (= `LITELLM_MASTER_KEY`) |
+| `CLAUDE_MODEL` | Claude Code | Default model alias (`haiku`) |
+| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | Claude Code | Enable model discovery via proxy |
+| `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | Claude Code | Disable telemetry/analytics |
+| `ANTHROPIC_DEFAULT_FABLE_MODEL` | Claude Code | Model for `fable` alias |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | Claude Code | Model for `opus` alias |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | Claude Code | Model for `sonnet` alias |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | Claude Code | Model for `haiku` alias |
+| `ANTHROPIC_CUSTOM_MODEL_OPTION` | Claude Code | Model for `custom` alias |
+| `LITELLM_BASE_URL` | MiMoCode / OpenCode | Proxy URL for 0-click config |
+| `PROXY_API_KEY` | MiMoCode / OpenCode | Proxy auth (= `LITELLM_MASTER_KEY`) |
+| `MIMOCODE_MIMO_ONLY` | MiMoCode | Pure MiMo mode (no Claude Code) |
+| `MIMOCODE_DISABLE_AUTOUPDATE` | MiMoCode | Disable auto-update checks |
+| `MIMOCODE_ENABLE_ANALYSIS` | MiMoCode | Disable remote telemetry |
+| `MIMOCODE_CONFIG` | MiMoCode | Path to generated `mimocode.json` |
+| `OPENCODE_CONFIG` | OpenCode | Path to generated `opencode.json` |
+| `OPENCODE_DISABLE_AUTOUPDATE` | OpenCode | Disable auto-update checks |
+
+### Secrets file summary
+
+| File | Scope | Variables |
+| --- | --- | --- |
+| `.env.proxy.secrets` | Proxy + all providers | `LITELLM_MASTER_KEY`, `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `MICROSOFT_FOUNDRY_API_BASE`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY`, `LOCAL_M_API_KEY`, `LOCAL_S_API_KEY` |
+| `.env.claude.secrets` | Claude Code sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
+| `.env.mimo.secrets` | MiMoCode sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
+| `.env.opencode.secrets` | OpenCode sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
+
+---
+
 ## Architecture
 
 ```
