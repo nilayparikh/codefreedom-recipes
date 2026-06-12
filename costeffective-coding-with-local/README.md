@@ -92,6 +92,7 @@ When you run `--plan`, the recipe engine prompts for each required secret:
 | Secret                      | Prompt                    | Default                 |
 | --------------------------- | ------------------------- | ----------------------- |
 | `LITELLM_MASTER_KEY`        | LiteLLM proxy master key  | `sk-codefreedom-local`  |
+| `DEEPSEEK_API_KEY`          | DeepSeek API key          | (empty — must provide)  |
 | `MICROSOFT_FOUNDRY_API_KEY` | Microsoft Foundry API key | (empty — must provide)  |
 | `OPENCODE_ZEN_API_KEY`      | OpenCode Zen API key      | (empty — must provide)  |
 | `OPENROUTER_API_KEY`        | OpenRouter API key        | (empty — must provide)  |
@@ -241,7 +242,7 @@ in `.env.user` only if you need to change agent behavior.
 | **Proxy config**       | `.env.proxy`, `.env.proxy.secrets`                                              |
 | **Profiles**           | `claude-code.yaml`, `mimo-code.yaml`, `chrome.yaml`, `web.yaml`, `github.yaml`, `web-bridge.yaml` |
 | **Proxy compose**      | `docker-compose.yaml` with embedded PostgreSQL                                  |
-| **Proxy config**       | `config.yaml` with LiteLLM routing                                              |
+| **LiteLLM config**     | `config.yaml` with LiteLLM routing                                              |
 | **Plugins**            | Reasoning-efforts mapping, image-router, system-message-merger                 |
 | **Providers**          | Azure Foundry, OpenCode, OpenRouter, Local                                      |
 | **Mount dirs**         | `pg/data`, `pg/backup` (embedded PostgreSQL host volumes)                       |
@@ -262,13 +263,14 @@ you want to use. Unset providers are skipped automatically by LiteLLM.
 | **Local M** (port 8000) | `LOCAL_M_API_KEY`           | `http://host.docker.internal:8000/v1` (any key value works)                     |
 | **Local S** (port 8001) | `LOCAL_S_API_KEY`           | `http://host.docker.internal:8001/v1` (any key value works)                     |
 
-Set keys in `~/.codefreedom/.env.secrets` or `~/.codefreedom/.env.user`:
+Set keys in `~/.codefreedom/.env.proxy.secrets` or `~/.codefreedom/.env.user`:
 
 ```bash
-echo "MICROSOFT_FOUNDRY_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-echo "OPENCODE_ZEN_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-echo "OPENROUTER_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-chmod 600 ~/.codefreedom/.env.secrets
+echo "DEEPSEEK_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "MICROSOFT_FOUNDRY_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "OPENCODE_ZEN_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "OPENROUTER_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+chmod 600 ~/.codefreedom/.env.proxy.secrets
 ```
 
 Or export them as environment variables (highest priority).

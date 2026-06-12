@@ -322,13 +322,13 @@ model_list:
         reasoning-efforts:
           rule: minimax-m3
 
-  # https://openrouter.ai/moonshotai/kimi-k2.6
+  # https://openrouter.ai/moonshotai/kimi-k2.7
   # | Model | Input Price | Output Price | Cache Read |
   # |---|---|---|---|
-  # | Kimi K2.6 | $0.95 | $4.00 | $0.16 |
-  - model_name: Kimi-K2.6
+  # | Kimi K2.7 | $0.95 | $4.00 | $0.19 |
+  - model_name: Kimi-K2.7
     litellm_params:
-      model: openrouter/moonshotai/kimi-k2.6
+      model: openrouter/moonshotai/kimi-k2.7
       <<:
         [
           *openrouter_api_params,
@@ -341,12 +341,12 @@ model_list:
           only: ["moonshotai"]
           allow_fallbacks: false
     model_info:
-      id: "openrouter-kimi-k2-6"
+      id: "openrouter-kimi-k2-7"
       custom_llm_provider: openrouter
       <<: *openrouter_model_info
       input_cost_per_token: 0.00000095
       output_cost_per_token: 0.00000400
-      cache_read_input_token_cost: 0.00000016
+      cache_read_input_token_cost: 0.00000019
       supports_vision: true
       context_window: 1000000
       max_tokens: 1000000
@@ -358,7 +358,7 @@ model_list:
     codefreedom:
       plugins:
         reasoning-efforts:
-          rule: kimi-k2-6
+          rule: kimi-k2-7
 
   # -- Free models with aggressive routing after rate limits --
 

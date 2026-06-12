@@ -30,7 +30,8 @@ cf cc
 
 | Recipe | Description | API Keys Needed |
 |--------|-------------|-----------------|
-| [costeffective-coding-with-local](costeffective-coding-with-local/) | Universal: cloud providers + local inference, graduated recipe | `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `OPENCODE_ZEN_API_KEY` |
+| [costeffective-coding](costeffective-coding/) | Cloud-only: Azure, OpenCode, OpenRouter via LiteLLM proxy | `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY` |
+| [costeffective-coding-with-local](costeffective-coding-with-local/) | Universal: cloud providers + local inference, graduated recipe | `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY` |
 | [free](free/) | Free models from NVIDIA, OpenRouter, and OpenCode Zen | None (optional for higher rate limits) |
 | [deepseek](deepseek/) | Native DeepSeek API via LiteLLM proxy | `DEEPSEEK_API_KEY` |
 | [nvidia](nvidia/) | NVIDIA AI Endpoints | `NVIDIA_API_KEY` (free at build.nvidia.com) |

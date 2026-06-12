@@ -112,6 +112,9 @@ required_secrets:
   - var: OPENCODE_ZEN_API_KEY
     prompt: "OpenCode Zen API key"
     hint: "Get key from OpenCode dashboard"
+  - var: OPENROUTER_API_KEY
+    prompt: "OpenRouter API key"
+    hint: "Get key at https://openrouter.ai/keys"
 
 optional_config:
   - var: LITELLM_MODEL_ALIAS_BEST
@@ -119,13 +122,13 @@ optional_config:
   - var: LITELLM_MODEL_ALIAS_FABLE
     default: "DeepSeek/DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_SONNET
-    default: "DGX/Qwen3.6-27B"
+    default: "DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_OPUS
-    default: "DeepSeek/DeepSeek-V4-Pro"
+    default: "DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_HAIKU
-    default: "DGX/Qwen3.6-35B-A3B"
+    default: "DeepSeek-V4-Flash"
   - var: LITELLM_MODEL_ALIAS_SONNET_1M
-    default: "DGX/Qwen3.6-27B"
+    default: "DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_OPUS_1M
     default: "DeepSeek/DeepSeek-V4-Pro"
   - var: LITELLM_MODEL_ALIAS_OPUSPLAN

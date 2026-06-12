@@ -87,6 +87,7 @@ When you run `--plan`, the recipe engine prompts for each required secret:
 | Secret                      | Prompt                    | Default                 |
 | --------------------------- | ------------------------- | ----------------------- |
 | `LITELLM_MASTER_KEY`        | LiteLLM proxy master key  | `sk-codefreedom-local`  |
+| `DEEPSEEK_API_KEY`          | DeepSeek API key          | (empty — must provide)  |
 | `MICROSOFT_FOUNDRY_API_KEY` | Microsoft Foundry API key | (empty — must provide)  |
 | `OPENCODE_ZEN_API_KEY`      | OpenCode Zen API key      | (empty — must provide)  |
 | `OPENROUTER_API_KEY`        | OpenRouter API key        | (empty — must provide)  |
@@ -231,7 +232,7 @@ in `.env.user` only if you need to change agent behavior.
 | **Proxy config**       | `.env.proxy`, `.env.proxy.secrets`                                              |
 | **Profiles**           | `claude-code.yaml`, `mimo-code.yaml`, `chrome.yaml`, `web.yaml`, `github.yaml`, `web-bridge.yaml` |
 | **Proxy compose**      | `docker-compose.yaml` with embedded PostgreSQL                                  |
-| **Proxy config**       | `config.yaml` with LiteLLM routing                                              |
+| **LiteLLM config**     | `config.yaml` with LiteLLM routing                                              |
 | **Plugins**            | Reasoning-efforts mapping, image-router, system-message-merger                 |
 | **Providers**          | Azure Foundry, OpenCode, OpenRouter                                              |
 | **Mount dirs**         | `pg/data`, `pg/backup` (embedded PostgreSQL host volumes)                       |
@@ -250,13 +251,14 @@ you want to use. Unset providers are skipped automatically by LiteLLM.
 | **OpenCode GO**         | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/go/v1`                                                 |
 | **OpenRouter**          | `OPENROUTER_API_KEY`        | `https://openrouter.ai/api/v1`                                                  |
 
-Set keys in `~/.codefreedom/.env.secrets` or `~/.codefreedom/.env.user`:
+Set keys in `~/.codefreedom/.env.proxy.secrets` or `~/.codefreedom/.env.user`:
 
 ```bash
-echo "MICROSOFT_FOUNDRY_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-echo "OPENCODE_ZEN_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-echo "OPENROUTER_API_KEY=sk-..." >> ~/.codefreedom/.env.secrets
-chmod 600 ~/.codefreedom/.env.secrets
+echo "DEEPSEEK_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "MICROSOFT_FOUNDRY_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "OPENCODE_ZEN_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+echo "OPENROUTER_API_KEY=sk-..." >> ~/.codefreedom/.env.proxy.secrets
+chmod 600 ~/.codefreedom/.env.proxy.secrets
 ```
 
 Or export them as environment variables (highest priority).
@@ -275,7 +277,7 @@ Override any by setting the corresponding `LITELLM_MODEL_ALIAS_*` env var
 | `opus`               | `Qwen3.7-Plus`         | OpenCode GO, OpenRouter                      | Complex reasoning       |
 | `sonnet`             | `DeepSeek-V4-Pro`      | OpenRouter                                   | Daily coding            |
 | `haiku`              | `DeepSeek-V4-Flash`    | OpenCode Zen (free), OpenCode GO, OpenRouter | Fast / lightweight      |
-| `custom`             | `Qwen3.6-27B`          | OpenRouter                                   | Custom model slot       |
+| `custom`             | `Qwen3.6-27B`          | — (configure your own backend)         | Custom model slot       |
 
 **Override an alias** — set `LITELLM_MODEL_ALIAS_*` in `~/.codefreedom/.env.user`:
 

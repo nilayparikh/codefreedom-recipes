@@ -95,7 +95,7 @@ rules:
       xhigh: high
       max: high
 
-  kimi-k2-6:
+  kimi-k2-7:
     type: mapping
     output: reasoning_effort
     values:
