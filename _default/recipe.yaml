@@ -37,6 +37,9 @@ files:
   - path: profiles/mimo-code.yaml
     target: profiles/mimo-code.yaml
     merge: deepdiff
+  - path: profiles/opencode.yaml
+    target: profiles/opencode.yaml
+    merge: deepdiff
   - path: profiles/web.yaml
     target: profiles/web.yaml
     merge: deepdiff

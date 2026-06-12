@@ -21,7 +21,9 @@ profiles:
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:mimo-code
     tools:
+      - chrome
       - web
+      - github
     env:
       # Proxy auto-config (consumed by cf mimo to generate mimocode.json)
       LITELLM_BASE_URL: http://localhost:4000
@@ -46,3 +48,12 @@ profiles:
       MIMOCODE_DISABLE_AUTOUPDATE: "1"
       MIMOCODE_ENABLE_ANALYSIS: "0"
       MIMOCODE_PURE: "1"
+  ui-ux:
+    description: >
+      UI/UX design profile — optimized for frontend development, visual
+      design, and design system work. Enables question tool for interactive
+      design feedback and image attachment support.
+    env:
+      MIMOCODE_MAX_PROMPT_IMAGES: "20"
+      MIMOCODE_ENABLE_QUESTION_TOOL: "1"
+      MIMOCODE_EXPERIMENTAL: "1"
