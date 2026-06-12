@@ -124,6 +124,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   # Big Pickle — general purpose, reasoning + tools
   # Spec not independently verified on models.dev; using conservative defaults
@@ -149,6 +151,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: big-pickle
+        route-image-request:
+          enabled: true
 
   # ── OpenCode Go Provider ────────────────────────────────────────────────────
   # Subscription models from OpenCode GO.
@@ -226,6 +230,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: qwen3-7-plus
+        route-image-request:
+          enabled: true
 
   # https://models.dev/models/alibaba/qwen3.7-max
   # Qwen3.7 Max — 1M context, 65K output
@@ -299,6 +305,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   # https://models.dev/models/deepseek/deepseek-v4-pro
   # DeepSeek V4-Pro — 1M context, 384K output
@@ -328,6 +336,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-pro
+        route-image-request:
+          enabled: true
 
   # https://models.dev/models/moonshotai/kimi-k2.6
   # Kimi K2.6 — 262K context, 262K output
@@ -390,3 +400,5 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: glm-5-1
+        route-image-request:
+          enabled: true

@@ -179,6 +179,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: glm-5-1
+        route-image-request:
+          enabled: true
 
   # ── MiniMax M3 ─────────────────────────────────────────────────────────────
   # https://models.dev/models/minimax/MiniMax-M3
@@ -235,6 +237,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-pro
+        route-image-request:
+          enabled: true
 
   # ── DeepSeek V4 Flash ──────────────────────────────────────────────────────
   # https://models.dev/models/deepseek/deepseek-v4-flash
@@ -263,6 +267,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   # ── Qwen 3.7 Max ───────────────────────────────────────────────────────────
   # https://models.dev/models/alibaba/qwen3.7-max
@@ -292,6 +298,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: qwen3-7-max
+        route-image-request:
+          enabled: true
 
   # ── Qwen 3.7 Plus ──────────────────────────────────────────────────────────
   # https://models.dev/models/alibaba/qwen3.7-plus

@@ -116,6 +116,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5
+        route-image-request:
+          enabled: true
 
   - model_name: DeepSeek-V4-Flash
     litellm_params:
@@ -142,6 +144,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   # ── OpenCode Go Provider ────────────────────────────────────────────────────
   # Subscription models from OpenCode GO.
@@ -279,6 +283,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   - model_name: Kimi-K2.6
     litellm_params:
@@ -337,6 +343,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5
+        route-image-request:
+          enabled: true
 
   - model_name: MiMo-V2.5-Pro
     litellm_params:
@@ -366,3 +374,5 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5
+        route-image-request:
+          enabled: true

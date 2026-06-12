@@ -48,6 +48,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-flash
+        route-image-request:
+          enabled: true
 
   - model_name: DeepSeek/DeepSeek-V4-Pro
     litellm_params:
@@ -81,3 +83,5 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-pro
+        route-image-request:
+          enabled: true

@@ -83,6 +83,7 @@ litellm_settings:
     - prometheus
     - websearch_interception
     - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
+    - plugins.image-router.image_router.instance
 
   websearch_interception_params:
     enabled_providers:
@@ -110,6 +111,17 @@ litellm_settings:
 # callback route every Claude Code WebSearch to the local web-bridge, which
 # in turn calls the Camoufox MCP web_search tool. See
 # docs/proxy/websearch-interception.md.
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CodeFreedom Plugins
+# ═══════════════════════════════════════════════════════════════════════════════
+codefreedom:
+  image-router-for-text-only:
+    enabled: true
+    models:
+      - "OpenCode/MiMo-V2.5-FREE"
+      - "OpenCode/Kimi-K2.6"
+      - "OpenCode/Qwen3.7-Max"
 
 search_tools:
   - search_tool_name: codefreedom-web
