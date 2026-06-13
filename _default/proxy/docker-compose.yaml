@@ -4,10 +4,17 @@
 # (provider URLs, API keys, model aliases) are injected via .env.proxy
 # files and the `cf proxy start` CLI.
 #
+# IMAGE: The published `codefreedom:litellm-latest` image is multi-arch
+# (linux/arm64 + linux/amd64).  Keep this compose file free of a
+# `platform:` pin so Docker can pull the matching manifest on Apple
+# Silicon, Linux ARM, Intel/AMD Linux, and Docker Desktop.
+#
 # Both PG data and backup use Docker named volumes (codefreedom_pg_data,
 # codefreedom_pg_backup) for cross-platform compatibility — no permission
 # issues on Windows/macOS/Linux.  Backup files are extracted via
 # `docker cp` from the running container during `cf manage admin backup`.
+# The concrete Docker volume names are env-overridable so parallel test
+# stacks can run without reusing another compose project's PG volumes.
 # ───────────────────────────────────────────────────────────────────────────
 
 services:
@@ -30,6 +37,9 @@ services:
     ports:
       - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
     extra_hosts:
+      # Docker Desktop already provides host.docker.internal on macOS/Windows;
+      # this host-gateway mapping gives Linux the same hostname so one compose
+      # file works unchanged across all supported OSes.
       - host.docker.internal:host-gateway
     environment:
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
@@ -57,9 +67,9 @@ services:
 
 volumes:
   codefreedom_pg_data:
-    name: codefreedom_pg_data
+    name: ${CODEFREEDOM_PG_DATA_VOLUME:-codefreedom_pg_data}
   codefreedom_pg_backup:
-    name: codefreedom_pg_backup
+    name: ${CODEFREEDOM_PG_BACKUP_VOLUME:-codefreedom_pg_backup}
 
 networks:
   codefreedom:

@@ -6,19 +6,19 @@
 #         available on ghcr.io/nilayparikh/codefreedom as a mirror).
 #         The image bakes in the WebSearch count display patch — no
 #         entrypoint wrapper, no runtime mutation, no surprises.
+#         The image is multi-arch (linux/arm64 + linux/amd64). Keep this
+#         compose file free of a `platform:` pin so Docker selects the
+#         matching manifest on Apple Silicon, Linux ARM, and Intel/AMD.
 #         Override LITELLM_IMAGE in .env.proxy to use a different tag
 #         (e.g. a locally-built `codefreedom:litellm-local`).
 #
 # DATABASE: Embedded PostgreSQL 18.4 inside the image.
 #   The image ships its own stripped PG (Unix-socket only, no TCP listener).
 #   The entrypoint auto-initialises the cluster, runs `prisma db push`,
-#   and sets DATABASE_URL=postgresql://litellm@/litellm?host=/var/run/postgresql
-#   before exec'ing litellm. NO user configuration is needed for the
-#   embedded PG — just provide a host directory for the data + socket
-#   bind mounts below (cf init creates them
-#   at ~/.codefreedom/pg/{data,backup,socket} with ownership uid 1000).
+#   and exports DATABASE_URL before exec'ing litellm. NO user
+#   configuration is needed for the embedded PG.
 #   To point at an EXTERNAL PG instead, set DATABASE_URL in .env.proxy
-#   and remove the three PG volume mounts below.
+#   and remove the two PG named-volume mounts below.
 #
 # ── DISABLING PROVIDERS ───────────────────────────────────────────────────
 # To disable a provider, comment out or remove its env vars below.
@@ -55,7 +55,9 @@ services:
       - 8.8.8.8
       - 1.1.1.1
     extra_hosts:
-      # Allows LiteLLM to reach local backends on host ports
+      # Docker Desktop already provides host.docker.internal on
+      # macOS/Windows; this host-gateway mapping gives Linux the same
+      # hostname so one compose file works across all supported OSes.
       - host.docker.internal:host-gateway
     environment:
       # ── Auth ────────────────────────────────────────────────────────────
@@ -119,15 +121,17 @@ services:
       #
       # Both PG data and backup use Docker named volumes (cross-platform,
       # no permission issues on Windows/macOS/Linux).  Backup files are
-      # extracted via `docker cp` from the running container.
+      # extracted via `docker cp` from the running container.  Override
+      # `CODEFREEDOM_PG_DATA_VOLUME` / `CODEFREEDOM_PG_BACKUP_VOLUME` when you
+      # want an isolated test stack with its own embedded PostgreSQL volumes.
       - codefreedom_pg_data:/var/lib/postgresql/data
       - codefreedom_pg_backup:/var/lib/postgresql/backup
 
 volumes:
   codefreedom_pg_data:
-    name: codefreedom_pg_data
+    name: ${CODEFREEDOM_PG_DATA_VOLUME:-codefreedom_pg_data}
   codefreedom_pg_backup:
-    name: codefreedom_pg_backup
+    name: ${CODEFREEDOM_PG_BACKUP_VOLUME:-codefreedom_pg_backup}
 
 networks:
   codefreedom:
