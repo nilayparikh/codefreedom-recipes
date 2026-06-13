@@ -42,19 +42,16 @@ Before starting, make sure you have:
 ## Quick start
 
 ```bash
-# 1. Preview what will be installed
-cf init --plan costeffective-coding
+# 1. Plan + apply (shows preview, prompts to confirm, then installs)
+cf init -pa costeffective-coding
 
-# 2. Apply the plan (you will be prompted for API keys)
-cf init --apply <plan_id>
-
-# 3. Fix ownership (Linux/WSL only)
+# 2. Fix ownership (Linux/WSL only)
 sudo chown -R $(id -u):$(id -g) ~/.codefreedom
 
-# 4. Start the proxy — auto-starts Chrome, Web, GitHub, Web-bridge
+# 3. Start the proxy — auto-starts Chrome, Web, GitHub, Web-bridge
 cf px start
 
-# 5. Launch Claude Code or MiMoCode
+# 4. Launch Claude Code or MiMoCode
 cf cc
 # or
 cf mimo
@@ -498,8 +495,9 @@ cf mimo
 
 | Command                                          | Outcome                                                                      |
 | ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| `cf init --plan costeffective-coding`            | Preview: shows files to create/replace with diffs and dirs to create         |
-| `cf init --apply <plan-id>`                      | Apply: writes config files, creates `pg/data` and `pg/backup` mount dirs     |
+| `cf init -pa costeffective-coding`               | Plan + apply interactively (preview, confirm, install + secrets check)       |
+| `cf init --plan costeffective-coding`            | Preview only: shows files to create/replace with diffs and dirs to create    |
+| `cf init --apply <plan-id>`                      | Apply a previously generated plan                                            |
 | `cf px start`                                    | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
 | `cf px status`                                   | Proxy health check                                                           |
 | `cf px stop`                                     | Stop proxy and tools                                                         |
