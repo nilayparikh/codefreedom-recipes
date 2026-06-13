@@ -90,11 +90,9 @@ files:
     target: proxy/config/providers/local.yaml
     merge: deepdiff
 
-dirs:
-  # Host mount directory for PostgreSQL backup/logs (bind-mounted in
-  # docker-compose.yaml).  PG data uses a Docker named volume instead
-  # of a bind-mount, so no host directory is needed for data.
-  - pg/backup
+dirs: []
+  # PG data and backup both use Docker named volumes — no host
+  # directories are needed.
 
 required_secrets:
   - var: LITELLM_MASTER_KEY

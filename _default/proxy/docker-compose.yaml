@@ -4,10 +4,10 @@
 # (provider URLs, API keys, model aliases) are injected via .env.proxy
 # files and the `cf proxy start` CLI.
 #
-# PG data uses a Docker named volume (codefreedom_pg_data) for
-# cross-platform compatibility (no permission issues on Windows/macOS/Linux).
-# PG backup stays as a bind-mount so dump files are host-accessible.
-# The CLI injects POSTGRES_HOST_BACKUP_DIR from $CODEFREEDOM_HOME.
+# Both PG data and backup use Docker named volumes (codefreedom_pg_data,
+# codefreedom_pg_backup) for cross-platform compatibility — no permission
+# issues on Windows/macOS/Linux.  Backup files are extracted via
+# `docker cp` from the running container during `cf manage admin backup`.
 # ───────────────────────────────────────────────────────────────────────────
 
 services:
@@ -53,11 +53,13 @@ services:
     volumes:
       - ./config:/app/litellm-config
       - codefreedom_pg_data:/var/lib/postgresql/data
-      - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
+      - codefreedom_pg_backup:/var/lib/postgresql/backup
 
 volumes:
   codefreedom_pg_data:
     name: codefreedom_pg_data
+  codefreedom_pg_backup:
+    name: codefreedom_pg_backup
 
 networks:
   codefreedom:

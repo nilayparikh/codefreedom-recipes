@@ -117,17 +117,17 @@ services:
       # client, pushes the schema, and exports DATABASE_URL before
       # exec'ing litellm. No DATABASE_URL to set, no migrations to run.
       #
-      # PG data uses a Docker named volume (cross-platform, no permission
-      # issues on Windows/macOS/Linux).  Backup dir stays as a bind-mount
-      # so pg_dump files are accessible from the host for `cf manage admin backup`.
-      #
-      # Override POSTGRES_HOST_BACKUP_DIR via .env.proxy if needed.
+      # Both PG data and backup use Docker named volumes (cross-platform,
+      # no permission issues on Windows/macOS/Linux).  Backup files are
+      # extracted via `docker cp` from the running container.
       - codefreedom_pg_data:/var/lib/postgresql/data
-      - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
+      - codefreedom_pg_backup:/var/lib/postgresql/backup
 
 volumes:
   codefreedom_pg_data:
     name: codefreedom_pg_data
+  codefreedom_pg_backup:
+    name: codefreedom_pg_backup
 
 networks:
   codefreedom:
