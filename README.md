@@ -10,14 +10,14 @@ Recipes are opinionated bundles of proxy config, Claude Code profiles, and tool 
 
 ```bash
 # See what's available
-cf init --list
+cf s i -l
 
 # Plan + apply in one step (recommended)
-cf init -pa costeffective-coding
+cf s i -pa costeffective-coding
 
 # Or two-step: preview first, then apply separately
-cf init --plan costeffective-coding
-cf init --apply <plan-id>
+cf s i -p costeffective-coding
+cf s i -a <plan-id>
 ```
 
 After installing, set your API keys in the `.secrets` files, then:
@@ -70,10 +70,10 @@ Point to your own recipe store -- a GitHub repo or local folder with the same st
 
 ```bash
 # GitHub repository
-cf init --store https://github.com/your-org/my-recipes
+cf s i --store https://github.com/your-org/my-recipes
 
 # Local folder
-cf init --store /path/to/my-recipes
+cf s i --store /path/to/my-recipes
 ```
 
 ## Recipe Format
@@ -163,7 +163,7 @@ recipe-name/
 - **Slim reasoning-efforts** -- include only rules for your provider's models
 - **Clear hints** -- tell users where to get their API keys
 - **Free-first defaults** -- if your provider has a free tier, default to it
-- **Test the flow** -- run `cf init --plan <name>` and verify the diff looks right
+- **Test the flow** -- run `cf s i -p <name>` and verify the diff looks right
 
 ### Model Aliases
 
@@ -186,7 +186,7 @@ This is a community-maintained repository. Anyone can contribute recipes, and co
 
 By contributing, you represent that you are responsible for your own submissions: their correctness, their legal standing, and any downstream effects of the configurations they describe. Merging a PR is a quality signal, not an endorsement.
 
-Users are encouraged to review recipe contents before applying them -- that's what `cf init --plan` is for.
+Users are encouraged to review recipe contents before applying them -- that's what `cf s i -p <name>` is for.
 
 ## License
 

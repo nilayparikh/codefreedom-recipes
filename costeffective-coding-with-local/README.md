@@ -48,7 +48,7 @@ Before starting, make sure you have:
 
 ```bash
 # 1. Plan + apply (shows preview, prompts to confirm, then installs)
-cf init -pa costeffective-coding-with-local
+cf s i -pa costeffective-coding-with-local
 
 # 2. Fix ownership (Linux/WSL only)
 sudo chown -R $(id -u):$(id -g) ~/.codefreedom
@@ -77,7 +77,7 @@ If you are on the `recipe-branch` branch (unstable recipes), add `--staging`
 to the plan command:
 
 ```bash
-cf init --staging --plan costeffective-coding-with-local
+cf s i --staging -p costeffective-coding-with-local
 ```
 
 ---
@@ -539,9 +539,9 @@ cf mimo
 
 | Command                                           | Outcome                                                                      |
 | ------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `cf init -pa costeffective-coding-with-local`     | Plan + apply interactively (preview, confirm, install + secrets check)       |
-| `cf init --plan costeffective-coding-with-local`  | Preview only: shows files to create/replace with diffs and dirs to create    |
-| `cf init --apply <plan-id>`                       | Apply a previously generated plan                                            |
+| `cf s i -pa costeffective-coding-with-local`     | Plan + apply interactively (preview, confirm, install + secrets check)       |
+| `cf s i -p costeffective-coding-with-local`  | Preview only: shows files to create/replace with diffs and dirs to create    |
+| `cf s i -a <plan-id>`                       | Apply a previously generated plan                                            |
 | `cf px start`                                    | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
 | `cf px status`                                   | Proxy health check                                                           |
 | `cf px stop`                                     | Stop proxy and tools                                                         |
