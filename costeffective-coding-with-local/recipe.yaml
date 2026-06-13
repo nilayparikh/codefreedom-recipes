@@ -129,21 +129,3 @@ advice: |
     PowerShell: .\scripts\setup-secrets.ps1
   The script sets CF_CLI_* machine environment variables, persists them
   in your shell profile, and reports which services are configured.
-
-optional_config:
-  - var: LITELLM_MODEL_ALIAS_BEST
-    default: "DeepSeek/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_FABLE
-    default: "DeepSeek/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_SONNET
-    default: "DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_OPUS
-    default: "DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_HAIKU
-    default: "DeepSeek-V4-Flash"
-  - var: LITELLM_MODEL_ALIAS_SONNET_1M
-    default: "DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_OPUS_1M
-    default: "DeepSeek/DeepSeek-V4-Pro"
-  - var: LITELLM_MODEL_ALIAS_OPUSPLAN
-    default: "DeepSeek/DeepSeek-V4-Pro"
