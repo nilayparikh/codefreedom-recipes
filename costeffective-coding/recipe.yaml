@@ -98,9 +98,6 @@ required_secrets:
   - var: DEEPSEEK_API_KEY
     prompt: "DeepSeek API key"
     hint: "Get key at https://platform.deepseek.com/api_keys"
-  - var: MICROSOFT_FOUNDRY_API_BASE
-    prompt: "Azure Foundry base URL"
-    hint: "Azure AI Foundry workspace endpoint"
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Azure Foundry API key"
     hint: "Set in Azure AI Foundry portal"
@@ -110,6 +107,11 @@ required_secrets:
   - var: OPENROUTER_API_KEY
     prompt: "OpenRouter API key"
     hint: "Get key at https://openrouter.ai/keys"
+
+config_vars:
+  - var: MICROSOFT_FOUNDRY_API_BASE
+    prompt: "Azure Foundry base URL"
+    hint: "Azure AI Foundry workspace endpoint"
 
 advice: |
   For interactive secret setup (recommended), run the assisted script:
