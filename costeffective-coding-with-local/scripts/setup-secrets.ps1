@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-#Requires -Version 5.1
+#Requires -Version 7.0
 <#
 .SYNOPSIS
     CodeFreedom — Assisted Secret Setup (PowerShell)
@@ -175,7 +175,10 @@ function Prompt-Secret {
         $overwriteChoice = Read-Host -Prompt "  > [K]eep existing  [O]verwrite  (Enter to keep)"
         if ($overwriteChoice -eq "o" -or $overwriteChoice -eq "O") {
             Write-Host "  Overwriting — enter new value (Enter to skip):" -ForegroundColor DarkGray
-            $userInput = Read-Host -Prompt "  >"
+            $secureOverwrite = Read-Host -Prompt "  >" -AsSecureString
+            $userInput = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
+                [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureOverwrite)
+            )
             if ($userInput -ne "") {
                 $Script:SecretValues[$VarName] = $userInput
                 Write-Host "  " -NoNewline
@@ -212,7 +215,10 @@ function Prompt-Secret {
     }
     $promptText += " (Enter to skip): "
 
-    $userInput = Read-Host -Prompt $promptText
+    $secureInput = Read-Host -Prompt $promptText -AsSecureString
+    $userInput = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
+        [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureInput)
+    )
 
     if ($userInput -ne "") {
         $Script:SecretValues[$VarName] = $userInput
@@ -235,34 +241,12 @@ function Prompt-Secret {
     }
 }
 
-function Write-ProfileBlock {
-    $profilePath = $PROFILE.CurrentUserCurrentHost
-    if (-not (Test-Path $profilePath)) {
-        New-Item -Path $profilePath -ItemType File -Force | Out-Null
-    }
-
-    $markerBegin = "# >>> codefreedom:costeffective-coding-with-local secrets >>>"
-    $markerEnd   = "# <<< codefreedom:costeffective-coding-with-local secrets <<<"
-
-    # Read existing content and remove old block
-    $content = if (Test-Path $profilePath) { Get-Content $profilePath -Raw } else { "" }
-    if ($content -and $content.Contains($markerBegin)) {
-        $startIdx = $content.IndexOf($markerBegin)
-        $endIdx   = $content.IndexOf($markerEnd) + $markerEnd.Length
-        $content  = $content.Remove($startIdx, $endIdx - $startIdx)
-    }
-
-    # Build new block
-    $block = "`n$markerBegin`n# Added by: scripts/setup-secrets.ps1 ($(Get-Date -Format 'yyyy-MM-dd HH:mm'))`n"
+function Set-UserEnvironmentVars {
     foreach ($varName in $SecretDefs.Keys) {
         if ($Script:SecretValues.ContainsKey($varName) -and $Script:SecretValues[$varName] -ne "") {
-            $block += "`$env:CF_CLI_$varName = `"$($Script:SecretValues[$varName])`"`n"
+            [Environment]::SetEnvironmentVariable("CF_CLI_$varName", $Script:SecretValues[$varName], "User")
         }
     }
-    $block += "$markerEnd`n"
-
-    # Write
-    Set-Content -Path $profilePath -Value ($content.TrimEnd() + "`n" + $block) -NoNewline
 }
 
 function Export-CurrentSession {
@@ -348,9 +332,8 @@ function Write-Summary {
     }
 
     Write-Host ""
-    $profilePath = $PROFILE.CurrentUserCurrentHost
-    Write-Host "  Persisted to: $profilePath" -ForegroundColor DarkGray
-    Write-Host "  Restart PowerShell or run: . `$PROFILE" -ForegroundColor DarkGray
+    Write-Host "  Persisted as User environment variables (CF_CLI_*)" -ForegroundColor DarkGray
+    Write-Host "  Restart PowerShell or open a new terminal to pick them up." -ForegroundColor DarkGray
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor White
     Write-Host ""
 }
@@ -372,6 +355,6 @@ foreach ($varName in $SecretDefs.Keys) {
                   -PlaceholderValue $placeholder
 }
 
-Write-ProfileBlock
+Set-UserEnvironmentVars
 Export-CurrentSession
 Write-Summary
