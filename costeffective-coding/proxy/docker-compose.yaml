@@ -102,29 +102,22 @@ services:
     volumes:
       - ./config:/app/litellm-config
 
-      # ── Embedded PostgreSQL 18.4 (no TCP, Unix-socket only) ──────────
+      # ── Embedded PostgreSQL 18.4 ────────────────────────────────────
       # The entrypoint auto-initialises the cluster, generates the Prisma
-      # client, pushes the schema, and exports DATABASE_URL pointing at
-      # the Unix socket. No DATABASE_URL to set, no migrations to run.
+      # client, pushes the schema, and exports DATABASE_URL before
+      # exec'ing litellm. No DATABASE_URL to set, no migrations to run.
       #
-      # The host dirs must be owned by uid 1000 (the in-container
-      # 'codefreedom' user). cf init creates them.
+      # PG data uses a Docker named volume (cross-platform, no permission
+      # issues on Windows/macOS/Linux).  Backup dir stays as a bind-mount
+      # so pg_dump files are accessible from the host for `cf manage admin backup`.
       #
-      # When using `cf proxy start`, the CLI injects POSTGRES_HOST_DATA_DIR
-      # from $CODEFREEDOM_HOME automatically, respecting any custom
-      # CODEFREEDOM_HOME setting.  The fallback below only applies when
-      # running `docker compose` directly (ignores CODEFREEDOM_HOME).
-      # Override via .env.proxy: POSTGRES_HOST_DATA_DIR /
-      # POSTGRES_HOST_BACKUP_DIR.
-      - ${POSTGRES_HOST_DATA_DIR:-${HOME}/.codefreedom/pg/data}:/var/lib/postgresql/data
+      # Override POSTGRES_HOST_BACKUP_DIR via .env.proxy if needed.
+      - codefreedom_pg_data:/var/lib/postgresql/data
       - ${POSTGRES_HOST_BACKUP_DIR:-${HOME}/.codefreedom/pg/backup}:/var/lib/postgresql/backup
-      # /var/run/postgresql (PG's Unix socket dir) is intentionally NOT
-      # bind-mounted.  The socket is pure in-process IPC, recreated on
-      # every container start, and has no value persisting across
-      # restarts.  The entrypoint creates the dir + chmod 700s it.
-    # The WebSearch count display patch is baked into the image (see
-    # docker/litellm/Dockerfile.LiteLLM). No volume mounts or entrypoint
-    # wrappers needed here.
+
+volumes:
+  codefreedom_pg_data:
+    name: codefreedom_pg_data
 
 networks:
   codefreedom:

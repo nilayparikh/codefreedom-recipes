@@ -61,11 +61,9 @@ files:
     merge: deepdiff
 
 dirs:
-  # Host mount directories for embedded PostgreSQL (docker-compose.yaml
-  # volume binds these paths).  Must exist before `docker compose up`
-  # runs so that a subsequent permission fix (e.g. `chown 1000:1000`)
-  # can set the correct owner for the in-container 'codefreedom' user.
-  - pg/data
+  # Host mount directory for PostgreSQL backup/logs (bind-mounted in
+  # docker-compose.yaml).  PG data uses a Docker named volume instead
+  # of a bind-mount, so no host directory is needed for data.
   - pg/backup
 
 required_secrets:

@@ -12,10 +12,11 @@ Recipes are opinionated bundles of proxy config, Claude Code profiles, and tool 
 # See what's available
 cf init --list
 
-# Preview what a recipe installs (no changes made)
-cf init --plan free
+# Plan + apply in one step (recommended)
+cf init -pa costeffective-coding
 
-# Apply the generated plan
+# Or two-step: preview first, then apply separately
+cf init --plan costeffective-coding
 cf init --apply <plan-id>
 ```
 
