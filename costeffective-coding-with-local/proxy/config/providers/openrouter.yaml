@@ -88,6 +88,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: deepseek-v4-pro
+        route-image-request:
+          enabled: true
 
   # https://openrouter.ai/deepseek/deepseek-v4-flash?provider=DeepSeek
   - model_name: DeepSeek-V4-Flash
@@ -160,6 +162,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5
+        route-image-request:
+          enabled: true
 
   # https://openrouter.ai/xiaomi/mimo-v2.5-pro
   - model_name: MiMo-V2.5-Pro
@@ -195,6 +199,8 @@ model_list:
       plugins:
         reasoning-efforts:
           rule: mimo-v2-5-pro
+        route-image-request:
+          enabled: true
 
   # https://openrouter.ai/qwen/qwen3.7-plus
   # | Context Size | Input Price | Output Price | Cache Read | Cache Creation (5min) | Cache Read (5min) |

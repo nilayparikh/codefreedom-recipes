@@ -67,7 +67,7 @@ router_settings:
     "opus": "Qwen3.7-Plus"
     "sonnet": "DeepSeek-V4-Pro"
     "haiku": "DeepSeek-V4-Flash"
-    "custom": "Qwen3.6-27B"
+    "custom": "DeepSeek-V4-Flash"
 
   # ── Context Window Fallbacks ─────────────────────────────────────────────
   # If a model can't fit the context, fall back to cloud.
@@ -136,9 +136,7 @@ codefreedom:
   image-router-for-text-only:
     enabled: true
     models:
-      - "OpenCode/MiMo-V2.5-FREE"
-      - "OpenCode/Kimi-K2.6"
-      - "OpenCode/Qwen3.7-Max"
+      - "FreeRouter"
 
 search_tools:
   - search_tool_name: codefreedom-web

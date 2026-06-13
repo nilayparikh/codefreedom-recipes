@@ -70,6 +70,8 @@ model_list:
           rule: qwen3-6-27b
         system-message-merger:
           enabled: true
+        route-image-request:
+          enabled: true
 
   - model_name: Qwen3.6-35B-A3B
     litellm_params:
