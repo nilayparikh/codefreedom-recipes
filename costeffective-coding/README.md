@@ -84,16 +84,37 @@ cf init --staging --plan costeffective-coding
 
 When you run `--plan`, the recipe engine prompts for each required secret:
 
-| Secret                      | Prompt                    | Default                 |
-| --------------------------- | ------------------------- | ----------------------- |
-| `LITELLM_MASTER_KEY`        | LiteLLM proxy master key  | `sk-codefreedom-local`  |
-| `DEEPSEEK_API_KEY`          | DeepSeek API key          | (empty — must provide)  |
-| `MICROSOFT_FOUNDRY_API_KEY` | Microsoft Foundry API key | (empty — must provide)  |
-| `OPENCODE_ZEN_API_KEY`      | OpenCode Zen API key      | (empty — must provide)  |
-| `OPENROUTER_API_KEY`        | OpenRouter API key        | (empty — must provide)  |
+| Secret                      | Prompt                    | Default                |
+| --------------------------- | ------------------------- | ---------------------- |
+| `LITELLM_MASTER_KEY`        | LiteLLM proxy master key  | `sk-codefreedom-local` |
+| `DEEPSEEK_API_KEY`          | DeepSeek API key          | (empty — must provide) |
+| `MICROSOFT_FOUNDRY_API_KEY` | Microsoft Foundry API key | (empty — must provide) |
+| `OPENCODE_ZEN_API_KEY`      | OpenCode Zen API key      | (empty — must provide) |
+| `OPENROUTER_API_KEY`        | OpenRouter API key        | (empty — must provide) |
 
 Keys are written to `~/.codefreedom/.env.proxy.secrets`. Leave a key empty to
 skip that provider — LiteLLM will not load its config.
+
+### Assisted secret setup
+
+Instead of setting each secret by hand, run the assisted setup script. It walks
+you through every secret interactively, persists them as `CF_CLI_*` env vars in
+your shell profile, and prints a summary of which services are configured.
+
+```bash
+# Bash / Zsh
+bash scripts/setup-secrets.sh
+
+# PowerShell
+.\scripts\setup-secrets.ps1
+```
+
+To pre-fill values without being prompted, edit the placeholder block at the top
+of the script before running it. Press ENTER at any prompt to skip (the
+corresponding service will not be available).
+
+The script uses the `CF_CLI_` prefix convention so CodeFreedom's env chain
+picks them up automatically at the highest priority tier.
 
 ---
 
@@ -109,88 +130,91 @@ highest priority), in `.env.*.secrets` files (secrets), or in `.env.user`
 Secrets are split across three files by scope. Set via `CF_CLI_*` machine env
 vars (recommended) or fill in the `.env.*.secrets` files as fallbacks.
 
-| Variable | File | Used by | Description |
-| --- | --- | --- | --- |
-| `LITELLM_MASTER_KEY` | `.env.proxy.secrets` | Proxy, Claude, MiMo, OpenCode | Proxy auth token — all agents use this to talk to LiteLLM |
-| `DEEPSEEK_API_KEY` | `.env.proxy.secrets` | Proxy | DeepSeek direct API key |
-| `MICROSOFT_FOUNDRY_API_KEY` | `.env.proxy.secrets` | Proxy (Azure provider) | Azure AI Foundry API key |
-| `MICROSOFT_FOUNDRY_API_BASE` | `.env.proxy.secrets` | Proxy (Azure provider) | Azure endpoint URL (region-specific) |
-| `OPENCODE_ZEN_API_KEY` | `.env.proxy.secrets` | Proxy (OpenCode Zen + GO) | OpenCode API key — free tier + subscription |
-| `OPENROUTER_API_KEY` | `.env.proxy.secrets` | Proxy (OpenRouter) | OpenRouter API key |
-| `GITHUB_PERSONAL_ACCESS_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode | GitHub PAT for git push/pull in `--sandbox` |
-| `GH_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode | GitHub token alias (usually same as PAT above) |
+| Variable                       | File                                  | Used by                       | Description                                               |
+| ------------------------------ | ------------------------------------- | ----------------------------- | --------------------------------------------------------- |
+| `LITELLM_MASTER_KEY`           | `.env.proxy.secrets`                  | Proxy, Claude, MiMo, OpenCode | Proxy auth token — all agents use this to talk to LiteLLM |
+| `DEEPSEEK_API_KEY`             | `.env.proxy.secrets`                  | Proxy                         | DeepSeek direct API key                                   |
+| `MICROSOFT_FOUNDRY_API_KEY`    | `.env.proxy.secrets`                  | Proxy (Azure provider)        | Azure AI Foundry API key                                  |
+| `MICROSOFT_FOUNDRY_API_BASE`   | `.env.proxy.secrets`                  | Proxy (Azure provider)        | Azure endpoint URL (region-specific)                      |
+| `OPENCODE_ZEN_API_KEY`         | `.env.proxy.secrets`                  | Proxy (OpenCode Zen + GO)     | OpenCode API key — free tier + subscription               |
+| `OPENROUTER_API_KEY`           | `.env.proxy.secrets`                  | Proxy (OpenRouter)            | OpenRouter API key                                        |
+| `GITHUB_PERSONAL_ACCESS_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode                  | GitHub PAT for git push/pull in `--sandbox`               |
+| `GH_TOKEN`                     | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode                  | GitHub token alias (usually same as PAT above)            |
 
 ### Non-secrets (proxy container)
 
 Set in `.env.proxy` or `.env.user`. These control the proxy container and
 model routing — they are not sensitive.
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `LITELLM_IMAGE` | `docker.io/nilayparikh/codefreedom:litellm-latest` | Proxy container image |
-| `LITELLM_CONTAINER_NAME` | `litellm-codefreedom` | Docker container name |
-| `LITELLM_PORT` | `4000` | Proxy listen port |
-| `LITELLM_BIND_HOST` | `0.0.0.0` | Proxy bind address |
-| `LITELLM_LOG` | `INFO` | Log level (DEBUG/INFO/WARNING) |
-| `LITELLM_DROP_PARAMS` | `true` | Strip unsupported params before forwarding |
-| `JSON_LOGS` | `true` | JSON-formatted log output |
-| `SEARXNG_API_BASE` | `http://host.docker.internal:8500` | Web bridge SearXNG endpoint |
-| `OPENCODE_ZEN_BASE_URL` | `https://opencode.ai/zen/v1` | OpenCode Zen API endpoint |
-| `OPENCODE_GO_BASE_URL` | `https://opencode.ai/zen/go/v1` | OpenCode GO API endpoint |
-| `OPENCODE_GO_ANTHROPIC_BASE_URL` | `https://opencode.ai/zen/go` | OpenCode GO Anthropic-format endpoint |
-| `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenRouter API endpoint |
-| `POSTGRES_HOST_DATA_DIR` | `~/.codefreedom/pg/data` | PostgreSQL data directory host path |
-| `POSTGRES_HOST_BACKUP_DIR` | `~/.codefreedom/pg/backup` | PostgreSQL backup directory host path |
+| Variable                         | Default                                            | Description                                        |
+| -------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| `LITELLM_IMAGE`                  | `docker.io/nilayparikh/codefreedom:litellm-latest` | Proxy container image                              |
+| `LITELLM_CONTAINER_NAME`         | `litellm-codefreedom`                              | Docker container name                              |
+| `LITELLM_PORT`                   | `4000`                                             | Proxy listen port                                  |
+| `LITELLM_BIND_HOST`              | `0.0.0.0`                                          | Proxy bind address                                 |
+| `LITELLM_LOG`                    | `INFO`                                             | Log level (DEBUG/INFO/WARNING)                     |
+| `LITELLM_DROP_PARAMS`            | `true`                                             | Strip unsupported params before forwarding         |
+| `JSON_LOGS`                      | `true`                                             | JSON-formatted log output                          |
+| `SEARXNG_API_BASE`               | `http://host.docker.internal:8500`                 | Web bridge SearXNG endpoint                        |
+| `OPENCODE_ZEN_BASE_URL`          | `https://opencode.ai/zen/v1`                       | OpenCode Zen API endpoint                          |
+| `OPENCODE_GO_BASE_URL`           | `https://opencode.ai/zen/go/v1`                    | OpenCode GO API endpoint                           |
+| `OPENCODE_GO_ANTHROPIC_BASE_URL` | `https://opencode.ai/zen/go`                       | OpenCode GO Anthropic-format endpoint              |
+| `OPENROUTER_BASE_URL`            | `https://openrouter.ai/api/v1`                     | OpenRouter API endpoint                            |
+| `POSTGRES_HOST_BACKUP_DIR`       | `~/.codefreedom/pg/backup`                         | PostgreSQL backup directory host path (bind-mount) |
+
+> **Note:** PG data uses a Docker named volume (`codefreedom_pg_data`) instead of a host
+> bind-mount. This avoids permission issues on Windows/macOS/Linux. No host directory
+> configuration is needed for PG data.
 
 ### Non-secrets (model alias overrides)
 
 Set in `.env.user` to override the default model for each alias. See
 [Model alias routing](#model-alias-routing) for details.
 
-| Variable | Default | Overrides alias |
-| --- | --- | --- |
-| `LITELLM_MODEL_ALIAS_BEST` | `DeepSeek/DeepSeek-V4-Pro` | `best` |
-| `LITELLM_MODEL_ALIAS_FABLE` | `DeepSeek/DeepSeek-V4-Pro` | `fable` |
-| `LITELLM_MODEL_ALIAS_SONNET` | `DGX/Qwen3.6-27B` | `sonnet` |
-| `LITELLM_MODEL_ALIAS_OPUS` | `DeepSeek/DeepSeek-V4-Pro` | `opus` |
-| `LITELLM_MODEL_ALIAS_HAIKU` | `DGX/Qwen3.6-35B-A3B` | `haiku` |
-| `LITELLM_MODEL_ALIAS_OPUS_1M` | `DeepSeek/DeepSeek-V4-Pro` | `opus` (1M context) |
-| `LITELLM_MODEL_ALIAS_OPUSPLAN` | `DeepSeek/DeepSeek-V4-Pro` | `opusplan` |
+| Variable                       | Default                    | Overrides alias     |
+| ------------------------------ | -------------------------- | ------------------- |
+| `LITELLM_MODEL_ALIAS_BEST`     | `DeepSeek/DeepSeek-V4-Pro` | `best`              |
+| `LITELLM_MODEL_ALIAS_FABLE`    | `DeepSeek/DeepSeek-V4-Pro` | `fable`             |
+| `LITELLM_MODEL_ALIAS_SONNET`   | `DGX/Qwen3.6-27B`          | `sonnet`            |
+| `LITELLM_MODEL_ALIAS_OPUS`     | `DeepSeek/DeepSeek-V4-Pro` | `opus`              |
+| `LITELLM_MODEL_ALIAS_HAIKU`    | `DGX/Qwen3.6-35B-A3B`      | `haiku`             |
+| `LITELLM_MODEL_ALIAS_OPUS_1M`  | `DeepSeek/DeepSeek-V4-Pro` | `opus` (1M context) |
+| `LITELLM_MODEL_ALIAS_OPUSPLAN` | `DeepSeek/DeepSeek-V4-Pro` | `opusplan`          |
 
 ### Non-secrets (agent profiles)
 
 These are set in profile YAML `env:` blocks and resolved automatically. Override
 in `.env.user` only if you need to change agent behavior.
 
-| Variable | Agent | Description |
-| --- | --- | --- |
-| `ANTHROPIC_BASE_URL` | Claude Code | Proxy URL (`http://localhost:4000`) |
-| `ANTHROPIC_AUTH_TOKEN` | Claude Code | Proxy auth (= `LITELLM_MASTER_KEY`) |
-| `CLAUDE_MODEL` | Claude Code | Default model alias (`haiku`) |
-| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | Claude Code | Enable model discovery via proxy |
-| `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` | Claude Code | Disable telemetry/analytics |
-| `ANTHROPIC_DEFAULT_FABLE_MODEL` | Claude Code | Model for `fable` alias |
-| `ANTHROPIC_DEFAULT_OPUS_MODEL` | Claude Code | Model for `opus` alias |
-| `ANTHROPIC_DEFAULT_SONNET_MODEL` | Claude Code | Model for `sonnet` alias |
-| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | Claude Code | Model for `haiku` alias |
-| `ANTHROPIC_CUSTOM_MODEL_OPTION` | Claude Code | Model for `custom` alias |
-| `LITELLM_BASE_URL` | MiMoCode / OpenCode | Proxy URL for 0-click config |
-| `PROXY_API_KEY` | MiMoCode / OpenCode | Proxy auth (= `LITELLM_MASTER_KEY`) |
-| `MIMOCODE_MIMO_ONLY` | MiMoCode | Pure MiMo mode (no Claude Code) |
-| `MIMOCODE_DISABLE_AUTOUPDATE` | MiMoCode | Disable auto-update checks |
-| `MIMOCODE_ENABLE_ANALYSIS` | MiMoCode | Disable remote telemetry |
-| `MIMOCODE_CONFIG` | MiMoCode | Path to generated `mimocode.json` |
-| `OPENCODE_CONFIG` | OpenCode | Path to generated `opencode.json` |
-| `OPENCODE_DISABLE_AUTOUPDATE` | OpenCode | Disable auto-update checks |
+| Variable                                     | Agent               | Description                         |
+| -------------------------------------------- | ------------------- | ----------------------------------- |
+| `ANTHROPIC_BASE_URL`                         | Claude Code         | Proxy URL (`http://localhost:4000`) |
+| `ANTHROPIC_AUTH_TOKEN`                       | Claude Code         | Proxy auth (= `LITELLM_MASTER_KEY`) |
+| `CLAUDE_MODEL`                               | Claude Code         | Default model alias (`haiku`)       |
+| `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY` | Claude Code         | Enable model discovery via proxy    |
+| `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`   | Claude Code         | Disable telemetry/analytics         |
+| `ANTHROPIC_DEFAULT_FABLE_MODEL`              | Claude Code         | Model for `fable` alias             |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL`               | Claude Code         | Model for `opus` alias              |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL`             | Claude Code         | Model for `sonnet` alias            |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL`              | Claude Code         | Model for `haiku` alias             |
+| `ANTHROPIC_CUSTOM_MODEL_OPTION`              | Claude Code         | Model for `custom` alias            |
+| `LITELLM_BASE_URL`                           | MiMoCode / OpenCode | Proxy URL for 0-click config        |
+| `PROXY_API_KEY`                              | MiMoCode / OpenCode | Proxy auth (= `LITELLM_MASTER_KEY`) |
+| `MIMOCODE_MIMO_ONLY`                         | MiMoCode            | Pure MiMo mode (no Claude Code)     |
+| `MIMOCODE_DISABLE_AUTOUPDATE`                | MiMoCode            | Disable auto-update checks          |
+| `MIMOCODE_ENABLE_ANALYSIS`                   | MiMoCode            | Disable remote telemetry            |
+| `MIMOCODE_CONFIG`                            | MiMoCode            | Path to generated `mimocode.json`   |
+| `OPENCODE_CONFIG`                            | OpenCode            | Path to generated `opencode.json`   |
+| `OPENCODE_DISABLE_AUTOUPDATE`                | OpenCode            | Disable auto-update checks          |
 
 ### Secrets file summary
 
-| File | Scope | Variables |
-| --- | --- | --- |
-| `.env.proxy.secrets` | Proxy + all providers | `LITELLM_MASTER_KEY`, `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `MICROSOFT_FOUNDRY_API_BASE`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY` |
-| `.env.claude.secrets` | Claude Code sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
-| `.env.mimo.secrets` | MiMoCode sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
-| `.env.opencode.secrets` | OpenCode sandbox | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN` |
+| File                    | Scope                 | Variables                                                                                                                                         |
+| ----------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.env.proxy.secrets`    | Proxy + all providers | `LITELLM_MASTER_KEY`, `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `MICROSOFT_FOUNDRY_API_BASE`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY` |
+| `.env.claude.secrets`   | Claude Code sandbox   | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
+| `.env.mimo.secrets`     | MiMoCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
+| `.env.opencode.secrets` | OpenCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
 
 ---
 
@@ -225,17 +249,17 @@ in `.env.user` only if you need to change agent behavior.
 
 ## What it provides
 
-| Layer                  | Files                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------- |
-| **Claude Code config** | `.env.claude`, `.env.claude.secrets`                                            |
-| **MiMoCode config**    | `.env.mimo`, `.env.mimo.secrets`                                                |
-| **Proxy config**       | `.env.proxy`, `.env.proxy.secrets`                                              |
+| Layer                  | Files                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------- |
+| **Claude Code config** | `.env.claude`, `.env.claude.secrets`                                                              |
+| **MiMoCode config**    | `.env.mimo`, `.env.mimo.secrets`                                                                  |
+| **Proxy config**       | `.env.proxy`, `.env.proxy.secrets`                                                                |
 | **Profiles**           | `claude-code.yaml`, `mimo-code.yaml`, `chrome.yaml`, `web.yaml`, `github.yaml`, `web-bridge.yaml` |
-| **Proxy compose**      | `docker-compose.yaml` with embedded PostgreSQL                                  |
-| **LiteLLM config**     | `config.yaml` with LiteLLM routing                                              |
-| **Plugins**            | Reasoning-efforts mapping, image-router, system-message-merger                 |
-| **Providers**          | Azure Foundry, OpenCode, OpenRouter                                              |
-| **Mount dirs**         | `pg/data`, `pg/backup` (embedded PostgreSQL host volumes)                       |
+| **Proxy compose**      | `docker-compose.yaml` with embedded PostgreSQL                                                    |
+| **LiteLLM config**     | `config.yaml` with LiteLLM routing                                                                |
+| **Plugins**            | Reasoning-efforts mapping, image-router, system-message-merger                                    |
+| **Providers**          | Azure Foundry, OpenCode, OpenRouter                                                               |
+| **Mount dirs**         | `pg/data`, `pg/backup` (embedded PostgreSQL host volumes)                                         |
 
 ---
 
@@ -244,12 +268,12 @@ in `.env.user` only if you need to change agent behavior.
 Each provider config reads its key from an environment variable. Set the ones
 you want to use. Unset providers are skipped automatically by LiteLLM.
 
-| Provider config         | Key env var                 | Default endpoint                                                                |
-| ----------------------- | --------------------------- | ------------------------------------------------------------------------------- |
-| **Azure Foundry**       | `MICROSOFT_FOUNDRY_API_KEY` | Region-specific — set in `.env.user`; see commented placeholder in `.env.proxy` |
-| **OpenCode Zen**        | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/v1`                                                    |
-| **OpenCode GO**         | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/go/v1`                                                 |
-| **OpenRouter**          | `OPENROUTER_API_KEY`        | `https://openrouter.ai/api/v1`                                                  |
+| Provider config   | Key env var                 | Default endpoint                                                                |
+| ----------------- | --------------------------- | ------------------------------------------------------------------------------- |
+| **Azure Foundry** | `MICROSOFT_FOUNDRY_API_KEY` | Region-specific — set in `.env.user`; see commented placeholder in `.env.proxy` |
+| **OpenCode Zen**  | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/v1`                                                    |
+| **OpenCode GO**   | `OPENCODE_ZEN_API_KEY`      | `https://opencode.ai/zen/go/v1`                                                 |
+| **OpenRouter**    | `OPENROUTER_API_KEY`        | `https://openrouter.ai/api/v1`                                                  |
 
 Set keys in `~/.codefreedom/.env.proxy.secrets` or `~/.codefreedom/.env.user`:
 
@@ -271,13 +295,13 @@ Aliases are defined in `proxy/config/config.yaml` and map directly to model name
 Override any by setting the corresponding `LITELLM_MODEL_ALIAS_*` env var
 (included in `recipe.yaml` `optional_config` with defaults).
 
-| Alias in config.yaml | Routes to model name   | Available providers                          | Purpose                 |
-| -------------------- | ---------------------- | -------------------------------------------- | ----------------------- |
-| `fable`              | `Qwen3.7-Max`          | OpenCode GO, OpenRouter                      | Hard reasoning, primary |
-| `opus`               | `Qwen3.7-Plus`         | OpenCode GO, OpenRouter                      | Complex reasoning       |
-| `sonnet`             | `DeepSeek-V4-Pro`      | OpenRouter                                   | Daily coding            |
-| `haiku`              | `DeepSeek-V4-Flash`    | OpenCode Zen (free), OpenCode GO, OpenRouter | Fast / lightweight      |
-| `custom`             | `Qwen3.6-27B`          | — (configure your own backend)         | Custom model slot       |
+| Alias in config.yaml | Routes to model name | Available providers                          | Purpose                 |
+| -------------------- | -------------------- | -------------------------------------------- | ----------------------- |
+| `fable`              | `Qwen3.7-Max`        | OpenCode GO, OpenRouter                      | Hard reasoning, primary |
+| `opus`               | `Qwen3.7-Plus`       | OpenCode GO, OpenRouter                      | Complex reasoning       |
+| `sonnet`             | `DeepSeek-V4-Pro`    | OpenRouter                                   | Daily coding            |
+| `haiku`              | `DeepSeek-V4-Flash`  | OpenCode Zen (free), OpenCode GO, OpenRouter | Fast / lightweight      |
+| `custom`             | `Qwen3.6-27B`        | — (configure your own backend)               | Custom model slot       |
 
 **Override an alias** — set `LITELLM_MODEL_ALIAS_*` in `~/.codefreedom/.env.user`:
 
@@ -305,15 +329,15 @@ reference even though `config.yaml` currently uses hardcoded aliases.
 
 Key settings written to `~/.codefreedom/.env.proxy`:
 
-| Variable                      | Value                                    | Purpose                                    |
-| ----------------------------- | ---------------------------------------- | ------------------------------------------ |
-| `LITELLM_IMAGE`               | `docker.io/nilayparikh/codefreedom:litellm-latest` | Proxy container image          |
-| `LITELLM_PORT`                | `4000`                                   | Proxy listen port                          |
-| `LITELLM_DROP_PARAMS`         | `true`                                   | Strip unsupported params before forwarding |
-| `OPENCODE_ZEN_BASE_URL`       | `https://opencode.ai/zen/v1`             | OpenCode Zen API                           |
-| `OPENCODE_GO_BASE_URL`        | `https://opencode.ai/zen/go/v1`          | OpenCode GO API                            |
-| `OPENCODE_GO_ANTHROPIC_BASE_URL` | `https://opencode.ai/zen/go`          | OpenCode GO Anthropic API                  |
-| `OPENROUTER_BASE_URL`         | `https://openrouter.ai/api/v1`           | OpenRouter API endpoint                    |
+| Variable                         | Value                                              | Purpose                                    |
+| -------------------------------- | -------------------------------------------------- | ------------------------------------------ |
+| `LITELLM_IMAGE`                  | `docker.io/nilayparikh/codefreedom:litellm-latest` | Proxy container image                      |
+| `LITELLM_PORT`                   | `4000`                                             | Proxy listen port                          |
+| `LITELLM_DROP_PARAMS`            | `true`                                             | Strip unsupported params before forwarding |
+| `OPENCODE_ZEN_BASE_URL`          | `https://opencode.ai/zen/v1`                       | OpenCode Zen API                           |
+| `OPENCODE_GO_BASE_URL`           | `https://opencode.ai/zen/go/v1`                    | OpenCode GO API                            |
+| `OPENCODE_GO_ANTHROPIC_BASE_URL` | `https://opencode.ai/zen/go`                       | OpenCode GO Anthropic API                  |
+| `OPENROUTER_BASE_URL`            | `https://openrouter.ai/api/v1`                     | OpenRouter API endpoint                    |
 
 > **Microsoft Foundry:** The `MICROSOFT_FOUNDRY_API_BASE` variable is set in the
 > docker-compose environment but **not** defined in `.env.proxy` — it's expected
@@ -353,11 +377,11 @@ The recipe's `claude-code.yaml` configures Claude Code to:
 
 ### Profiles
 
-| Profile   | Description                                                              |
-| --------- | ------------------------------------------------------------------------ |
-| `default` | Base profile — routes through proxy with all model aliases               |
-| `bare`    | Minimal — no model aliases, no sandbox settings, no preferences          |
-| `ui-ux`   | UI/UX design — vision-capable models for frontend development            |
+| Profile   | Description                                                     |
+| --------- | --------------------------------------------------------------- |
+| `default` | Base profile — routes through proxy with all model aliases      |
+| `bare`    | Minimal — no model aliases, no sandbox settings, no preferences |
+| `ui-ux`   | UI/UX design — vision-capable models for frontend development   |
 
 ---
 
@@ -372,15 +396,15 @@ The recipe's `mimo-code.yaml` configures MiMoCode to:
 
 ### Profiles
 
-| Profile   | Description                                                              |
-| --------- | ------------------------------------------------------------------------ |
-| `default` | Base profile — 0-click proxy auto-config with all models                 |
-| `bare`    | Minimal — no model config, no proxy auto-config, no sandbox settings     |
-| `ultra`   | Maximum capability — best models, all experimental features              |
-| `pro`     | Production — high-quality models, balanced feature set                   |
-| `flash`   | Speed-optimized — lightweight models, minimal plugins                    |
-| `air`     | Minimal-resource — for low-power devices and constrained environments    |
-| `ui-ux`   | UI/UX design — interactive design feedback, image attachment support     |
+| Profile   | Description                                                           |
+| --------- | --------------------------------------------------------------------- |
+| `default` | Base profile — 0-click proxy auto-config with all models              |
+| `bare`    | Minimal — no model config, no proxy auto-config, no sandbox settings  |
+| `ultra`   | Maximum capability — best models, all experimental features           |
+| `pro`     | Production — high-quality models, balanced feature set                |
+| `flash`   | Speed-optimized — lightweight models, minimal plugins                 |
+| `air`     | Minimal-resource — for low-power devices and constrained environments |
+| `ui-ux`   | UI/UX design — interactive design feedback, image attachment support  |
 
 ---
 
@@ -388,11 +412,11 @@ The recipe's `mimo-code.yaml` configures MiMoCode to:
 
 Three plugins are included in the proxy configuration:
 
-| Plugin                  | Purpose                                                                  |
-| ----------------------- | ------------------------------------------------------------------------ |
-| **Reasoning-efforts**   | Translates reasoning effort settings per model (full rule library)       |
-| **Image-router**        | Routes image requests to vision-capable models for text-only models      |
-| **System-message-merger** | Merges system messages for models that don't support them natively |
+| Plugin                    | Purpose                                                             |
+| ------------------------- | ------------------------------------------------------------------- |
+| **Reasoning-efforts**     | Translates reasoning effort settings per model (full rule library)  |
+| **Image-router**          | Routes image requests to vision-capable models for text-only models |
+| **System-message-merger** | Merges system messages for models that don't support them natively  |
 
 ---
 
@@ -426,17 +450,17 @@ This recipe is designed to minimize cost through three strategies:
 
 1. **Cheap cloud daily driver** — `haiku` routes to `DeepSeek-V4-Flash` at
    $0.14/M input tokens (free tier available via OpenCode Zen)
-3. **Expensive models on demand** — `fable` / `opus` use top-tier
+2. **Expensive models on demand** — `fable` / `opus` use top-tier
    models only when you explicitly select them
 
 Rough monthly estimate for a solo developer (1M input tokens / month):
 
-| Usage pattern                          | Estimated cost |
-| -------------------------------------- | -------------- |
-| Free tier only (`haiku` via OpenCode Zen) | $0          |
-| Cloud daily driver (`sonnet`)          | ~$1-5          |
-| Heavy reasoning (`fable` + `opus`)     | ~$5-20         |
-| Mixed (typical)                        | ~$2-10         |
+| Usage pattern                             | Estimated cost |
+| ----------------------------------------- | -------------- |
+| Free tier only (`haiku` via OpenCode Zen) | $0             |
+| Cloud daily driver (`sonnet`)             | ~$1-5          |
+| Heavy reasoning (`fable` + `opus`)        | ~$5-20         |
+| Mixed (typical)                           | ~$2-10         |
 
 Actual costs vary by provider pricing, cache hit rate, and output token volume.
 
@@ -472,18 +496,18 @@ cf mimo
 
 ## Commands reference
 
-| Command                                                 | Outcome                                                                      |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `cf init --plan costeffective-coding` | Preview: shows files to create/replace with diffs and dirs to create         |
+| Command                                          | Outcome                                                                      |
+| ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `cf init --plan costeffective-coding`            | Preview: shows files to create/replace with diffs and dirs to create         |
 | `cf init --apply <plan-id>`                      | Apply: writes config files, creates `pg/data` and `pg/backup` mount dirs     |
-| `cf px start`                                           | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
-| `cf px status`                                          | Proxy health check                                                           |
-| `cf px stop`                                            | Stop proxy and tools                                                         |
-| `cf px restart`                                         | Restart proxy (preserves state, no image pull)                               |
-| `cf cc`                                                 | Launch Claude Code with configured profile                                   |
-| `cf mimo`                                               | Launch MiMoCode with configured profile                                      |
-| `sudo chown -R $(id -u):$(id -g) ~/.codefreedom`        | Fix ownership (Linux/WSL — container user UID vs host UID)                  |
-| `cf tools status`                                       | Status of all tool containers                                                |
+| `cf px start`                                    | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
+| `cf px status`                                   | Proxy health check                                                           |
+| `cf px stop`                                     | Stop proxy and tools                                                         |
+| `cf px restart`                                  | Restart proxy (preserves state, no image pull)                               |
+| `cf cc`                                          | Launch Claude Code with configured profile                                   |
+| `cf mimo`                                        | Launch MiMoCode with configured profile                                      |
+| `sudo chown -R $(id -u):$(id -g) ~/.codefreedom` | Fix ownership (Linux/WSL — container user UID vs host UID)                   |
+| `cf tools status`                                | Status of all tool containers                                                |
 
 ---
 
@@ -600,9 +624,9 @@ base proxy compose, LiteLLM config, and plugins from the
 
 ## Recipe metadata
 
-| Field       | Value                             |
-| ----------- | --------------------------------- |
+| Field       | Value                  |
+| ----------- | ---------------------- |
 | **Name**    | `costeffective-coding` |
-| **Extends** | `_default`                        |
-| **Version** | 1                                 |
-| **Type**    | Cloud providers                   |
+| **Extends** | `_default`             |
+| **Version** | 1                      |
+| **Type**    | Cloud providers        |

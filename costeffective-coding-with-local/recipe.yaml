@@ -91,11 +91,9 @@ files:
     merge: deepdiff
 
 dirs:
-  # Host mount directories for embedded PostgreSQL (docker-compose.yaml
-  # volume binds these paths).  Must exist before `docker compose up`
-  # runs so that a subsequent permission fix (e.g. `chown 1000:1000`)
-  # can set the correct owner for the in-container 'codefreedom' user.
-  - pg/data
+  # Host mount directory for PostgreSQL backup/logs (bind-mounted in
+  # docker-compose.yaml).  PG data uses a Docker named volume instead
+  # of a bind-mount, so no host directory is needed for data.
   - pg/backup
 
 required_secrets:
@@ -106,8 +104,11 @@ required_secrets:
   - var: DEEPSEEK_API_KEY
     prompt: "DeepSeek API key"
     hint: "Get key at https://platform.deepseek.com/api_keys"
+  - var: MICROSOFT_FOUNDRY_API_BASE
+    prompt: "Azure Foundry base URL"
+    hint: "Azure AI Foundry workspace endpoint"
   - var: MICROSOFT_FOUNDRY_API_KEY
-    prompt: "Microsoft Foundry API key"
+    prompt: "Azure Foundry API key"
     hint: "Set in Azure AI Foundry portal"
   - var: OPENCODE_ZEN_API_KEY
     prompt: "OpenCode Zen API key"
@@ -115,6 +116,19 @@ required_secrets:
   - var: OPENROUTER_API_KEY
     prompt: "OpenRouter API key"
     hint: "Get key at https://openrouter.ai/keys"
+  - var: LOCAL_M_API_KEY
+    prompt: "Local model key (primary)"
+    hint: "Any non-empty value — local server does not validate"
+  - var: LOCAL_S_API_KEY
+    prompt: "Local model key (secondary)"
+    hint: "Any non-empty value — local server does not validate"
+
+advice: |
+  For interactive secret setup (recommended), run the assisted script:
+    Bash:       bash scripts/setup-secrets.sh
+    PowerShell: .\scripts\setup-secrets.ps1
+  The script sets CF_CLI_* machine environment variables, persists them
+  in your shell profile, and reports which services are configured.
 
 optional_config:
   - var: LITELLM_MODEL_ALIAS_BEST
