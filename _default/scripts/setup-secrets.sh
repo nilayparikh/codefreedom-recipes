@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════════════════
 # CodeFreedom — Assisted Secret Setup (Bash / Zsh)
-# Recipe: costeffective-coding
+# Recipe: _default
 # ═══════════════════════════════════════════════════════════════════════════════
 #
 # USAGE:
@@ -26,16 +26,12 @@ set -euo pipefail
 # Press ENTER at the prompt to skip (the service will not be available).
 
 LITELLM_MASTER_KEY=""               # Proxy master key (default: sk-codefreedom-local)
-MICROSOFT_FOUNDRY_API_BASE=""       # Azure AI Foundry endpoint URL
-MICROSOFT_FOUNDRY_API_KEY=""        # Azure AI Foundry API key
-OPENCODE_ZEN_API_KEY=""             # https://opencode.ai dashboard
-OPENROUTER_API_KEY=""               # https://openrouter.ai/keys
 GITHUB_PERSONAL_ACCESS_TOKEN=""     # https://github.com/settings/tokens
 GH_TOKEN=""                         # Alias — usually same as GITHUB_PERSONAL_ACCESS_TOKEN
 
 # ── Marker for shell profile block (do not edit) ─────────────────────────────
-MARKER_BEGIN="# >>> codefreedom:costeffective-coding secrets >>>"
-MARKER_END="# <<< codefreedom:costeffective-coding secrets <<<"
+MARKER_BEGIN="# >>> codefreedom:_default secrets >>>"
+MARKER_END="# <<< codefreedom:_default secrets <<<"
 
 # ── Colors ────────────────────────────────────────────────────────────────────
 if [[ -t 1 ]]; then
@@ -56,10 +52,6 @@ fi
 
 SECRETS=(
     "LITELLM_MASTER_KEY|LiteLLM Master Key|Proxy authentication (clients use this to talk to the proxy)|-|sk-codefreedom-local"
-    "MICROSOFT_FOUNDRY_API_BASE|Azure Foundry Base URL|Azure AI Foundry workspace endpoint|-|-"
-    "MICROSOFT_FOUNDRY_API_KEY|Azure Foundry API Key|Azure AI Foundry API key|-|-"
-    "OPENCODE_ZEN_API_KEY|OpenCode Zen API Key|Covers both Zen (free) and GO (subscription)|https://opencode.ai|-"
-    "OPENROUTER_API_KEY|OpenRouter API Key|Multi-provider routing|https://openrouter.ai/keys|-"
     "GITHUB_PERSONAL_ACCESS_TOKEN|GitHub PAT|Git push/pull in sandbox mode|https://github.com/settings/tokens|-"
     "GH_TOKEN|GitHub Token (alias)|Alias for GITHUB_PERSONAL_ACCESS_TOKEN|-|-"
 )
@@ -68,9 +60,6 @@ SECRETS=(
 # Format: SERVICE_NAME|REQUIRED_SECRETS (comma-separated, ALL required)
 SERVICES=(
     "LiteLLM Proxy|LITELLM_MASTER_KEY"
-    "Azure Foundry Provider|MICROSOFT_FOUNDRY_API_BASE,MICROSOFT_FOUNDRY_API_KEY"
-    "OpenCode Zen Provider|OPENCODE_ZEN_API_KEY"
-    "OpenRouter Provider|OPENROUTER_API_KEY"
     "Git in Sandbox|GITHUB_PERSONAL_ACCESS_TOKEN"
 )
 
@@ -290,7 +279,7 @@ SHELL_PROFILE="$(detect_shell_profile)"
 echo -e ""
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 echo -e "${BOLD}  CodeFreedom — Assisted Secret Setup${RESET}"
-echo -e "${DIM}  Recipe: costeffective-coding${RESET}"
+echo -e "${DIM}  Recipe: _default${RESET}"
 echo -e "${DIM}  Setting CF_CLI_* env vars in: ${SHELL_PROFILE}${RESET}"
 echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 echo -e ""

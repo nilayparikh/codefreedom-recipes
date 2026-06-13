@@ -1,9 +1,9 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 #Requires -Version 5.1
 <#
 .SYNOPSIS
     CodeFreedom — Assisted Secret Setup (PowerShell)
-    Recipe: costeffective-coding-with-local
+    Recipe: _default
 
 .DESCRIPTION
     Sets CF_CLI_* environment variables so CodeFreedom's env chain can read
@@ -31,14 +31,8 @@
 
 $Placeholders = @{
     LITELLM_MASTER_KEY              = ""   # Proxy master key (default: sk-codefreedom-local)
-    MICROSOFT_FOUNDRY_API_BASE      = ""   # Azure AI Foundry endpoint URL
-    MICROSOFT_FOUNDRY_API_KEY       = ""   # Azure AI Foundry API key
-    OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
-    OPENROUTER_API_KEY              = ""   # https://openrouter.ai/keys
     GITHUB_PERSONAL_ACCESS_TOKEN    = ""   # https://github.com/settings/tokens
     GH_TOKEN                        = ""   # Alias — usually same as GITHUB_PERSONAL_ACCESS_TOKEN
-    LOCAL_M_API_KEY                 = ""   # Local model key (any non-empty value)
-    LOCAL_S_API_KEY                 = ""   # Local model key (any non-empty value)
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -52,30 +46,6 @@ $SecretDefs = [ordered]@{
         URL         = ""
         Default     = "sk-codefreedom-local"
     }
-    MICROSOFT_FOUNDRY_API_BASE = @{
-        Name        = "Azure Foundry Base URL"
-        Description = "Azure AI Foundry workspace endpoint"
-        URL         = ""
-        Default     = ""
-    }
-    MICROSOFT_FOUNDRY_API_KEY = @{
-        Name        = "Azure Foundry API Key"
-        Description = "Azure AI Foundry API key"
-        URL         = ""
-        Default     = ""
-    }
-    OPENCODE_ZEN_API_KEY = @{
-        Name        = "OpenCode Zen API Key"
-        Description = "Covers both Zen (free) and GO (subscription)"
-        URL         = "https://opencode.ai"
-        Default     = ""
-    }
-    OPENROUTER_API_KEY = @{
-        Name        = "OpenRouter API Key"
-        Description = "Multi-provider routing"
-        URL         = "https://openrouter.ai/keys"
-        Default     = ""
-    }
     GITHUB_PERSONAL_ACCESS_TOKEN = @{
         Name        = "GitHub PAT"
         Description = "Git push/pull in sandbox mode"
@@ -88,18 +58,6 @@ $SecretDefs = [ordered]@{
         URL         = ""
         Default     = ""
     }
-    LOCAL_M_API_KEY = @{
-        Name        = "Local Model Key (primary)"
-        Description = "Any non-empty value; local server does not validate"
-        URL         = ""
-        Default     = ""
-    }
-    LOCAL_S_API_KEY = @{
-        Name        = "Local Model Key (secondary)"
-        Description = "Any non-empty value; local server does not validate"
-        URL         = ""
-        Default     = ""
-    }
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -107,13 +65,8 @@ $SecretDefs = [ordered]@{
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $ServiceDefs = [ordered]@{
-    "LiteLLM Proxy"               = @("LITELLM_MASTER_KEY")
-    "Azure Foundry Provider"      = @("MICROSOFT_FOUNDRY_API_BASE", "MICROSOFT_FOUNDRY_API_KEY")
-    "OpenCode Zen Provider"       = @("OPENCODE_ZEN_API_KEY")
-    "OpenRouter Provider"         = @("OPENROUTER_API_KEY")
-    "Local Inference (primary)"   = @("LOCAL_M_API_KEY")
-    "Local Inference (secondary)" = @("LOCAL_S_API_KEY")
-    "Git in Sandbox"              = @("GITHUB_PERSONAL_ACCESS_TOKEN")
+    "LiteLLM Proxy"             = @("LITELLM_MASTER_KEY")
+    "Git in Sandbox"            = @("GITHUB_PERSONAL_ACCESS_TOKEN")
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -127,7 +80,7 @@ function Write-Header {
     Write-Host ""
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor White
     Write-Host "  CodeFreedom — Assisted Secret Setup" -ForegroundColor White
-    Write-Host "  Recipe: costeffective-coding-with-local" -ForegroundColor DarkGray
+    Write-Host "  Recipe: _default" -ForegroundColor DarkGray
     Write-Host "  Setting CF_CLI_* env vars in PowerShell profile" -ForegroundColor DarkGray
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor White
     Write-Host ""
@@ -241,8 +194,8 @@ function Write-ProfileBlock {
         New-Item -Path $profilePath -ItemType File -Force | Out-Null
     }
 
-    $markerBegin = "# >>> codefreedom:costeffective-coding-with-local secrets >>>"
-    $markerEnd   = "# <<< codefreedom:costeffective-coding-with-local secrets <<<"
+    $markerBegin = "# >>> codefreedom:_default secrets >>>"
+    $markerEnd   = "# <<< codefreedom:_default secrets <<<"
 
     # Read existing content and remove old block
     $content = if (Test-Path $profilePath) { Get-Content $profilePath -Raw } else { "" }

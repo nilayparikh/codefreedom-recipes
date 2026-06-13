@@ -105,10 +105,10 @@ your shell profile, and prints a summary of which services are configured.
 
 ```bash
 # Bash / Zsh
-bash scripts/setup-secrets.sh
+bash <CODEFREEDOM_HOME>/scripts/costeffective-coding-with-local/setup-secrets.sh
 
 # PowerShell
-.\scripts\setup-secrets.ps1
+<CODEFREEDOM_HOME>\scripts\costeffective-coding-with-local\setup-secrets.ps1
 ```
 
 To pre-fill values without being prompted, edit the placeholder block at the top

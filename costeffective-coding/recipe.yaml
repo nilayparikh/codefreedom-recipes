@@ -84,6 +84,12 @@ files:
     target: proxy/config/providers/openrouter.yaml
     merge: deepdiff
 
+  # ── Setup scripts ──────────────────────────────────────────────────────
+  - path: scripts/setup-secrets.sh
+    target: scripts/costeffective-coding/setup-secrets.sh
+  - path: scripts/setup-secrets.ps1
+    target: scripts/costeffective-coding/setup-secrets.ps1
+
 dirs: []
   # PG data and backup both use Docker named volumes — no host
   # directories are needed.
@@ -93,9 +99,6 @@ required_secrets:
     prompt: "LiteLLM proxy master key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
     default: "sk-codefreedom-local"
-  - var: DEEPSEEK_API_KEY
-    prompt: "DeepSeek API key"
-    hint: "Get key at https://platform.deepseek.com/api_keys"
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Azure Foundry API key"
     hint: "Set in Azure AI Foundry portal"
@@ -105,6 +108,9 @@ required_secrets:
   - var: OPENROUTER_API_KEY
     prompt: "OpenRouter API key"
     hint: "Get key at https://openrouter.ai/keys"
+  - var: GITHUB_PERSONAL_ACCESS_TOKEN
+    prompt: "GitHub personal access token"
+    hint: "Get key at https://github.com/settings/tokens"
 
 config_vars:
   - var: MICROSOFT_FOUNDRY_API_BASE
@@ -113,7 +119,7 @@ config_vars:
 
 advice: |
   For interactive secret setup (recommended), run the assisted script:
-    Bash:       bash scripts/setup-secrets.sh
-    PowerShell: .\scripts\setup-secrets.ps1
+    Bash:       bash {cf_dir}/scripts/costeffective-coding/setup-secrets.sh
+    PowerShell: {cf_dir}\scripts\costeffective-coding\setup-secrets.ps1
   The script sets CF_CLI_* machine environment variables, persists them
   in your shell profile, and reports which services are configured.

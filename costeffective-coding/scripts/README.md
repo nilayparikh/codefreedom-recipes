@@ -30,14 +30,14 @@ Assisted secret setup for all API keys and tokens used by this recipe.
 
 ```bash
 # Bash / Zsh
-bash scripts/setup-secrets.sh
+bash <CODEFREEDOM_HOME>/scripts/costeffective-coding/setup-secrets.sh
 
 # If permission denied:
-chmod +x scripts/setup-secrets.sh
-./scripts/setup-secrets.sh
+chmod +x <CODEFREEDOM_HOME>/scripts/costeffective-coding/setup-secrets.sh
+<CODEFREEDOM_HOME>/scripts/costeffective-coding/setup-secrets.sh
 
 # PowerShell
-.\scripts\setup-secrets.ps1
+<CODEFREEDOM_HOME>\scripts\costeffective-coding\setup-secrets.ps1
 
 # If execution policy blocks:
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned

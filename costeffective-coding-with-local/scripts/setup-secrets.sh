@@ -26,7 +26,6 @@ set -euo pipefail
 # Press ENTER at the prompt to skip (the service will not be available).
 
 LITELLM_MASTER_KEY=""               # Proxy master key (default: sk-codefreedom-local)
-DEEPSEEK_API_KEY=""                 # https://platform.deepseek.com/api_keys
 MICROSOFT_FOUNDRY_API_BASE=""       # Azure AI Foundry endpoint URL
 MICROSOFT_FOUNDRY_API_KEY=""        # Azure AI Foundry API key
 OPENCODE_ZEN_API_KEY=""             # https://opencode.ai dashboard
@@ -59,7 +58,6 @@ fi
 
 SECRETS=(
     "LITELLM_MASTER_KEY|LiteLLM Master Key|Proxy authentication (clients use this to talk to the proxy)|-|sk-codefreedom-local"
-    "DEEPSEEK_API_KEY|DeepSeek API Key|Direct DeepSeek API access|https://platform.deepseek.com/api_keys|-"
     "MICROSOFT_FOUNDRY_API_BASE|Azure Foundry Base URL|Azure AI Foundry workspace endpoint|-|-"
     "MICROSOFT_FOUNDRY_API_KEY|Azure Foundry API Key|Azure AI Foundry API key|-|-"
     "OPENCODE_ZEN_API_KEY|OpenCode Zen API Key|Covers both Zen (free) and GO (subscription)|https://opencode.ai|-"
@@ -74,7 +72,6 @@ SECRETS=(
 # Format: SERVICE_NAME|REQUIRED_SECRETS (comma-separated, ALL required)
 SERVICES=(
     "LiteLLM Proxy|LITELLM_MASTER_KEY"
-    "DeepSeek Provider|DEEPSEEK_API_KEY"
     "Azure Foundry Provider|MICROSOFT_FOUNDRY_API_BASE,MICROSOFT_FOUNDRY_API_KEY"
     "OpenCode Zen Provider|OPENCODE_ZEN_API_KEY"
     "OpenRouter Provider|OPENROUTER_API_KEY"

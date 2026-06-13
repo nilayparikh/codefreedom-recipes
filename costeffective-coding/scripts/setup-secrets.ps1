@@ -31,7 +31,6 @@
 
 $Placeholders = @{
     LITELLM_MASTER_KEY              = ""   # Proxy master key (default: sk-codefreedom-local)
-    DEEPSEEK_API_KEY                = ""   # https://platform.deepseek.com/api_keys
     MICROSOFT_FOUNDRY_API_BASE      = ""   # Azure AI Foundry endpoint URL
     MICROSOFT_FOUNDRY_API_KEY       = ""   # Azure AI Foundry API key
     OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
@@ -50,12 +49,6 @@ $SecretDefs = [ordered]@{
         Description = "Proxy authentication (clients use this to talk to the proxy)"
         URL         = ""
         Default     = "sk-codefreedom-local"
-    }
-    DEEPSEEK_API_KEY = @{
-        Name        = "DeepSeek API Key"
-        Description = "Direct DeepSeek API access"
-        URL         = "https://platform.deepseek.com/api_keys"
-        Default     = ""
     }
     MICROSOFT_FOUNDRY_API_BASE = @{
         Name        = "Azure Foundry Base URL"
@@ -101,7 +94,6 @@ $SecretDefs = [ordered]@{
 
 $ServiceDefs = [ordered]@{
     "LiteLLM Proxy"             = @("LITELLM_MASTER_KEY")
-    "DeepSeek Provider"         = @("DEEPSEEK_API_KEY")
     "Azure Foundry Provider"    = @("MICROSOFT_FOUNDRY_API_BASE", "MICROSOFT_FOUNDRY_API_KEY")
     "OpenCode Zen Provider"     = @("OPENCODE_ZEN_API_KEY")
     "OpenRouter Provider"       = @("OPENROUTER_API_KEY")
