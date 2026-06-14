@@ -29,6 +29,9 @@ profiles:
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # OpenCode: disable auto-update checks
       OPENCODE_DISABLE_AUTOUPDATE: "1"
+      # OpenCode: show alias models (e.g. opus, sonnet) in proxy config
+      # Default: false — alias models are hidden unless explicitly enabled
+      OPENCODE_SHOW_ALIAS_MODELS: ""
       # OpenCode: disable Claude Code config inheritance
       # Prevents reading .claude/, ~/.claude/CLAUDE.md, .claude/skills
       OPENCODE_DISABLE_CLAUDE_CODE: "1"
