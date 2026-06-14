@@ -36,7 +36,6 @@ $Placeholders = @{
     OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
     OPENROUTER_API_KEY              = ""   # https://openrouter.ai/keys
     GITHUB_PERSONAL_ACCESS_TOKEN    = ""   # https://github.com/settings/tokens
-    GH_TOKEN                        = ""   # Alias — usually same as GITHUB_PERSONAL_ACCESS_TOKEN
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -78,12 +77,6 @@ $SecretDefs = [ordered]@{
         Name        = "GitHub PAT"
         Description = "Git push/pull in sandbox mode"
         URL         = "https://github.com/settings/tokens"
-        Default     = ""
-    }
-    GH_TOKEN = @{
-        Name        = "GitHub Token (alias)"
-        Description = "Alias for GITHUB_PERSONAL_ACCESS_TOKEN"
-        URL         = ""
         Default     = ""
     }
 }

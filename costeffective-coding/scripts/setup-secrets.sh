@@ -31,7 +31,6 @@ MICROSOFT_FOUNDRY_API_KEY=""        # Azure AI Foundry API key
 OPENCODE_ZEN_API_KEY=""             # https://opencode.ai dashboard
 OPENROUTER_API_KEY=""               # https://openrouter.ai/keys
 GITHUB_PERSONAL_ACCESS_TOKEN=""     # https://github.com/settings/tokens
-GH_TOKEN=""                         # Alias — usually same as GITHUB_PERSONAL_ACCESS_TOKEN
 
 # ── Marker for shell profile block (do not edit) ─────────────────────────────
 MARKER_BEGIN="# >>> codefreedom:costeffective-coding secrets >>>"
@@ -61,7 +60,6 @@ SECRETS=(
     "OPENCODE_ZEN_API_KEY|OpenCode Zen API Key|Covers both Zen (free) and GO (subscription)|https://opencode.ai|-"
     "OPENROUTER_API_KEY|OpenRouter API Key|Multi-provider routing|https://openrouter.ai/keys|-"
     "GITHUB_PERSONAL_ACCESS_TOKEN|GitHub PAT|Git push/pull in sandbox mode|https://github.com/settings/tokens|-"
-    "GH_TOKEN|GitHub Token (alias)|Alias for GITHUB_PERSONAL_ACCESS_TOKEN|-|-"
 )
 
 # ── Service → secret mapping (for failure summary) ───────────────────────────

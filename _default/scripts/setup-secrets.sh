@@ -27,7 +27,6 @@ set -euo pipefail
 
 LITELLM_MASTER_KEY=""               # Proxy master key (default: sk-codefreedom-local)
 GITHUB_PERSONAL_ACCESS_TOKEN=""     # https://github.com/settings/tokens
-GH_TOKEN=""                         # Alias — usually same as GITHUB_PERSONAL_ACCESS_TOKEN
 
 # ── Marker for shell profile block (do not edit) ─────────────────────────────
 MARKER_BEGIN="# >>> codefreedom:_default secrets >>>"
@@ -53,7 +52,6 @@ fi
 SECRETS=(
     "LITELLM_MASTER_KEY|LiteLLM Master Key|Proxy authentication (clients use this to talk to the proxy)|-|sk-codefreedom-local"
     "GITHUB_PERSONAL_ACCESS_TOKEN|GitHub PAT|Git push/pull in sandbox mode|https://github.com/settings/tokens|-"
-    "GH_TOKEN|GitHub Token (alias)|Alias for GITHUB_PERSONAL_ACCESS_TOKEN|-|-"
 )
 
 # ── Service → secret mapping (for failure summary) ───────────────────────────

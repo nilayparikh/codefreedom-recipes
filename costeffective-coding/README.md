@@ -136,7 +136,6 @@ vars (recommended) or fill in the `.env.*.secrets` files as fallbacks.
 | `OPENCODE_ZEN_API_KEY`         | `.env.proxy.secrets`                  | Proxy (OpenCode Zen + GO)     | OpenCode API key — free tier + subscription               |
 | `OPENROUTER_API_KEY`           | `.env.proxy.secrets`                  | Proxy (OpenRouter)            | OpenRouter API key                                        |
 | `GITHUB_PERSONAL_ACCESS_TOKEN` | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode                  | GitHub PAT for git push/pull in `--sandbox`               |
-| `GH_TOKEN`                     | `.env.claude/.mimo/.opencode.secrets` | Sandbox mode                  | GitHub token alias (usually same as PAT above)            |
 
 ### Non-secrets (proxy container)
 
@@ -195,7 +194,7 @@ in `.env.user` only if you need to change agent behavior.
 | `ANTHROPIC_DEFAULT_SONNET_MODEL`             | Claude Code         | Model for `sonnet` alias            |
 | `ANTHROPIC_DEFAULT_HAIKU_MODEL`              | Claude Code         | Model for `haiku` alias             |
 | `ANTHROPIC_CUSTOM_MODEL_OPTION`              | Claude Code         | Model for `custom` alias            |
-| `LITELLM_BASE_URL`                           | MiMoCode / OpenCode | Proxy URL for 0-click config        |
+| `PROXY_BASE_URL`                             | MiMoCode / OpenCode | Proxy URL for 0-click config        |
 | `PROXY_API_KEY`                              | MiMoCode / OpenCode | Proxy auth (= `LITELLM_MASTER_KEY`) |
 | `MIMOCODE_MIMO_ONLY`                         | MiMoCode            | Pure MiMo mode (no Claude Code)     |
 | `MIMOCODE_DISABLE_AUTOUPDATE`                | MiMoCode            | Disable auto-update checks          |
@@ -209,9 +208,9 @@ in `.env.user` only if you need to change agent behavior.
 | File                    | Scope                 | Variables                                                                                                                                         |
 | ----------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `.env.proxy.secrets`    | Proxy + all providers | `LITELLM_MASTER_KEY`, `DEEPSEEK_API_KEY`, `MICROSOFT_FOUNDRY_API_KEY`, `MICROSOFT_FOUNDRY_API_BASE`, `OPENCODE_ZEN_API_KEY`, `OPENROUTER_API_KEY` |
-| `.env.claude.secrets`   | Claude Code sandbox   | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
-| `.env.mimo.secrets`     | MiMoCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
-| `.env.opencode.secrets` | OpenCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`, `GH_TOKEN`                                                                                                        |
+| `.env.claude.secrets`   | Claude Code sandbox   | `GITHUB_PERSONAL_ACCESS_TOKEN`                                                                                                                                                        |
+| `.env.mimo.secrets`     | MiMoCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`                                                                                                                                                        |
+| `.env.opencode.secrets` | OpenCode sandbox      | `GITHUB_PERSONAL_ACCESS_TOKEN`                                                                                                                                                        |
 
 ---
 
@@ -386,7 +385,7 @@ The recipe's `claude-code.yaml` configures Claude Code to:
 
 The recipe's `mimo-code.yaml` configures MiMoCode to:
 
-- Use 0-click proxy auto-config — probes `LITELLM_BASE_URL`, fetches `/v1/models`,
+- Use 0-click proxy auto-config — probes `PROXY_BASE_URL`, fetches `/v1/models`,
   and generates a complete `mimocode.json` with all models
 - Auto-start tools: Web
 - Disable auto-updates, models fetch, and Claude Code integration

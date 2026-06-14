@@ -54,7 +54,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 | `OPENCODE_ZEN_API_KEY`         | OpenCode Zen           | No (skip to disable)                  |
 | `OPENROUTER_API_KEY`           | OpenRouter             | No (skip to disable)                  |
 | `GITHUB_PERSONAL_ACCESS_TOKEN` | Git in sandbox         | No (skip to disable)                  |
-| `GH_TOKEN`                     | Git in sandbox (alias) | No (skip to disable)                  |
 
 ### Where secrets are persisted
 

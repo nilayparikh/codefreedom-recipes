@@ -44,8 +44,8 @@ files:
   - path: profiles/mimo-code.yaml
     target: profiles/mimo-code.yaml
     merge: deepdiff
-  - path: profiles/opencode.yaml
-    target: profiles/opencode.yaml
+  - path: profiles/open-code.yaml
+    target: profiles/open-code.yaml
     merge: deepdiff
   - path: profiles/chrome.yaml
     target: profiles/chrome.yaml

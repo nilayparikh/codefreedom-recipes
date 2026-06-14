@@ -2,7 +2,7 @@ description: MiMoCode profiles for codefreedom — terminal-native AI coding age
   with cross-session memory (fork of OpenCode), launched via CodeFreedom's
   proxy auto-config.
 notes:
-  - "'cf r ag mc' drives proxy auto-config: reads LITELLM_BASE_URL and
+  - "'cf r ag mc' drives proxy auto-config: reads PROXY_BASE_URL and
     PROXY_API_KEY from profile env, fetches /v1/models, generates
     mimocode.json, and points MIMOCODE_CONFIG at it."
   - "'default' is the base profile — 'ui-ux' inherits from it."
@@ -17,7 +17,7 @@ profiles:
   default:
     description:
       Base profile — MiMoCode agent launched via CodeFreedom's proxy auto-config.
-      LITELLM_BASE_URL and PROXY_API_KEY drive mimocode.json generation.
+      PROXY_BASE_URL and PROXY_API_KEY drive mimocode.json generation.
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:mimo-code
     tools:
@@ -26,7 +26,7 @@ profiles:
       - github
     env:
       # Proxy auto-config (consumed by cf r ag mc to generate mimocode.json)
-      LITELLM_BASE_URL: http://localhost:4000
+      PROXY_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # MiMoCode: pure mimo mode, no Claude Code inheritance
       MIMOCODE_MIMO_ONLY: "1"
@@ -45,7 +45,7 @@ profiles:
         IS_SANDBOX: "1"
         MIMOCODE_DISABLE_GIT: "0"
         GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
-        GH_TOKEN: ${GH_TOKEN}
+        GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
   bare:
     description: "Standalone — minimal: no proxy config, no sandbox settings,
       no preferences. Just the mimo binary."

@@ -42,7 +42,7 @@ services:
       # file works unchanged across all supported OSes.
       - host.docker.internal:host-gateway
     environment:
-      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-codefreedom-local}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-}
       LITELLM_LOG_LEVEL: ${LITELLM_LOG_LEVEL:-INFO}
       NO_DOCS: ${LITELLM_NO_DOCS:-True}
       NO_REDOC: ${LITELLM_NO_REDOC:-True}

@@ -54,7 +54,7 @@ profiles:
       env:
         IS_SANDBOX: "1"
         GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
-        GH_TOKEN: ${GH_TOKEN}
+        GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
   bare:
     description:
       "Standalone — minimal: no model aliases, no sandbox settings, no
