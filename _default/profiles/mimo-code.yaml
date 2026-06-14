@@ -19,7 +19,7 @@ profiles:
       Base profile — MiMoCode agent launched via CodeFreedom's proxy auto-config.
       PROXY_BASE_URL and PROXY_API_KEY drive mimocode.json generation.
     sandbox_images:
-      default: docker.io/nilayparikh/codefreedom:mimo-code
+      default: docker.io/nilayparikh/codefreedom:mimo-code-latest
     tools:
       - chrome
       - web

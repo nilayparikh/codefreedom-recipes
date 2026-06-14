@@ -3,7 +3,7 @@ description:
   image, port, data directory, and environment.
 notes:
   - The 'web_bridge' block defines all settings for 'codefreedom run tools web-bridge'.
-  - "'image' is the Docker image to use — 'docker.io/nilayparikh/codefreedom:web-bridge'."
+  - "'image' is the Docker image to use — 'docker.io/nilayparikh/codefreedom:web-bridge-latest'."
   - "'container_name' is the Docker container name."
   - "'port' is the host port (8500 by default). Override via CODEFREEDOM_WEB_BRIDGE_PORT env var."
   - "'data_dir' (optional) is the host path mounted to /app/data inside the container."
