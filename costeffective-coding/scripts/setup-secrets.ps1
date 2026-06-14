@@ -148,8 +148,9 @@ function Prompt-Secret {
 
     if ($existingValue -and $existingValue -ne "") {
         # Mask value
-        if ($existingValue.Length -le 12) { $masked = "****" }
-        else { $masked = $existingValue.Substring(0, 8) + "..." + $existingValue.Substring($existingValue.Length - 4) }
+        # Mask value — show first and last char only
+        if ($existingValue.Length -le 2) { $masked = "****" }
+        else { $masked = $existingValue.Substring(0, 1) + "..." + $existingValue.Substring($existingValue.Length - 1) }
 
         Write-Host ""
         Write-Host "  $DisplayName" -ForegroundColor Cyan
@@ -180,6 +181,7 @@ function Prompt-Secret {
             Write-Host "  " -NoNewline
             Write-Host [char]0x2714 -ForegroundColor Green -NoNewline
             Write-Host " Keeping existing value"
+            $Script:SecretValues[$VarName] = $existingValue
             $Script:SetCount++
         }
         return
@@ -251,10 +253,10 @@ function Write-Summary {
     foreach ($varName in $SecretDefs.Keys) {
         if ($Script:SecretValues.ContainsKey($varName) -and $Script:SecretValues[$varName] -ne "") {
             $val = $Script:SecretValues[$varName]
-            if ($val.Length -le 12) {
+            if ($val.Length -le 2) {
                 $masked = "****"
             } else {
-                $masked = $val.Substring(0, 8) + "..." + $val.Substring($val.Length - 4)
+                $masked = $val.Substring(0, 1) + "..." + $val.Substring($val.Length - 1)
             }
             Write-Host "  " -NoNewline
             Write-Host [char]0x2714 -ForegroundColor Green -NoNewline

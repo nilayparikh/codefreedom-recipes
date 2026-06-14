@@ -102,10 +102,10 @@ prompt_secret() {
     # If CF_CLI_* already set in environment, ask user what to do
     if [[ -n "$env_existing" ]]; then
         local masked
-        if [[ ${#env_existing} -le 12 ]]; then
+        if [[ ${#env_existing} -le 2 ]]; then
             masked="****"
         else
-            masked="${env_existing:0:8}...${env_existing: -4}"
+            masked="${env_existing:0:1}...${env_existing: -1}"
         fi
         echo -e ""
         echo -e "  ${CYAN}${BOLD}${display_name}${RESET}"
@@ -126,6 +126,7 @@ prompt_secret() {
                 ;;
             *)
                 echo -e "  ${GREEN}✔${RESET} Keeping existing value"
+                SECRET_VALUES["$var_name"]="$env_existing"
                 ;;
         esac
         return
@@ -220,11 +221,12 @@ print_summary() {
         IFS='|' read -r var_name display_name _ _ _ <<< "$secret_def"
         local val="${SECRET_VALUES[$var_name]:-}"
         if [[ -n "$val" ]]; then
+            # Mask value — show first and last char only
             local masked
-            if [[ ${#val} -le 12 ]]; then
+            if [[ ${#val} -le 2 ]]; then
                 masked="****"
             else
-                masked="${val:0:8}...${val: -4}"
+                masked="${val:0:1}...${val: -1}"
             fi
             echo -e "  ${GREEN}✔${RESET} ${var_name}=${DIM}${masked}${RESET}"
             ((set_count++))
