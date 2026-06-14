@@ -49,12 +49,12 @@ cf s i -pa costeffective-coding
 sudo chown -R $(id -u):$(id -g) ~/.codefreedom
 
 # 3. Start the proxy — auto-starts Chrome, Web, GitHub, Web-bridge
-cf px start
+cf r px start
 
 # 4. Launch Claude Code or MiMoCode
-cf cc
+cf r ag cc
 # or
-cf mimo
+cf r ag mc
 ```
 
 Step 1 shows every file the recipe will create, along with a diff preview.
@@ -218,7 +218,7 @@ in `.env.user` only if you need to change agent behavior.
 ## Architecture
 
 ```
-                            Claude Code (cf cc) / MiMoCode (cf mimo)
+                            Claude Code (cf r ag cc) / MiMoCode (cf r ag mc)
                                    |
                      ANTHROPIC_BASE_URL = http://localhost:4000
                                    |
@@ -345,7 +345,7 @@ Key settings written to `~/.codefreedom/.env.proxy`:
 
 ## Tool endpoints
 
-After `cf px start`, the following services are available:
+After `cf r px start`, the following services are available:
 
 | Tool        | Endpoint                        | Purpose                                  |
 | ----------- | ------------------------------- | ---------------------------------------- |
@@ -469,10 +469,10 @@ After setup, confirm everything is working:
 
 ```bash
 # Check proxy health
-cf px status
+cf r px status
 
 # Check tool status
-cf tools status
+cf run tools status
 
 # Test a model call via the proxy
 curl http://localhost:4000/v1/chat/completions \
@@ -483,10 +483,10 @@ curl http://localhost:4000/v1/chat/completions \
 # Expected response: {"id":"...","choices":[{"message":{"content":"Hello"}}],...}
 
 # Launch Claude Code
-cf cc
+cf r ag cc
 
 # Or launch MiMoCode
-cf mimo
+cf r ag mc
 ```
 
 ---
@@ -498,14 +498,14 @@ cf mimo
 | `cf s i -pa costeffective-coding`               | Plan + apply interactively (preview, confirm, install + secrets check)       |
 | `cf s i -p costeffective-coding`            | Preview only: shows files to create/replace with diffs and dirs to create    |
 | `cf s i -a <plan-id>`                      | Apply a previously generated plan                                            |
-| `cf px start`                                    | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
-| `cf px status`                                   | Proxy health check                                                           |
-| `cf px stop`                                     | Stop proxy and tools                                                         |
-| `cf px restart`                                  | Restart proxy (preserves state, no image pull)                               |
-| `cf cc`                                          | Launch Claude Code with configured profile                                   |
-| `cf mimo`                                        | Launch MiMoCode with configured profile                                      |
+| `cf r px start`                                    | Starts proxy + embedded PostgreSQL + tools (Chrome, Web, GitHub, Web-bridge) |
+| `cf r px status`                                   | Proxy health check                                                           |
+| `cf r px stop`                                     | Stop proxy and tools                                                         |
+| `cf r px restart`                                  | Restart proxy (preserves state, no image pull)                               |
+| `cf r ag cc`                                          | Launch Claude Code with configured profile                                   |
+| `cf r ag mc`                                        | Launch MiMoCode with configured profile                                      |
 | `sudo chown -R $(id -u):$(id -g) ~/.codefreedom` | Fix ownership (Linux/WSL — container user UID vs host UID)                   |
-| `cf tools status`                                | Status of all tool containers                                                |
+| `cf run tools status`                                | Status of all tool containers                                                |
 
 ---
 
@@ -520,7 +520,7 @@ container user (UID 1000). If host commands can't access them:
 sudo chown -R $(id -u):$(id -g) ~/.codefreedom
 ```
 
-Run this once after `cf px start` if you see permission errors on the host.
+Run this once after `cf r px start` if you see permission errors on the host.
 
 ### Port conflicts
 
@@ -528,7 +528,7 @@ If port 4000 is already in use:
 
 ```bash
 # Override the proxy port for this run
-cf px start --port 4001
+cf r px start --port 4001
 
 # Or set it permanently
 echo "LITELLM_PORT=4001" >> ~/.codefreedom/.env.user
@@ -547,7 +547,7 @@ docker ps -a --filter name=litellm
 docker rm -f litellm-codefreedom
 
 # Try again
-cf px start
+cf r px start
 ```
 
 ### Model returns empty / timeout
@@ -582,17 +582,17 @@ echo "CLAUDE_CODE_TELEMETRY_DISABLED=true" >> ~/.codefreedom/.env.user
 ### Stop everything
 
 ```bash
-cf px stop
+cf r px stop
 ```
 
 ### Remove all CodeFreedom config
 
 ```bash
 # Interactive (asks for confirmation)
-cf deinit
+cf setup deinit
 
 # Force (no prompts)
-cf deinit --force
+cf setup deinit --force
 ```
 
 This stops containers and removes `~/.codefreedom` (except `.env.user` which
@@ -604,10 +604,10 @@ The `--apply` command creates an automatic backup before making changes:
 
 ```bash
 # List available backups
-cf admin list-backups
+cf manage admin list
 
 # Restore a backup
-cf admin restore ~/.codefreedom/backup/codefreedom-backup-...tar.gz
+cf manage admin restore ~/.codefreedom/backup/codefreedom-backup-...tar.gz
 ```
 
 ---

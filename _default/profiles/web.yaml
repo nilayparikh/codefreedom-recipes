@@ -2,7 +2,7 @@ description:
   Web search tool profile for codefreedom — configures container image,
   ports, data directory, search engines, and parser registry.
 notes:
-  - The 'web' block defines all settings for 'codefreedom tools web'.
+  - The 'web' block defines all settings for 'codefreedom run tools web'.
   - "'image' is the Docker image to use — change to 'docker.io/nilayparikh/codefreedom:web-latest'
     for published builds. (Also available on ghcr.io/nilayparikh/codefreedom as a mirror.)"
   - "'container_name' is the Docker container name (persistent, restart unless-stopped)."

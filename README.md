@@ -23,8 +23,8 @@ cf s i -a <plan-id>
 After installing, set your API keys in the `.secrets` files, then:
 
 ```bash
-cf proxy start
-cf cc
+cf run proxy start
+cf r ag cc
 ```
 
 ## Available Recipes

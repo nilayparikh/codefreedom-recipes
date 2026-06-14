@@ -1,7 +1,7 @@
 description: OpenCode profiles for codefreedom — terminal-native AI coding agent
   launched via CodeFreedom's proxy auto-config.
 notes:
-  - "'cf opencode' drives proxy auto-config: reads LITELLM_BASE_URL and
+  - "'cf r ag oc' drives proxy auto-config: reads LITELLM_BASE_URL and
     PROXY_API_KEY from profile env, fetches /v1/models, generates
     opencode.json, and points OPENCODE_CONFIG at it."
   - "'default' is the base profile — 'ui-ux' inherits from it."
@@ -24,7 +24,7 @@ profiles:
       - web
       - github
     env:
-      # Proxy auto-config (consumed by cf opencode to generate opencode.json)
+      # Proxy auto-config (consumed by cf r ag oc to generate opencode.json)
       LITELLM_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # OpenCode: disable auto-update checks

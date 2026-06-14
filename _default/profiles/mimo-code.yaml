@@ -2,7 +2,7 @@ description: MiMoCode profiles for codefreedom — terminal-native AI coding age
   with cross-session memory (fork of OpenCode), launched via CodeFreedom's
   proxy auto-config.
 notes:
-  - "'cf mimo' drives proxy auto-config: reads LITELLM_BASE_URL and
+  - "'cf r ag mc' drives proxy auto-config: reads LITELLM_BASE_URL and
     PROXY_API_KEY from profile env, fetches /v1/models, generates
     mimocode.json, and points MIMOCODE_CONFIG at it."
   - "'default' is the base profile — all other profiles inherit from it."
@@ -25,7 +25,7 @@ profiles:
       - web
       - github
     env:
-      # Proxy auto-config (consumed by cf mimo to generate mimocode.json)
+      # Proxy auto-config (consumed by cf r ag mc to generate mimocode.json)
       LITELLM_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # MiMoCode: pure mimo mode, no Claude Code inheritance

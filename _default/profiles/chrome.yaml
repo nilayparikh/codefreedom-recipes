@@ -1,7 +1,7 @@
 description: Chrome browser tool profile for codefreedom — configures container image,
   ports, data directory, and environment.
 notes:
-- The 'chrome' block defines all settings for 'codefreedom tools chrome'.
+- The 'chrome' block defines all settings for 'codefreedom run tools chrome'.
 - '''image'' is the Docker image to use — change to ''docker.io/nilayparikh/codefreedom:chrome-latest''
   for published builds. (Also available on ghcr.io/nilayparikh/codefreedom as a mirror.)'
 - '''container_name'' is the Docker container name (persistent, restart unless-stopped).'

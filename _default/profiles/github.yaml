@@ -1,7 +1,7 @@
 description: GitHub MCP Server tool profile for codefreedom — configures container
   image, ports, data directory, and environment.
 notes:
-- The 'github' block defines all settings for 'codefreedom tools github'.
+- The 'github' block defines all settings for 'codefreedom run tools github'.
 - '''image'' is the Docker image to use — ''docker.io/nilayparikh/codefreedom:github-latest''
   wraps ghcr.io/github/github-mcp-server with an HTTP bridge. (Also available on ghcr.io/nilayparikh/codefreedom
   as a mirror.)'

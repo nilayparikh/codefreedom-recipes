@@ -2,7 +2,7 @@
 # ── LiteLLM Proxy (CodeFreedom image) — Base ────────────────────────────────
 # Shared compose file used by all recipes. Recipe-specific env vars
 # (provider URLs, API keys, model aliases) are injected via .env.proxy
-# files and the `cf proxy start` CLI.
+# files and the `cf run proxy start` CLI.
 #
 # IMAGE: The published `codefreedom:litellm-latest` image is multi-arch
 # (linux/arm64 + linux/amd64).  Keep this compose file free of a
