@@ -46,12 +46,11 @@ azure_model_info: &azure_model_info
     - reasoning_effort
 
 model_list:
-
   # ── GPT-5.5 ─────────────────────────────────────────────────────────────────
   # Pricing per million tokens:
-  #   Input: $5.00  |  Cached Input: $0.50  |  Output: $30.00
+  # Input: $5.00  |  Cached Input: $0.50  |  Output: $30.00
   # Context: 1,050,000 tokens | Output limit: 128,000 tokens
-  - model_name: Azure/GPT-5.5
+  - model_name: GPT-5.5
     litellm_params:
       model: openai/gpt-5.5
       <<: [*azure_api_params, *azure_litellm_params]
@@ -75,8 +74,8 @@ model_list:
 
   # ── GPT-5.4 ─────────────────────────────────────────────────────────────────
   # Pricing per million tokens:
-  #   Input: $2.50  |  Cached Input: $0.25  |  Output: $15.00
-  - model_name: Azure/GPT-5.4
+  # Input: $2.50  |  Cached Input: $0.25  |  Output: $15.00
+  - model_name: GPT-5.4
     litellm_params:
       model: openai/gpt-5.4
       <<: [*azure_api_params, *azure_litellm_params]
@@ -100,8 +99,8 @@ model_list:
 
   # ── GPT-5.4-Mini ────────────────────────────────────────────────────────────
   # Pricing per million tokens:
-  #   Input: $1.00  |  Cached Input: $0.08  |  Output: $15.00
-  - model_name: Azure/GPT-5.4-Mini
+  # Input: $1.00  |  Cached Input: $0.08  |  Output: $15.00
+  - model_name: GPT-5.4-Mini
     litellm_params:
       model: openai/gpt-5.4-mini
       <<: [*azure_api_params, *azure_litellm_params]
@@ -125,8 +124,8 @@ model_list:
 
   # ── GPT-5.4-Nano ────────────────────────────────────────────────────────────
   # Pricing per million tokens:
-  #   Input: $0.80  |  Cached Input: $0.08  |  Output: $12.50
-  - model_name: Azure/GPT-5.4-Nano
+  # Input: $0.80  |  Cached Input: $0.08  |  Output: $12.50
+  - model_name: GPT-5.4-Nano
     litellm_params:
       model: openai/gpt-5.4-nano
       <<: [*azure_api_params, *azure_litellm_params]
