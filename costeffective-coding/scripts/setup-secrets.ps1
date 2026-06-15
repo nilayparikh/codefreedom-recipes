@@ -30,7 +30,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $Placeholders = @{
-    LITELLM_MASTER_KEY              = ""   # Proxy master key (default: sk-codefreedom-local)
+    LITELLM_MASTER_KEY              = ""   # Proxy master key
     MICROSOFT_FOUNDRY_API_BASE      = ""   # Azure AI Foundry endpoint URL
     MICROSOFT_FOUNDRY_API_KEY       = ""   # Azure AI Foundry API key
     OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
@@ -47,7 +47,7 @@ $SecretDefs = [ordered]@{
         Name        = "LiteLLM Master Key"
         Description = "Proxy authentication (clients use this to talk to the proxy)"
         URL         = ""
-        Default     = "sk-codefreedom-local"
+        Default     = ""
     }
     MICROSOFT_FOUNDRY_API_BASE = @{
         Name        = "Azure Foundry Base URL"
