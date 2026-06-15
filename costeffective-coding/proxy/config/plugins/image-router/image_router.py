@@ -1,1 +1,0 @@
-/app/litellm-plugins/image_router.py

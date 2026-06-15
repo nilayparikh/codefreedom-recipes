@@ -74,9 +74,6 @@ files:
     merge: deepdiff
 
   # ── Proxy providers ─────────────────────────────────────────────────────
-  - path: proxy/config/providers/deepseek.yaml
-    target: proxy/config/providers/deepseek.yaml
-    merge: deepdiff
   - path: proxy/config/providers/azure-foundry.yaml
     target: proxy/config/providers/azure-foundry.yaml
     merge: deepdiff
@@ -88,6 +85,11 @@ files:
     merge: deepdiff
   - path: proxy/config/providers/local.yaml
     target: proxy/config/providers/local.yaml
+    merge: deepdiff
+
+  # ── Image Router Plugin ───────────────────────────────────────────────
+  - path: proxy/config/plugins/image-router/image-router.yaml
+    target: proxy/config/plugins/image-router/image-router.yaml
     merge: deepdiff
 
   # ── Setup scripts ──────────────────────────────────────────────────────

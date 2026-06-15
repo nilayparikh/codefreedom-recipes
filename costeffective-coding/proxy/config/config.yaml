@@ -137,6 +137,7 @@ codefreedom:
     enabled: true
     models:
       - "FreeRouter"
+      - "MiniMax-M3"
 
 search_tools:
   - search_tool_name: codefreedom-web

@@ -72,6 +72,9 @@ files:
   - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
     merge: deepdiff
+  - path: proxy/config/plugins/image-router/image-router.yaml
+    target: proxy/config/plugins/image-router/image-router.yaml
+    merge: deepdiff
 
   # ── Proxy providers ─────────────────────────────────────────────────────
   - path: proxy/config/providers/azure-foundry.yaml
