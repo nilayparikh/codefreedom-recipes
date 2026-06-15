@@ -139,9 +139,8 @@ codefreedom:
   image-router-for-text-only:
     enabled: true
     models:
-      - "OpenCode/MiMo-V2.5-FREE"
-      - "OpenCode/Kimi-K2.6"
-      - "OpenCode/Qwen3.7-Max"
+      - "FreeRouter"
+      - "Qwen3.6-35B-A3B"
 
 search_tools:
   - search_tool_name: codefreedom-web
