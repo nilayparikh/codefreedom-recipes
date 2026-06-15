@@ -48,7 +48,6 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 | Variable                       | Provider               | Required                              |
 | ------------------------------ | ---------------------- | ------------------------------------- |
 | `LITELLM_MASTER_KEY`           | Proxy auth             | Yes (default: `sk-codefreedom-local`) |
-| `DEEPSEEK_API_KEY`             | DeepSeek               | No (skip to disable)                  |
 | `MICROSOFT_FOUNDRY_API_BASE`   | Azure Foundry          | No (skip to disable)                  |
 | `MICROSOFT_FOUNDRY_API_KEY`    | Azure Foundry          | No (skip to disable)                  |
 | `OPENCODE_ZEN_API_KEY`         | OpenCode Zen           | No (skip to disable)                  |
