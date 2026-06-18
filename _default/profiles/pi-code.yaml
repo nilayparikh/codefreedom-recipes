@@ -32,6 +32,8 @@ profiles:
                   PROXY_API_KEY: ${LITELLM_MASTER_KEY}
                   PI_SKIP_VERSION_CHECK: "1"
                   PI_DEFAULT_MODEL: "MiMo-V2.5"
+                  PI_DEFAULT_THINKING_LEVEL: "medium"
+                  PI_DEFAULT_PROVIDER: "codefreedom"
                   PI_SHOW_ALIAS_MODELS: ""
                   GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
                   GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
