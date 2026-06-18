@@ -147,13 +147,13 @@ model_list:
                     route-image-request:
                           enabled: true
 
-      - model_name: MiniMax-M3-Free
+      - model_name: MiniMax-M3
         litellm_params:
               model: anthropic/minimax-m3-free
               <<:
                     [
                           *opencode_params,
-                          *opencode_anthropic_go_api_params,
+                          *opencode_openai_zen_api_params,
                           *free_model_routing_params,
                     ]
         model_info:
