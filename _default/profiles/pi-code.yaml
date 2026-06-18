@@ -1,9 +1,9 @@
 description: Pi Code profiles for codefreedom — Earendil's AI coding agent
-  with 0-click proxy config, launched via CodeFreedom's proxy auto-config.
+  with extension-based proxy config, launched via CodeFreedom's launcher.
 notes:
-  - "'cf r ag pc' drives proxy auto-config: reads PROXY_BASE_URL and
-    PROXY_API_KEY from profile env, fetches /v1/models, generates
-    settings.json, and points PI_CONFIG_DIR at it."
+  - "'cf r ag pc' generates .pi/extensions/codefreedom.ts in the workspace.
+    The extension uses pi.registerProvider() for dynamic model discovery
+    from the proxy at startup. pi-mcp-adapter reads .mcp.json for MCP tools."
   - "'default' is the base profile — all other profiles inherit from it."
   - "'bare' is standalone: minimal profile with no proxy config or sandbox."
   - "In sandbox mode (--sandbox), each profile gets its own isolated
@@ -15,8 +15,9 @@ notes:
 profiles:
   default:
     description:
-      Base profile — Pi Code agent launched via CodeFreedom's proxy auto-config.
-      PROXY_BASE_URL and PROXY_API_KEY drive settings.json generation.
+      Base profile — Pi Code agent launched via CodeFreedom's launcher.
+      Generates TypeScript extension for dynamic model discovery from proxy.
+      pi-mcp-adapter handles MCP tool integration from .mcp.json.
     sandbox_images:
       default: docker.io/nilayparikh/codefreedom:pi-code-latest
     tools:
@@ -24,13 +25,11 @@ profiles:
       - web
       - github
     env:
-      # Proxy auto-config (consumed by cf r ag pc to generate settings.json)
       PROXY_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
-      # Pi: disable auto-update checks
       PI_SKIP_VERSION_CHECK: "1"
-      # Pi: default model (optional — overrides Pi's built-in default)
       PI_DEFAULT_MODEL: ""
+      PI_SHOW_ALIAS_MODELS: ""
     sandbox:
       env:
         IS_SANDBOX: "1"
