@@ -1,20 +1,28 @@
-description: Pi Code profiles for codefreedom — Earendil's AI coding agent
-      with extension-based proxy config, launched via CodeFreedom's launcher.
+description: >
+      Pi Code profiles for codefreedom — Earendil's AI coding agent
+      with extension-based proxy config, launched via CodeFreedom's
+      launcher.
 notes:
-      - "'cf r ag pc' generates extensions/codefreedom.ts in the pi agent config dir.
-        The extension uses pi.registerProvider() for dynamic model discovery
-        from the proxy at startup. pi-mcp-adapter reads .mcp.json for MCP tools."
-      - "'default' is the base profile — all other profiles inherit from it."
+      - "'cf r ag pc' generates extensions/codefreedom.ts in the pi
+        agent config dir. The extension uses pi.registerProvider()
+        for dynamic model discovery from the proxy at startup.
+        pi-mcp-adapter reads .mcp.json for MCP tools."
+      - "'default' is the base profile — all other profiles inherit
+        from it."
       - "'bare' is standalone: minimal profile with no proxy config."
-      - "Use local.env to declare env vars that should only apply in native mode."
-      - "Extensions are listed in settings.json with npm: prefix so pi auto-installs
-        them at startup. lean-ctx binary is installed at first launch if needed."
+      - "Use local.env to declare env vars that should only apply
+        in native mode."
+      - "Extensions are listed in settings.json with npm: prefix
+        so pi auto-installs them at startup. lean-ctx binary is
+        installed at first launch if needed."
 profiles:
       default:
-            description:
-                  Base profile — Pi Code agent launched via CodeFreedom's launcher.
-                  Generates TypeScript extension for dynamic model discovery from proxy.
-                  pi-mcp-adapter handles MCP tool integration from .mcp.json.
+            description: >
+                  Base profile — Pi Code agent launched via
+                  CodeFreedom's launcher. Generates TypeScript
+                  extension for dynamic model discovery from proxy.
+                  pi-mcp-adapter handles MCP tool integration
+                  from .mcp.json.
             tools:
                   - chrome
                   - web
@@ -44,6 +52,8 @@ profiles:
                         - "python-lsp-server[all]"
                         - ruff
       bare:
-            description: "Standalone — minimal: no proxy config, no preferences. Just the pi binary."
+            description: >
+                  Standalone — minimal: no proxy config,
+                  no preferences. Just the pi binary.
             env:
                   PI_SKIP_VERSION_CHECK: "1"
