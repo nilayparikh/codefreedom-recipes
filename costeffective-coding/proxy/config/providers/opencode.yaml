@@ -147,6 +147,32 @@ model_list:
                     route-image-request:
                           enabled: true
 
+      - model_name: MiniMax-M3-Free
+        litellm_params:
+              model: anthropic/minimax-m3-free
+              <<:
+                    [
+                          *opencode_params,
+                          *opencode_anthropic_go_api_params,
+                          *free_model_routing_params,
+                    ]
+        model_info:
+              id: "opencode-zen-minimax-m3-free"
+              custom_llm_provider: opencode-zen-free
+              <<: [*opencode_openai_model_info, *free_model_cost_params]
+              supports_vision: true
+              context_window: 512000
+              max_tokens: 512000
+              max_input_tokens: 384000
+              max_output_tokens: 128000
+              limit:
+                    context: 512000
+                    output: 128000
+        codefreedom:
+              plugins:
+                    reasoning-efforts:
+                          rule: minimax-m3
+
       # ── OpenCode Go Provider ────────────────────────────────────────────────────
       # Subscription models from OpenCode GO.
       # Set OPENCODE_ZEN_API_KEY to enable.
