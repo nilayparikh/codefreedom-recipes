@@ -27,6 +27,11 @@ files:
     target: .env.mimo.secrets
     merge: env
 
+  # ── Pi Code secrets ─────────────────────────────────────────────────
+  - path: .env.pi.secrets
+    target: .env.pi.secrets
+    merge: env
+
   # ── Profiles (shared) ───────────────────────────────────────────────────
   - path: profiles/chrome.yaml
     target: profiles/chrome.yaml
@@ -36,6 +41,9 @@ files:
     merge: deepdiff
   - path: profiles/open-code.yaml
     target: profiles/open-code.yaml
+    merge: deepdiff
+  - path: profiles/pi-code.yaml
+    target: profiles/pi-code.yaml
     merge: deepdiff
   - path: profiles/web.yaml
     target: profiles/web.yaml
