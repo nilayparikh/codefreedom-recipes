@@ -54,6 +54,9 @@ files:
   - path: profiles/web-bridge.yaml
     target: profiles/web-bridge.yaml
     merge: deepdiff
+  - path: profiles/git.yaml
+    target: profiles/git.yaml
+    merge: deepdiff
 
   # ── Proxy compose (shared) ──────────────────────────────────────────────
   - path: proxy/docker-compose.yaml
