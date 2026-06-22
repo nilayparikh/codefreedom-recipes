@@ -3,7 +3,7 @@
 # ──────────────────────────────────────────────────────────────────────────
 
 git:
-  model: "openai/mimo-v2.5"
+  model: "MiMo-V2.5"
   conventional_commit: true
   signed_commit: true
   templates:
