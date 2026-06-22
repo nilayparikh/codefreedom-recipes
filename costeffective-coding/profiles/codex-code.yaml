@@ -31,9 +31,7 @@ profiles:
       PROXY_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # Codex: default model for proxy routing
-      CODEX_DEFAULT_MODEL: cf-mimo-v2.5
-      # Model aliases: codex-style slug=proxy model ID (comma-separated)
-      CODEX_MODEL_ALIASES: cf-mimo-v2.5=MiMo-V2.5,cf-sonnet=sonnet,cf-haiku=haiku,cf-opus=opus
+      CODEX_DEFAULT_MODEL: MiMo-V2.5
     sandbox:
       env:
         IS_SANDBOX: "1"
