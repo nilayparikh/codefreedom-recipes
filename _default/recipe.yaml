@@ -45,6 +45,9 @@ files:
   - path: profiles/pi-code.yaml
     target: profiles/pi-code.yaml
     merge: deepdiff
+  - path: profiles/codex-code.yaml
+    target: profiles/codex-code.yaml
+    merge: deepdiff
   - path: profiles/web.yaml
     target: profiles/web.yaml
     merge: deepdiff
