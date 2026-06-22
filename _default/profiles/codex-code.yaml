@@ -30,7 +30,7 @@ profiles:
       PROXY_BASE_URL: http://localhost:4000
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # Codex: default model for proxy routing
-      CODEX_DEFAULT_MODEL: gpt-4o
+      CODEX_DEFAULT_MODEL: MiMo-V2.5
     sandbox:
       env:
         IS_SANDBOX: "1"
