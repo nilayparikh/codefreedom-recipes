@@ -33,7 +33,7 @@ profiles:
       CODEX_DEFAULT_MODEL: MiMo-V2.5
       # Show alias models (e.g. opus, sonnet, fable, haiku) in proxy catalog
       # Default: false — alias models are hidden unless explicitly enabled
-      MIMOCODE_SHOW_ALIAS_MODELS: ""
+      CODEX_SHOW_ALIAS_MODELS: ""
     sandbox:
       env:
         IS_SANDBOX: "1"
