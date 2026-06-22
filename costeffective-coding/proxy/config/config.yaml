@@ -1,125 +1,133 @@
 # ── LiteLLM Example Configuration ─────────────────────────────────────────────
 
 include:
-  # ── Cloud providers ─────────────────────────────────────────────────────
-  # Enabled by default — set the API key in .env.secrets to activate.
-  # Leave the key empty and LiteLLM skips the provider automatically.
-  - providers/azure-foundry.yaml
-  - providers/opencode.yaml
-  - providers/openrouter.yaml
+      # ── Cloud providers ─────────────────────────────────────────────────────
+      # Enabled by default — set the API key in .env.secrets to activate.
+      # Leave the key empty and LiteLLM skips the provider automatically.
+      - providers/azure-foundry.yaml
+      - providers/opencode.yaml
+      - providers/openrouter.yaml
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # General Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 general_settings:
-  # ── Database ─────────────────────────────────────────────────────────────
-  store_model_in_db: true
-  store_prompts_in_spend_logs: false
+      # ── Database ─────────────────────────────────────────────────────────────
+      store_model_in_db: true
+      store_prompts_in_spend_logs: false
 
-  # ── Forward Client Headers ───────────────────────────────────────────────
-  forward_client_headers_to_llm_api: true
+      # ── Forward Client Headers ───────────────────────────────────────────────
+      forward_client_headers_to_llm_api: true
 
-  # ── Health Checks ────────────────────────────────────────────────────────
-  background_health_checks: false
-  enable_health_check_routing: false
+      # ── Health Checks ────────────────────────────────────────────────────────
+      background_health_checks: false
+      enable_health_check_routing: false
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Router Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 router_settings:
-  # ── Routing Strategy ──────────────────────────────────────────────────────
-  routing_strategy: simple-shuffle
+      # ── Routing Strategy ──────────────────────────────────────────────────────
+      routing_strategy: simple-shuffle
 
-  # ── Failover and Retry Settings ───────────────────────────────────────────
-  num_retries: 3
+      # ── Failover and Retry Settings ───────────────────────────────────────────
+      num_retries: 3
 
-  # ── Explicit Error Specific Cooldown Policy ───────────────────────────────
-  allowed_fails_policy:
-    RateLimitErrorAllowedFails: 0 # Cooldown on the 1st rate limit (0 failures tolerated)
-    AuthenticationErrorAllowedFails: 2 # Cooldown on the 3rd auth failure
-    TimeoutErrorAllowedFails: 10 # Cooldown on the 11th timeout
-    BadRequestErrorAllowedFails: 10 # Cooldown on the 11th malformed request
+      # ── Explicit Error Specific Cooldown Policy ───────────────────────────────
+      allowed_fails_policy:
+            RateLimitErrorAllowedFails: 0 # Cooldown on the 1st rate limit (0 failures tolerated)
+            AuthenticationErrorAllowedFails: 2 # Cooldown on the 3rd auth failure
+            TimeoutErrorAllowedFails: 10 # Cooldown on the 11th timeout
+            BadRequestErrorAllowedFails: 10 # Cooldown on the 11th malformed request
 
-  # ── Retry Policy ─────────────────────────────────────────────────────────
-  retry_policy:
-    AuthenticationErrorRetries: 2 # Retry up to 2 times on auth errors, which may be transient (e.g. token refresh)
-    TimeoutErrorRetries: 5 # Retry up to 5 times on timeouts, which are often transient
-    RateLimitErrorRetries: 0 # Immediately moves to cooldown/failover on 429
-    ContentPolicyViolationErrorRetries: 0 # Don't retry on content policy violations
-    InternalServerErrorRetries: 5 # Retry on 5xx errors, which may be transient
-    BadRequestErrorRetries: 0 # Don't retry on 400 errors, which indicate a malformed request
+      # ── Retry Policy ─────────────────────────────────────────────────────────
+      retry_policy:
+            AuthenticationErrorRetries: 2 # Retry up to 2 times on auth errors, which may be transient (e.g. token refresh)
+            TimeoutErrorRetries: 5 # Retry up to 5 times on timeouts, which are often transient
+            RateLimitErrorRetries: 0 # Immediately moves to cooldown/failover on 429
+            ContentPolicyViolationErrorRetries: 0 # Don't retry on content policy violations
+            InternalServerErrorRetries: 5 # Retry on 5xx errors, which may be transient
+            BadRequestErrorRetries: 0 # Don't retry on 400 errors, which indicate a malformed request
 
-  # ── Model Group Aliases ──────────────────────────────────────────────────
-  # Each alias maps to a model group. Override via the corresponding
-  # LITELLM_MODEL_ALIAS_* env var in .env.
-  #
-  # | Model alias | Behavior |
-  # |---|---|
-  # | fable | Uses Claude Fable 5 for your hardest and longest-running tasks |
-  # | sonnet | Uses the latest Sonnet model for daily coding tasks |
-  # | opus | Uses the latest Opus model for complex reasoning tasks |
-  # | haiku | Uses the fast and efficient Haiku model for simple tasks |
-  # | custom | Routes to the model of your choice |
+      # ── Model Group Aliases ──────────────────────────────────────────────────
+      # Each alias maps to a model group. Override via the corresponding
+      # LITELLM_MODEL_ALIAS_* env var in .env.
+      #
+      # | Model alias | Behavior |
+      # |---|---|
+      # | fable | Uses Claude Fable 5 for your hardest and longest-running tasks |
+      # | sonnet | Uses the latest Sonnet model for daily coding tasks |
+      # | opus | Uses the latest Opus model for complex reasoning tasks |
+      # | haiku | Uses the fast and efficient Haiku model for simple tasks |
+      # | custom | Routes to the model of your choice |
 
-  # ──────────────────────────────────────────────────────────────────────────
-  model_group_alias:
-    "fable": "Qwen3.7-Max"
-    "opus": "Qwen3.7-Plus"
-    "sonnet": "DeepSeek-V4-Pro"
-    "haiku": "DeepSeek-V4-Flash"
-    "custom": "DeepSeek-V4-Flash"
+      # ──────────────────────────────────────────────────────────────────────────
+      model_group_alias:
+            # Anthropic aliases
+            "fable": "Qwen3.7-Max"
+            "opus": "Qwen3.7-Plus"
+            "sonnet": "DeepSeek-V4-Pro"
+            "haiku": "DeepSeek-V4-Flash"
+            "custom": "DeepSeek-V4-Flash"
 
-  # ── Context Window Fallbacks ─────────────────────────────────────────────
-  # If a model can't fit the context, fall back to cloud.
-  # context_window_fallbacks:
-  #   - "Qwen3.6-27B": ["OpenCode/GLM-5.1"]
-  #   - "Qwen3.6-35B-A3B": ["Qwen3.6-35B-A3B"]
+            # OpenAI/Codex aliases
+            "gpt-5.5": "Qwen3.7 Max"
+            "gpt-5.4": "MiMo-V2.5-Pro"
+            "gpt-5.4-mini": "MiMo-V2.5"
+            "gpt-5.3-codex": "DeepSeek-V4-Flash"
+            "gpt-5.2": "DeepSeek-V4-Flash"
+
+# ── Context Window Fallbacks ─────────────────────────────────────────────
+# If a model can't fit the context, fall back to cloud.
+# context_window_fallbacks:
+#   - "Qwen3.6-27B": ["OpenCode/GLM-5.1"]
+#   - "Qwen3.6-35B-A3B": ["Qwen3.6-35B-A3B"]
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LiteLLM Settings
 # ═══════════════════════════════════════════════════════════════════════════════
 litellm_settings:
-  always_include_stream_usage: true
-  get_cost_from_provider: true
-  drop_params: true
-  redact_user_api_key_info: true
-  turn_off_message_logging: false
-  json_logs: true
+      always_include_stream_usage: true
+      get_cost_from_provider: true
+      drop_params: true
+      redact_user_api_key_info: true
+      turn_off_message_logging: false
+      json_logs: true
 
-  modify_params: true
+      modify_params: true
 
-  # Translate Anthropic /v1/messages format to OpenAI for non-Anthropic backends
-  use_chat_completions_url_for_anthropic_messages: true
+      # Translate Anthropic /v1/messages format to OpenAI for non-Anthropic backends
+      use_chat_completions_url_for_anthropic_messages: true
 
-  # Expose Prometheus metrics at /metrics/
-  callbacks:
-    - prometheus
-    - websearch_interception
-    - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
-    - plugins.system-message-merger.system_message_merger.instance
-    - plugins.image-router.image_router.instance
+      # Expose Prometheus metrics at /metrics/
+      callbacks:
+            - prometheus
+            - websearch_interception
+            - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
+            - plugins.system-message-merger.system_message_merger.instance
+            - plugins.image-router.image_router.instance
 
-  websearch_interception_params:
-    enabled_providers:
-      [
-        "openai",
-        "anthropic",
-        "vertex_ai",
-        "bedrock",
-        "azure",
-        "deepseek",
-        "nvidia",
-        "opencode-zen",
-        "openrouter",
-        "minimax",
-        "qwen",
-        "moonshotai",
-        "xiaomi",
-      ]
-  search_tool_name: codefreedom-web
+      websearch_interception_params:
+            enabled_providers:
+                  [
+                        "openai",
+                        "anthropic",
+                        "vertex_ai",
+                        "bedrock",
+                        "azure",
+                        "deepseek",
+                        "nvidia",
+                        "opencode-zen",
+                        "openrouter",
+                        "minimax",
+                        "qwen",
+                        "moonshotai",
+                        "xiaomi",
+                  ]
+      search_tool_name: codefreedom-web
 
-  # Require auth for the /metrics/ endpoint (set to true for production)
-  require_auth_for_metrics_endpoint: false
+      # Require auth for the /metrics/ endpoint (set to true for production)
+      require_auth_for_metrics_endpoint: false
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Web Search Bridge — SearXNG-shaped provider for the Camoufox MCP
@@ -133,14 +141,14 @@ litellm_settings:
 # CodeFreedom Plugins
 # ═══════════════════════════════════════════════════════════════════════════════
 codefreedom:
-  image-router-for-text-only:
-    enabled: true
-    models:
-      - "FreeRouter"
-      - "MiniMax-M3"
+      image-router-for-text-only:
+            enabled: true
+            models:
+                  - "FreeRouter"
+                  - "MiniMax-M3"
 
 search_tools:
-  - search_tool_name: codefreedom-web
-    litellm_params:
-      search_provider: searxng
-      api_base: http://web-bridge:8500
+      - search_tool_name: codefreedom-web
+        litellm_params:
+              search_provider: searxng
+              api_base: http://web-bridge:8500
