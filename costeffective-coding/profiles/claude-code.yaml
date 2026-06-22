@@ -21,9 +21,9 @@ profiles:
                   Base profile — routes through local LiteLLM proxy to free-tier providers.
                   Other profiles inherit from this.
             sandbox_images:
-                  default: docker.io/nilayparikh/codefreedom:claude-code-latest
-                  cuda: docker.io/nilayparikh/codefreedom:claude-code-cuda-latest
-                  rocm: docker.io/nilayparikh/codefreedom:claude-code-rocm-latest
+                  default: docker.io/nilayparikh/codefreedom:ubuntu-latest
+                  cuda: docker.io/nilayparikh/codefreedom:cuda-latest
+                  rocm: docker.io/nilayparikh/codefreedom:rocm-latest
             tools:
                   - chrome
                   - web
