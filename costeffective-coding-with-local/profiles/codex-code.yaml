@@ -12,6 +12,7 @@ notes:
   - "Use sandbox.env to declare env vars that should only be forwarded in
     --sandbox mode."
   - "Use local.env to declare env vars that should only apply in native mode."
+  - "CODEX_MODEL_ALIASES maps short slugs to proxy model IDs (slug=model_id)."
 profiles:
   default:
     description:
@@ -31,6 +32,8 @@ profiles:
       PROXY_API_KEY: ${LITELLM_MASTER_KEY}
       # Codex: default model for proxy routing
       CODEX_DEFAULT_MODEL: MiMo-V2.5
+      # Model aliases: short slug=proxy model ID (comma-separated)
+      CODEX_MODEL_ALIASES: mimo=MiMo-V2.5,sonnet=sonnet,haiku=haiku,opus=opus
     sandbox:
       env:
         IS_SANDBOX: "1"
