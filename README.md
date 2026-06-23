@@ -59,6 +59,57 @@ cf s i --store https://github.com/your-org/my-recipes
 cf s i --store /path/to/my-recipes
 ```
 
+## Branch Naming Convention
+
+Branches in this repo **must** follow version-based naming so the CLI can auto-select the correct branch. The CLI resolves the branch from its own version at runtime.
+
+### Pattern
+
+```
+dev/v{MAJOR}.{MINOR}.{PATCH}    # development builds
+rc/v{MAJOR}.{MINOR}.{PATCH}     # release candidates
+v{MAJOR}.{MINOR}.{PATCH}        # stable releases
+```
+
+### Examples
+
+| CLI Version | Recipe Branch |
+|-------------|---------------|
+| `0.2.1.dev1` | `dev/v0.2.1` |
+| `0.2.1rc1` | `rc/v0.2.1` |
+| `0.2.1` | `v0.2.1` |
+| `0.3.0.dev5` | `dev/v0.3.0` |
+| `0.3.0rc2` | `rc/v0.3.0` |
+| `0.3.0` | `v0.3.0` |
+
+### Rules
+
+1. **Version component must match** between `codefreedom` and `codefreedom-recipes`. When codefreedom releases `v0.3.0`, the recipes repo must have a `v0.3.0` branch.
+2. **Prefix is required**: always `dev/`, `rc/`, or bare `v` for releases. No other prefixes.
+3. **`main` is the fallback** — used when version is `0.0.0` (dev fallback) or resolution fails.
+4. **Branches diverge at release time** — `dev/v0.3.0` may have different content than `v0.3.0`. Cherry-pick or merge as needed.
+
+### Creating a New Version Branch
+
+When codefreedom bumps to a new version (e.g. `0.3.0`):
+
+```bash
+# In the recipes repo
+git checkout main
+git checkout -b dev/v0.3.0
+git push -u origin dev/v0.3.0
+
+# When RC is ready
+git checkout main
+git checkout -b rc/v0.3.0
+git push -u origin rc/v0.3.0
+
+# When stable release is cut
+git checkout main
+git checkout -b v0.3.0
+git push -u origin v0.3.0
+```
+
 ## Creating a Recipe
 
 See the existing recipes for examples. Each recipe is a folder containing:
