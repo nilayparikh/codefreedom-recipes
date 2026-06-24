@@ -312,9 +312,9 @@ model_list:
                     route-image-request:
                           enabled: true
 
-      - model_name: Kimi-K2.7 Code
+      - model_name: Kimi-K2.7
         litellm_params:
-              model: openai/kimi-k2.7-code
+              model: openai/kimi-k2.7
               <<:
                     [
                           *opencode_params,

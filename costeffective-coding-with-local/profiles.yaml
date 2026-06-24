@@ -1,0 +1,214 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Common settings shared by all agents and tools
+# ═══════════════════════════════════════════════════════════════════════════════
+common:
+  # Sandbox
+  sandbox_images:
+    default: ${AGENT_IMAGE}
+    cuda: ${AGENT_CUDA_IMAGE}
+    rocm: ${AGENT_ROCM_IMAGE}
+  sandbox_env:
+    IS_SANDBOX: "1"
+    GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+    GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+
+  # Proxy
+  proxy_env:
+    PROXY_BASE_URL: ${PROXY_BASE_URL}
+    PROXY_API_KEY: ${LITELLM_MASTER_KEY}
+
+  # Tools
+  tools: [chrome, web, github]
+  tool_images:
+    base: "docker.io/nilayparikh/codefreedom"
+    tag: "latest"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Agent profiles
+# ═══════════════════════════════════════════════════════════════════════════════
+profiles:
+  # ── Claude Code ────────────────────────────────────────────────────────────
+  claude-code:
+    profiles:
+      default:
+        env:
+          ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
+          ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
+          CLAUDE_MODEL: haiku
+          ANTHROPIC_DEFAULT_FABLE_MODEL: fable
+          ANTHROPIC_DEFAULT_FABLE_MODEL_NAME: fable
+          ANTHROPIC_DEFAULT_OPUS_MODEL: opus
+          ANTHROPIC_DEFAULT_OPUS_MODEL_NAME: opus
+          ANTHROPIC_DEFAULT_SONNET_MODEL: sonnet
+          ANTHROPIC_DEFAULT_SONNET_MODEL_NAME: sonnet
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: haiku
+          ANTHROPIC_DEFAULT_HAIKU_MODEL_NAME: haiku
+          ANTHROPIC_CUSTOM_MODEL_OPTION: custom
+          ANTHROPIC_CUSTOM_MODEL_OPTION_NAME: custom
+      bare:
+        env:
+          ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
+          ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
+      ui-ux:
+        env:
+          CLAUDE_MODEL: Qwen3.7-Max
+          ANTHROPIC_DEFAULT_FABLE_MODEL: Qwen3.7-Max
+          ANTHROPIC_DEFAULT_FABLE_MODEL_NAME: Qwen3.7-Max
+          ANTHROPIC_DEFAULT_OPUS_MODEL: Kimi-K2.6
+          ANTHROPIC_DEFAULT_OPUS_MODEL_NAME: Kimi-K2.6
+          ANTHROPIC_DEFAULT_SONNET_MODEL: Qwen3.7-Plus
+          ANTHROPIC_DEFAULT_SONNET_MODEL_NAME: Qwen3.7-Plus
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: Qwen3.6-35B-A3B
+          ANTHROPIC_DEFAULT_HAIKU_MODEL_NAME: Qwen3.6-35B-A3B
+          ANTHROPIC_CUSTOM_MODEL_OPTION: Qwen3.7-Max
+          ANTHROPIC_CUSTOM_MODEL_OPTION_NAME: Qwen3.7-Max
+
+  # ── MiMo Code ─────────────────────────────────────────────────────────────
+  mimo-code:
+    profiles:
+      default:
+        env:
+          MIMOCODE_MIMO_ONLY: "1"
+          MIMOCODE_DISABLE_AUTOUPDATE: "1"
+          MIMOCODE_DISABLE_CLAUDE_CODE: "1"
+        sandbox:
+          env:
+            MIMOCODE_DISABLE_GIT: "0"
+      bare:
+        env:
+          MIMOCODE_MIMO_ONLY: "1"
+          MIMOCODE_DISABLE_AUTOUPDATE: "1"
+          MIMOCODE_DISABLE_CLAUDE_CODE: "1"
+          MIMOCODE_PURE: "1"
+      ui-ux:
+        env:
+          MIMOCODE_MAX_PROMPT_IMAGES: "20"
+          MIMOCODE_ENABLE_QUESTION_TOOL: "1"
+          MIMOCODE_EXPERIMENTAL: "1"
+
+  # ── Open Code ─────────────────────────────────────────────────────────────
+  open-code:
+    profiles:
+      default:
+        env:
+          OPENCODE_DISABLE_AUTOUPDATE: "1"
+          OPENCODE_DISABLE_CLAUDE_CODE: "1"
+      bare:
+        env:
+          OPENCODE_DISABLE_AUTOUPDATE: "1"
+          OPENCODE_DISABLE_CLAUDE_CODE: "1"
+          OPENCODE_PURE: "1"
+      ui-ux:
+        env:
+          OPENCODE_EXPERIMENTAL: "1"
+
+  # ── Codex Code ────────────────────────────────────────────────────────────
+  codex-code:
+    profiles:
+      default:
+        env:
+          CODEX_DEFAULT_MODEL: MiMo-V2.5
+      bare:
+        env: {}
+
+  # ── Pi Code ───────────────────────────────────────────────────────────────
+  pi-code:
+    profiles:
+      default:
+        env:
+          PI_DEFAULT_MODEL: "MiMo-V2.5-Pro"
+          PI_DEFAULT_THINKING_LEVEL: "high"
+          PI_DEFAULT_PROVIDER: "codefreedom"
+          GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+          GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+        extensions:
+          - pi-mcp-adapter
+          - pi-lean-ctx
+          - "@tintinweb/pi-subagents"
+          - pi-lens
+          - pi-simplify
+          - "@gotgenes/pi-permission-system"
+          - pi-workflow-agent
+        lsp_servers:
+          npm:
+            - typescript-language-server
+            - vscode-langservers-extracted
+            - bash-language-server
+          pip:
+            - "python-lsp-server[all]"
+            - ruff
+      bare:
+        env:
+          PI_SKIP_VERSION_CHECK: "1"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Tool profiles
+# ═══════════════════════════════════════════════════════════════════════════════
+tools:
+  chrome:
+    image: ${common.tool_images.base}:chrome-${common.tool_images.tag}
+    container_name: codefreedom-tools-chrome
+    port: ${CHROME_PORT:-9222}
+    mcp_port: 9223
+    mcp_path: /mcp
+    env:
+      CHROME_DEBUG_PORT: "9222"
+      MCP_PORT: "9223"
+
+  web:
+    image: ${common.tool_images.base}:web-${common.tool_images.tag}
+    container_name: codefreedom-web
+    port: ${WEB_MCP_PORT:-8420}
+    env: {}
+    search_cooldown_seconds: 10.0
+    search_engines:
+      search_engine1:
+        url: https://search.brave.com/search?q={q}
+        parser: standard
+      search_engine2:
+        url: https://www.bing.com/search?q={q}&form=QBLH
+        parser: standard
+    parser_registry:
+      standard:
+        result_selectors: "[data-type='web'], .b_algo, #res .g, .result, .search-result, li:has(h2 a[href]), li:has(h3 a[href])"
+        link_selector: h2 a[href], h3 a[href], a[href]
+        snippet_selectors: .b_caption p, .b_lineclamp2, .generic-snippet .content, .snippet, .description, .st, span.st
+        ai_selectors:
+          - .chatllm-content
+          - .b_ans
+          - .rai_content
+          - "[data-attrid='wa_description']"
+          - .knowledge-panel
+
+  github:
+    image: ${common.tool_images.base}:github-${common.tool_images.tag}
+    container_name: codefreedom-tools-github
+    port: ${GITHUB_MCP_PORT:-8129}
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+
+  web-bridge:
+    image: ${common.tool_images.base}:web-bridge-${common.tool_images.tag}
+    container_name: codefreedom-web-bridge
+    port: ${WEB_BRIDGE_PORT:-8500}
+    env:
+      MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:8420/mcp}
+      WEB_BRIDGE_COOLDOWN_SECONDS: ${WEB_BRIDGE_COOLDOWN_SECONDS:-2.0}
+      MCP_TIMEOUT_SECONDS: ${MCP_TIMEOUT_SECONDS:-60}
+
+  git:
+    model: "MiMo-V2.5"
+    conventional_commit: true
+    signed_commit: true
+    templates:
+      commit_message: "${type}(${scope}): ${description}"
+      pr_title: "${type}(${scope}): ${description}"
+      pr_description: |
+        ## Summary
+        ${summary}
+
+        ## Changes
+        ${changes}
+
+        ## Testing
+        ${testing}
