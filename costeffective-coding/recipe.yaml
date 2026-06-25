@@ -11,80 +11,79 @@ description: "Cloud inference — DeepSeek, Azure, OpenCode, OpenRouter via Lite
 version: 1
 
 vars:
-    LITELLM_PORT: "4000"
-    PROXY_BASE_URL: "http://localhost:${LITELLM_PORT}"
-    AGENT_IMAGE: "docker.io/nilayparikh/codefreedom:ubuntu-latest"
-    AGENT_CUDA_IMAGE: "docker.io/nilayparikh/codefreedom:cuda-latest"
-    AGENT_ROCM_IMAGE: "docker.io/nilayparikh/codefreedom:rocm-latest"
-    CHROME_PORT: "9223"
-    GITHUB_MCP_PORT: "8129"
-    WEB_MCP_PORT: "8420"
-    WEB_BRIDGE_PORT: "8500"
-    MICROSOFT_FOUNDRY_API_BASE: ""
-    OPENCODE_ZEN_BASE_URL: "https://opencode.ai/zen/v1"
-    OPENCODE_GO_BASE_URL: "https://opencode.ai/zen/go/v1"
-    OPENCODE_GO_ANTHROPIC_BASE_URL: "https://opencode.ai/zen/go"
-    OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
-
+  LITELLM_PORT: "4000"
+  PROXY_BASE_URL: "http://localhost:${LITELLM_PORT}"
+  AGENT_IMAGE: "docker.io/nilayparikh/codefreedom:ubuntu-latest"
+  AGENT_CUDA_IMAGE: "docker.io/nilayparikh/codefreedom:cuda-latest"
+  AGENT_ROCM_IMAGE: "docker.io/nilayparikh/codefreedom:rocm-latest"
+  CHROME_PORT: "9223"
+  GITHUB_MCP_PORT: "8129"
+  WEB_MCP_PORT: "8420"
+  WEB_BRIDGE_PORT: "8500"
+  MICROSOFT_FOUNDRY_API_BASE: ""
+  OPENCODE_ZEN_BASE_URL: "https://opencode.ai/zen/v1"
+  OPENCODE_GO_BASE_URL: "https://opencode.ai/zen/go/v1"
+  OPENCODE_GO_ANTHROPIC_BASE_URL: "https://opencode.ai/zen/go"
+  OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
 files:
-    # ── Unified profiles (single file, no split) ─────────────────────────
-    - path: profiles.yaml
-      target: profiles/profiles.yaml
-      merge: deepdiff
+  # ── Unified profiles (single file) ──────────────────────────────────
+  - path: profiles.yaml
+    target: profiles.yaml
+    merge: deepdiff
 
-    # ── Proxy config (copy entire directory) ──────────────────────────────
-    - path: proxy
-      target: proxy/
-      copy_dir: true
+  # ── Proxy config (copy entire directory) ──────────────────────────────
+  - path: proxy
+    target: proxy/
+    copy_dir: true
 
-    # ── Setup scripts ──────────────────────────────────────────────────────
-    - path: scripts/setup-secrets.sh
-      target: scripts/costeffective-coding/setup-secrets.sh
-    - path: scripts/setup-secrets.ps1
-      target: scripts/costeffective-coding/setup-secrets.ps1
+  # ── Setup scripts ──────────────────────────────────────────────────────
+  - path: scripts/setup-secrets.sh
+    target: scripts/costeffective-coding/setup-secrets.sh
+  - path: scripts/setup-secrets.ps1
+    target: scripts/costeffective-coding/setup-secrets.ps1
 
 dirs: []
-    # PG data and backup both use Docker named volumes — no host
-    # directories are needed.
+  # PG data and backup both use Docker named volumes — no host
+  # directories are needed.
 
 generated_artifacts:
-    - kind: setup_script_bash
-      target: scripts/costeffective-coding/setup-secrets.sh
-    - kind: setup_script_powershell
-      target: scripts/costeffective-coding/setup-secrets.ps1
+  - kind: setup_script_bash
+    target: scripts/costeffective-coding/setup-secrets.sh
+  - kind: setup_script_powershell
+    target: scripts/costeffective-coding/setup-secrets.ps1
 
 required_secrets:
-    - var: LITELLM_MASTER_KEY
-      prompt: "LiteLLM proxy master key"
-      hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
-      default: "sk-codefreedom-local"
-      env: "${CF_CLI_LITELLM_MASTER_KEY:-sk-codefreedom-local}"
-    - var: MICROSOFT_FOUNDRY_API_KEY
-      prompt: "Azure Foundry API key"
-      hint: "Set in Azure AI Foundry portal"
-      env: "${CF_CLI_MICROSOFT_FOUNDRY_API_KEY:-}"
-    - var: OPENCODE_ZEN_API_KEY
-      prompt: "OpenCode Zen API key"
-      hint: "Get key from OpenCode dashboard"
-      env: "${CF_CLI_OPENCODE_ZEN_API_KEY:-}"
-    - var: OPENROUTER_API_KEY
-      prompt: "OpenRouter API key"
-      hint: "Get key at https://openrouter.ai/keys"
-      env: "${CF_CLI_OPENROUTER_API_KEY:-}"
-    - var: GITHUB_PERSONAL_ACCESS_TOKEN
-      prompt: "GitHub personal access token"
-      hint: "Get key at https://github.com/settings/tokens"
-      env: "${CF_CLI_GITHUB_PERSONAL_ACCESS_TOKEN:-}"
+  - var: LITELLM_MASTER_KEY
+    prompt: "LiteLLM proxy master key"
+    hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
+    default: "sk-codefreedom-local"
+    env: "${CF_CLI_LITELLM_MASTER_KEY:-sk-codefreedom-local}"
+  - var: MICROSOFT_FOUNDRY_API_KEY
+    prompt: "Azure Foundry API key"
+    hint: "Set in Azure AI Foundry portal"
+    env: "${CF_CLI_MICROSOFT_FOUNDRY_API_KEY:-}"
+  - var: OPENCODE_ZEN_API_KEY
+    prompt: "OpenCode Zen API key"
+    hint: "Get key from OpenCode dashboard"
+    env: "${CF_CLI_OPENCODE_ZEN_API_KEY:-}"
+  - var: OPENROUTER_API_KEY
+    prompt: "OpenRouter API key"
+    hint: "Get key at https://openrouter.ai/keys"
+    env: "${CF_CLI_OPENROUTER_API_KEY:-}"
+  - var: GITHUB_PERSONAL_ACCESS_TOKEN
+    prompt: "GitHub personal access token"
+    hint: "Get key at https://github.com/settings/tokens"
+    env: "${CF_CLI_GITHUB_PERSONAL_ACCESS_TOKEN:-}"
 
 config_vars:
-    - var: MICROSOFT_FOUNDRY_API_BASE
-      prompt: "Azure Foundry base URL"
-      hint: "Azure AI Foundry workspace endpoint"
-      env: "${CF_CLI_MICROSOFT_FOUNDRY_API_BASE:-}"
+  - var: MICROSOFT_FOUNDRY_API_BASE
+    prompt: "Azure Foundry base URL"
+    hint: "Azure AI Foundry workspace endpoint"
+    env: "${CF_CLI_MICROSOFT_FOUNDRY_API_BASE:-}"
 
 advice: |
-    For interactive secret setup (recommended), run the assisted script:
-      Bash:       bash {cf_dir}/scripts/costeffective-coding/setup-secrets.sh
-      PowerShell: {cf_dir}\scripts\costeffective-coding\setup-secrets.ps1
-    The script sets CF_CLI_* machine environment variables, persists them
-    in your shell profile, and reports which services are configured.
+  For interactive secret setup (recommended), run the assisted script:
+    Bash:       bash {cf_dir}/scripts/costeffective-coding/setup-secrets.sh
+    PowerShell: {cf_dir}\scripts\costeffective-coding\setup-secrets.ps1
+  The script sets CF_CLI_* machine environment variables, persists them
+  in your shell profile, and reports which services are configured.

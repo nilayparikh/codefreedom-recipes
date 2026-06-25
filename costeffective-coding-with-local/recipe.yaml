@@ -31,15 +31,10 @@ vars:
   LOCAL_S_API_KEY: "sk-dummy"
 
 files:
-  # ── Combined profiles (split on install) ─────────────────────────────
+  # ── Unified profiles (single file) ──────────────────────────────────
   - path: profiles.yaml
-    target: profiles/
+    target: profiles.yaml
     merge: deepdiff
-    split_by_key: profiles
-  - path: profiles.yaml
-    target: profiles/
-    merge: deepdiff
-    split_by_key: tools
 
   # ── Proxy config (copy entire directory) ──────────────────────────────
   - path: proxy
