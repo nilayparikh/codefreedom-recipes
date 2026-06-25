@@ -201,14 +201,14 @@ tools:
     conventional_commit: true
     signed_commit: true
     templates:
-      commit_message: "${type}(${scope}): ${description}"
-      pr_title: "${type}(${scope}): ${description}"
+      commit_message: "$${type}($${scope}): $${description}"
+      pr_title: "$${type}($${scope}): $${description}"
       pr_description: |
         ## Summary
-        ${summary}
+        $${summary}
 
         ## Changes
-        ${changes}
+        $${changes}
 
         ## Testing
-        ${testing}
+        $${testing}
