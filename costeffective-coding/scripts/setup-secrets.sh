@@ -164,7 +164,6 @@ detect_shell_profile() {
 remove_existing_block() {
     local profile="$1"
     if [[ -f "$profile" ]] && grep -qF "$MARKER_BEGIN" "$profile"; then
-        # Remove existing block between markers (inclusive)
         sed -i.bak "/$MARKER_BEGIN/,/$MARKER_END/d" "$profile"
         rm -f "${profile}.bak"
     fi
@@ -202,8 +201,7 @@ export_current_session() {
 
 print_summary() {
     local set_count=0
-    local skipped_secrets=()
-    local set_secrets=()
+    local failing_services=()
 
     echo -e ""
     echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
@@ -224,10 +222,8 @@ print_summary() {
             fi
             echo -e "  ${GREEN}✔${RESET} ${var_name}=${DIM}${masked}${RESET}"
             ((set_count++))
-            set_secrets+=("$var_name")
         else
             echo -e "  ${YELLOW}⊘${RESET} ${var_name} ${DIM}(skipped)${RESET}"
-            skipped_secrets+=("$var_name")
         fi
     done
 
@@ -235,8 +231,6 @@ print_summary() {
     echo -e "  ${BOLD}Set:${RESET} ${GREEN}${set_count}${RESET} / ${#SECRETS[@]} secrets"
     echo -e ""
 
-    # ── Service failure analysis ──────────────────────────────────────────────
-    local failing_services=()
     for service_def in "${SERVICES[@]}"; do
         IFS='|' read -r service_name required_keys <<< "$service_def"
         IFS=',' read -ra required_arr <<< "$required_keys"
