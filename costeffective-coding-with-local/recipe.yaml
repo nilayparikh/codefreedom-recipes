@@ -12,11 +12,13 @@ version: 1
 
 vars:
   LITELLM_PORT: "4000"
-  PROXY_BASE_URL: "http://localhost:${LITELLM_PORT}"
+  LITELLM_BIND_HOST: "127.0.0.1"
+  PROXY_BASE_URL: "http://${LITELLM_BIND_HOST}:${LITELLM_PORT}"
   AGENT_IMAGE: "docker.io/nilayparikh/codefreedom:ubuntu-latest"
   AGENT_CUDA_IMAGE: "docker.io/nilayparikh/codefreedom:cuda-latest"
   AGENT_ROCM_IMAGE: "docker.io/nilayparikh/codefreedom:rocm-latest"
-  CHROME_PORT: "9223"
+  CHROME_CDP_PORT: "9222"
+  CHROME_MCP_PORT: "9223"
   GITHUB_MCP_PORT: "8129"
   WEB_MCP_PORT: "8420"
   WEB_BRIDGE_PORT: "8500"
