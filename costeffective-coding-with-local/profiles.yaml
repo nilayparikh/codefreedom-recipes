@@ -143,7 +143,7 @@ agents:
 # ═══════════════════════════════════════════════════════════════════════════════
 tools:
   chrome:
-    image: ${TOOL_IMAGE_BASE}:chrome-${TOOL_IMAGE_TAG}
+    image: ${TOOL_IMAGE_BASE}:chrome-${CHROME_IMAGE_TAG}
     container_name: codefreedom-tools-chrome
     port: ${CHROME_CDP_PORT:-9222}
     mcp_port: ${CHROME_MCP_PORT:-9223}
@@ -153,7 +153,7 @@ tools:
       MCP_PORT: "${CHROME_MCP_PORT:-9223}"
 
   web:
-    image: ${TOOL_IMAGE_BASE}:web-${TOOL_IMAGE_TAG}
+    image: ${TOOL_IMAGE_BASE}:web-${WEB_IMAGE_TAG}
     container_name: codefreedom-web
     port: ${WEB_MCP_PORT:-8420}
     env: {}
@@ -178,14 +178,14 @@ tools:
           - .knowledge-panel
 
   github:
-    image: ${TOOL_IMAGE_BASE}:github-${TOOL_IMAGE_TAG}
+    image: ${TOOL_IMAGE_BASE}:github-${GITHUB_IMAGE_TAG}
     container_name: codefreedom-tools-github
     port: ${GITHUB_MCP_PORT:-8129}
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
 
   web-bridge:
-    image: ${TOOL_IMAGE_BASE}:web-bridge-${TOOL_IMAGE_TAG}
+    image: ${TOOL_IMAGE_BASE}:web-bridge-${WEB_BRIDGE_IMAGE_TAG}
     container_name: codefreedom-web-bridge
     port: ${WEB_BRIDGE_PORT:-8500}
     env:
