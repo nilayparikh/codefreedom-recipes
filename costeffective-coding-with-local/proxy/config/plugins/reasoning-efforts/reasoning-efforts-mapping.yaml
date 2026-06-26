@@ -106,7 +106,7 @@ rules:
       xhigh: high
       max: high
 
-  glm-5-1:
+  glm:
     type: mapping
     output: reasoning_effort
     values:
