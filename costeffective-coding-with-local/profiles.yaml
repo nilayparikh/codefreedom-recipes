@@ -13,6 +13,9 @@ common:
     GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
 
   # Proxy
+  proxy:
+    bind_host: ${LITELLM_BIND_HOST:-127.0.0.1}
+    bind_port: ${LITELLM_PORT:-4000}
   proxy_env:
     PROXY_BASE_URL: ${PROXY_BASE_URL}
     PROXY_API_KEY: ${LITELLM_MASTER_KEY}
@@ -148,12 +151,12 @@ tools:
   chrome:
     image: ${common.tool_images.base}:chrome-${common.tool_images.tag}
     container_name: codefreedom-tools-chrome
-    port: ${CHROME_PORT:-9222}
-    mcp_port: 9223
+    port: ${CHROME_CDP_PORT:-9222}
+    mcp_port: ${CHROME_MCP_PORT:-9223}
     mcp_path: /mcp
     env:
-      CHROME_DEBUG_PORT: "9222"
-      MCP_PORT: "9223"
+      CHROME_DEBUG_PORT: "${CHROME_CDP_PORT:-9222}"
+      MCP_PORT: "${CHROME_MCP_PORT:-9223}"
 
   web:
     image: ${common.tool_images.base}:web-${common.tool_images.tag}
@@ -192,7 +195,7 @@ tools:
     container_name: codefreedom-web-bridge
     port: ${WEB_BRIDGE_PORT:-8500}
     env:
-      MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:8420/mcp}
+      MCP_WEB_URL: ${MCP_WEB_URL:-http://host.docker.internal:${WEB_MCP_PORT:-8420}/mcp}
       WEB_BRIDGE_COOLDOWN_SECONDS: "${WEB_BRIDGE_COOLDOWN_SECONDS:-2.0}"
       MCP_TIMEOUT_SECONDS: "${MCP_TIMEOUT_SECONDS:-60}"
 
