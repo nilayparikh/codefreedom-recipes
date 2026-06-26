@@ -16,20 +16,14 @@ common:
   proxy:
     bind_host: ${LITELLM_BIND_HOST:-127.0.0.1}
     bind_port: ${LITELLM_PORT:-4000}
-  proxy_env:
-    PROXY_BASE_URL: ${PROXY_BASE_URL}
-    PROXY_API_KEY: ${LITELLM_MASTER_KEY}
-
-  # Tools
-  tools: [chrome, web, github]
-  tool_images:
-    base: "docker.io/nilayparikh/codefreedom"
-    tag: "latest"
+    env:
+      PROXY_BASE_URL: ${PROXY_BASE_URL}
+      PROXY_API_KEY: ${LITELLM_MASTER_KEY}
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Agent profiles
 # ═══════════════════════════════════════════════════════════════════════════════
-profiles:
+agents:
   # ── Claude Code ────────────────────────────────────────────────────────────
   claude-code:
     profiles:
@@ -149,7 +143,7 @@ profiles:
 # ═══════════════════════════════════════════════════════════════════════════════
 tools:
   chrome:
-    image: ${common.tool_images.base}:chrome-${common.tool_images.tag}
+    image: ${TOOL_IMAGE_BASE}:chrome-${TOOL_IMAGE_TAG}
     container_name: codefreedom-tools-chrome
     port: ${CHROME_CDP_PORT:-9222}
     mcp_port: ${CHROME_MCP_PORT:-9223}
@@ -159,7 +153,7 @@ tools:
       MCP_PORT: "${CHROME_MCP_PORT:-9223}"
 
   web:
-    image: ${common.tool_images.base}:web-${common.tool_images.tag}
+    image: ${TOOL_IMAGE_BASE}:web-${TOOL_IMAGE_TAG}
     container_name: codefreedom-web
     port: ${WEB_MCP_PORT:-8420}
     env: {}
@@ -184,14 +178,14 @@ tools:
           - .knowledge-panel
 
   github:
-    image: ${common.tool_images.base}:github-${common.tool_images.tag}
+    image: ${TOOL_IMAGE_BASE}:github-${TOOL_IMAGE_TAG}
     container_name: codefreedom-tools-github
     port: ${GITHUB_MCP_PORT:-8129}
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
 
   web-bridge:
-    image: ${common.tool_images.base}:web-bridge-${common.tool_images.tag}
+    image: ${TOOL_IMAGE_BASE}:web-bridge-${TOOL_IMAGE_TAG}
     container_name: codefreedom-web-bridge
     port: ${WEB_BRIDGE_PORT:-8500}
     env:

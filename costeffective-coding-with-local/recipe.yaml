@@ -14,6 +14,8 @@ vars:
   LITELLM_PORT: "4000"
   LITELLM_BIND_HOST: "127.0.0.1"
   PROXY_BASE_URL: "http://${LITELLM_BIND_HOST}:${LITELLM_PORT}"
+  TOOL_IMAGE_BASE: "docker.io/nilayparikh/codefreedom"
+  TOOL_IMAGE_TAG: "latest"
   AGENT_IMAGE: "docker.io/nilayparikh/codefreedom:ubuntu-latest"
   AGENT_CUDA_IMAGE: "docker.io/nilayparikh/codefreedom:cuda-latest"
   AGENT_ROCM_IMAGE: "docker.io/nilayparikh/codefreedom:rocm-latest"
