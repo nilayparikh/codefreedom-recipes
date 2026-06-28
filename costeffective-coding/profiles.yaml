@@ -2,16 +2,6 @@
 # Common settings shared by all agents and tools
 # ═══════════════════════════════════════════════════════════════════════════════
 common:
-  # Sandbox
-  sandbox_images:
-    default: ${AGENT_IMAGE}
-    cuda: ${AGENT_CUDA_IMAGE}
-    rocm: ${AGENT_ROCM_IMAGE}
-  sandbox_env:
-    IS_SANDBOX: "1"
-    GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
-    GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
-
   # Proxy
   proxy:
     bind_host: ${LITELLM_BIND_HOST:-127.0.0.1}
@@ -92,9 +82,6 @@ agents:
           MIMOCODE_MIMO_ONLY: "1"
           MIMOCODE_DISABLE_AUTOUPDATE: "1"
           MIMOCODE_DISABLE_CLAUDE_CODE: "1"
-        sandbox:
-          env:
-            MIMOCODE_DISABLE_GIT: "0"
       bare:
         env:
           MIMOCODE_MIMO_ONLY: "1"
