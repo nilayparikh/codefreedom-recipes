@@ -40,6 +40,10 @@ agents:
           CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL: "1"
           CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS: "1"
           DISABLE_INSTALLATION_CHECKS: "1"
+        tools:
+          - chrome
+          - web
+          - github
       bare:
         env:
           ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
@@ -82,6 +86,10 @@ agents:
           MIMOCODE_MIMO_ONLY: "1"
           MIMOCODE_DISABLE_AUTOUPDATE: "1"
           MIMOCODE_DISABLE_CLAUDE_CODE: "1"
+        tools:
+          - chrome
+          - web
+          - github
       bare:
         env:
           MIMOCODE_MIMO_ONLY: "1"
@@ -101,6 +109,11 @@ agents:
         env:
           OPENCODE_DISABLE_AUTOUPDATE: "1"
           OPENCODE_DISABLE_CLAUDE_CODE: "1"
+        tools:
+          - chrome
+          - web
+          - github
+          - docker-mcp
       bare:
         env:
           OPENCODE_DISABLE_AUTOUPDATE: "1"
@@ -116,6 +129,10 @@ agents:
       default:
         env:
           CODEX_DEFAULT_MODEL: MiMo-V2.5
+        tools:
+          - chrome
+          - web
+          - github
       bare:
         env: {}
 
@@ -129,6 +146,10 @@ agents:
           PI_DEFAULT_PROVIDER: "codefreedom"
           GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
           GH_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+        tools:
+          - chrome
+          - web
+          - github
         extensions:
           - pi-mcp-adapter
           - pi-lean-ctx
@@ -220,3 +241,13 @@ tools:
 
         ## Testing
         ${testing}
+
+  docker-mcp:
+    kind: mcp
+    transport: local
+    command:
+      - docker
+      - mcp
+      - gateway
+      - run
+    enabled: true
