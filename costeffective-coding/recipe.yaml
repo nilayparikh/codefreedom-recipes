@@ -11,9 +11,9 @@ description: "Cloud inference — DeepSeek, Azure, OpenCode, OpenRouter via Lite
 version: 1
 
 vars:
-  LITELLM_PORT: "4000"
-  LITELLM_BIND_HOST: "127.0.0.1"
-  PROXY_BASE_URL: "http://${LITELLM_BIND_HOST}:${LITELLM_PORT}"
+  PROXY_PORT: "4000"
+  PROXY_BIND_HOST: "127.0.0.1"
+  PROXY_BASE_URL: "http://${PROXY_BIND_HOST}:${PROXY_PORT}"
   TOOL_IMAGE_BASE: "docker.io/nilayparikh/codefreedom"
   CHROME_IMAGE_TAG: "latest"
   WEB_IMAGE_TAG: "latest"

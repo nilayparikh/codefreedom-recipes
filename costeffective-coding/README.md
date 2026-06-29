@@ -136,7 +136,7 @@ sudo chown -R $(id -u):$(id -g) ~/.codefreedom
 **Port 4000 in use:**
 
 ```bash
-echo "LITELLM_PORT=4001" >> ~/.codefreedom/.env.user
+echo "PROXY_PORT=4001" >> ~/.codefreedom/.env.user
 ```
 
 **Proxy won't start:**

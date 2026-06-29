@@ -9,7 +9,7 @@
 #         The image is multi-arch (linux/arm64 + linux/amd64). Keep this
 #         compose file free of a `platform:` pin so Docker selects the
 #         matching manifest on Apple Silicon, Linux ARM, and Intel/AMD.
-#         Override LITELLM_IMAGE in .env.proxy to use a different tag
+#         Override PROXY_IMAGE in .env.proxy to use a different tag
 #         (e.g. a locally-built `codefreedom:litellm-local`).
 #
 # DATABASE: Embedded PostgreSQL 18.4 inside the image.
@@ -30,8 +30,8 @@
 
 services:
   litellm:
-    image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
-    container_name: ${LITELLM_CONTAINER_NAME:-litellm-codefreedom}
+    image: ${PROXY_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
+    container_name: ${PROXY_CONTAINER_NAME:-codefreedom-proxy}
     restart: unless-stopped
     profiles:
       - litellm
@@ -40,7 +40,7 @@ services:
       "codefreedom.component": "litellm-proxy"
     # Entrypoint is tini -> litellm (set in the image). The compose
     # file just passes the config path and port through. `--port` and
-    # `--host` are passed as args (not the LITELLM_PORT env var) so
+    # `--host` are passed as args (not the PROXY_PORT env var) so
     # they always win over the image's CMD defaults.
     command:
       - --config
@@ -50,7 +50,7 @@ services:
       - --host
       - "0.0.0.0"
     ports:
-      - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
+      - "${PROXY_BIND_HOST:-0.0.0.0}:${PROXY_PORT:-4000}:4000"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -67,7 +67,9 @@ services:
       # The canonical user-facing name is PROXY_API_KEY; the codefreedom CLI
       # mirrors it to LITELLM_MASTER_KEY at start time (LiteLLM's own
       # convention) so the container always receives its auth key.
-      LITELLM_PORT: ${LITELLM_PORT:-4000}
+      # LITELLM_LOG, LITELLM_DROP_PARAMS, and LITELLM_NO_DOCS are read
+      # directly by the LiteLLM process inside the container — they are
+      # LiteLLM's own conventions, not CodeFreedom names.
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-}
       LITELLM_LOG: ${LITELLM_LOG:-INFO}
 
