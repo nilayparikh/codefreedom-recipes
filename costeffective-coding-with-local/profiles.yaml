@@ -113,7 +113,10 @@ agents:
           - chrome
           - web
           - github
-          - docker-mcp
+          - dockerhub
+          - context7
+          - filesystem
+          - sentry
       bare:
         env:
           OPENCODE_DISABLE_AUTOUPDATE: "1"
@@ -175,6 +178,7 @@ agents:
 # ═══════════════════════════════════════════════════════════════════════════════
 tools:
   chrome:
+    kind: tool
     image: ${TOOL_IMAGE_BASE}:chrome-${CHROME_IMAGE_TAG}
     container_name: codefreedom-tools-chrome
     port: ${CHROME_CDP_PORT:-9222}
@@ -185,6 +189,7 @@ tools:
       MCP_PORT: "${CHROME_MCP_PORT:-9223}"
 
   web:
+    kind: tool
     image: ${TOOL_IMAGE_BASE}:web-${WEB_IMAGE_TAG}
     container_name: codefreedom-web
     port: ${WEB_MCP_PORT:-8420}
@@ -210,6 +215,7 @@ tools:
           - .knowledge-panel
 
   github:
+    kind: tool
     image: ${TOOL_IMAGE_BASE}:github-${GITHUB_IMAGE_TAG}
     container_name: codefreedom-tools-github
     port: ${GITHUB_MCP_PORT:-8129}
@@ -217,6 +223,7 @@ tools:
       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
 
   web-bridge:
+    kind: tool
     image: ${TOOL_IMAGE_BASE}:web-bridge-${WEB_BRIDGE_IMAGE_TAG}
     container_name: codefreedom-web-bridge
     port: ${WEB_BRIDGE_PORT:-8500}
@@ -226,6 +233,7 @@ tools:
       MCP_TIMEOUT_SECONDS: "${MCP_TIMEOUT_SECONDS:-60}"
 
   git:
+    kind: cli
     model: "MiMo-V2.5"
     conventional_commit: true
     signed_commit: true
@@ -242,12 +250,43 @@ tools:
         ## Testing
         ${testing}
 
-  docker-mcp:
+  dockerhub:
     kind: mcp
     transport: local
     command:
       - docker
-      - mcp
-      - gateway
       - run
+      - -i
+      - --rm
+      - -e
+      - HUB_PAT_TOKEN
+      - mcp/dockerhub
+      - --transport=stdio
+      - --username=${DOCKERHUB_USERNAME}
+    environment:
+      HUB_PAT_TOKEN: ${DOCKERHUB_PAT_TOKEN}
+    enabled: true
+
+  context7:
+    kind: mcp
+    transport: remote
+    url: https://mcp.context7.com/mcp
+    headers:
+      CONTEXT7_API_KEY: ${CONTEXT7_API_KEY}
+    enabled: true
+
+  filesystem:
+    kind: mcp
+    transport: local
+    command:
+      - npx
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - ${HOME}
+    enabled: true
+
+  sentry:
+    kind: mcp
+    transport: remote
+    url: https://mcp.sentry.dev/mcp
     enabled: true
