@@ -62,6 +62,9 @@ services:
       # Docker Compose reads .env for ${VAR} interpolation (lowest priority).
       # System env vars override .env (highest priority).
       # .env.secrets is loaded at runtime by codefreedom CLI.
+      # The canonical user-facing name is PROXY_API_KEY; the codefreedom CLI
+      # mirrors it to LITELLM_MASTER_KEY at start time (LiteLLM's own
+      # convention) so the container always receives its auth key.
       LITELLM_PORT: ${LITELLM_PORT:-4000}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-}
       LITELLM_LOG: ${LITELLM_LOG:-INFO}

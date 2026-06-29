@@ -8,7 +8,7 @@ common:
     bind_port: ${LITELLM_PORT:-4000}
     env:
       PROXY_BASE_URL: ${PROXY_BASE_URL}
-      PROXY_API_KEY: ${LITELLM_MASTER_KEY}
+      PROXY_API_KEY: ${PROXY_API_KEY}
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Agent profiles
@@ -20,7 +20,7 @@ agents:
       default:
         env:
           ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
-          ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
+          ANTHROPIC_AUTH_TOKEN: ${PROXY_API_KEY}
           CLAUDE_MODEL: MiMo-V2.5
           ANTHROPIC_DEFAULT_FABLE_MODEL: GPT-5.4
           ANTHROPIC_DEFAULT_FABLE_MODEL_NAME: GPT-5.4
@@ -47,7 +47,7 @@ agents:
       bare:
         env:
           ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
-          ANTHROPIC_AUTH_TOKEN: ${LITELLM_MASTER_KEY}
+          ANTHROPIC_AUTH_TOKEN: ${PROXY_API_KEY}
           CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY: "1"
           CLAUDE_CODE_ATTRIBUTION_HEADER: "0"
           CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: "1"

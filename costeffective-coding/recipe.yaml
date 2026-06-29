@@ -60,11 +60,11 @@ generated_artifacts:
     target: scripts/costeffective-coding/setup-secrets.ps1
 
 required_secrets:
-  - var: LITELLM_MASTER_KEY
-    prompt: "LiteLLM proxy master key"
+  - var: PROXY_API_KEY
+    prompt: "Proxy API key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
     default: "sk-codefreedom-local"
-    env: "${CF_CLI_LITELLM_MASTER_KEY:-sk-codefreedom-local}"
+    env: "${CF_CLI_PROXY_API_KEY:-sk-codefreedom-local}"
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Azure Foundry API key"
     hint: "Set in Azure AI Foundry portal"
