@@ -7,7 +7,7 @@
 # upstream client (MiMo Code, Claude Code, etc.) sends multiple system
 # messages.
 #
-# Per-model opt-in is configured in the model entry's codefreedom block:
+# Per-model opt-in is configured in the model entry (local.yaml):
 #
 #   codefreedom:
 #     plugins:

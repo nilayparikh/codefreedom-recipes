@@ -30,11 +30,12 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $Placeholders = @{
-    LITELLM_MASTER_KEY              = ""   # Proxy master key (default: sk-codefreedom-local)
+    PROXY_API_KEY                   = ""   # Proxy master key (default: sk-codefreedom-local)
     MICROSOFT_FOUNDRY_API_BASE      = ""   # Azure AI Foundry endpoint URL
     MICROSOFT_FOUNDRY_API_KEY       = ""   # Azure AI Foundry API key
     OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
     OPENROUTER_API_KEY              = ""   # https://openrouter.ai/keys
+    CLINE_PASS_API_KEY              = ""   # https://app.cline.bot → Settings → API Keys
     GITHUB_PERSONAL_ACCESS_TOKEN    = ""   # https://github.com/settings/tokens
     LOCAL_M_API_KEY                 = ""   # Local model key (any non-empty value)
     LOCAL_S_API_KEY                 = ""   # Local model key (any non-empty value)
@@ -45,8 +46,8 @@ $Placeholders = @{
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $SecretDefs = [ordered]@{
-    LITELLM_MASTER_KEY = @{
-        Name        = "LiteLLM Master Key"
+    PROXY_API_KEY = @{
+        Name        = "Proxy API Key"
         Description = "Proxy authentication (clients use this to talk to the proxy)"
         URL         = ""
         Default     = "sk-codefreedom-local"
@@ -75,6 +76,12 @@ $SecretDefs = [ordered]@{
         URL         = "https://openrouter.ai/keys"
         Default     = ""
     }
+    CLINE_PASS_API_KEY = @{
+        Name        = "Cline Pass API Key"
+        Description = "Flat-rate subscription to open-weight coding models"
+        URL         = "https://app.cline.bot"
+        Default     = ""
+    }
     GITHUB_PERSONAL_ACCESS_TOKEN = @{
         Name        = "GitHub PAT"
         Description = "Git push/pull in sandbox mode"
@@ -100,10 +107,11 @@ $SecretDefs = [ordered]@{
 # ═══════════════════════════════════════════════════════════════════════════════
 
 $ServiceDefs = [ordered]@{
-    "LiteLLM Proxy"               = @("LITELLM_MASTER_KEY")
+    "LiteLLM Proxy"               = @("PROXY_API_KEY")
     "Azure Foundry Provider"      = @("MICROSOFT_FOUNDRY_API_BASE", "MICROSOFT_FOUNDRY_API_KEY")
     "OpenCode Zen Provider"       = @("OPENCODE_ZEN_API_KEY")
     "OpenRouter Provider"         = @("OPENROUTER_API_KEY")
+    "Cline Pass Provider"         = @("CLINE_PASS_API_KEY")
     "Local Inference (primary)"   = @("LOCAL_M_API_KEY")
     "Local Inference (secondary)" = @("LOCAL_S_API_KEY")
     "Git in Sandbox"              = @("GITHUB_PERSONAL_ACCESS_TOKEN")

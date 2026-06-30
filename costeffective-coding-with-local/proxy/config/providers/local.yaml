@@ -17,6 +17,8 @@ model_list:
       api_base: os.environ/LOCAL_M_BASE_URL
       api_key: os.environ/LOCAL_M_API_KEY
       timeout: 300
+      cooldown_time: 60
+      order: 1
       include_reasoning: true
       max_tokens: 131072
       max_completion_tokens: 16384
@@ -79,6 +81,7 @@ model_list:
       model: openai/qwen3.6_35b_a3b
       api_base: os.environ/LOCAL_S_BASE_URL
       api_key: os.environ/LOCAL_S_API_KEY
+      # timeout/cooldown_time/order inherited from &local_params (slot 1)
       max_tokens: 262144
       max_completion_tokens: 40960
 

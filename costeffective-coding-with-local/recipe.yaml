@@ -4,107 +4,47 @@
 # Coding configuration recipe — profiles, proxy config, and env files
 # for cloud providers (DeepSeek, Azure, OpenCode, OpenRouter) plus local
 # inference backends, routing through a LiteLLM proxy.
-#
-# Extends _default for shared tool profiles, compose, and base proxy config.
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: costeffective-coding-with-local
-extends: _default
-description: "Cloud + local inference — DeepSeek, Azure, OpenCode, OpenRouter, and local backends via LiteLLM proxy"
+description: "Cloud + local inference -- DeepSeek, Azure, OpenCode, OpenRouter, and local backends via LiteLLM proxy"
 version: 1
 
+vars:
+  PROXY_PORT: "4000"
+  PROXY_BIND_HOST: "127.0.0.1"
+  PROXY_BASE_URL: "http://${PROXY_BIND_HOST}:${PROXY_PORT}"
+  IMAGE_BASE: "docker.io/nilayparikh/codefreedom"
+  CHROME_IMAGE_TAG: "v1.0.0"
+  WEB_IMAGE_TAG: "v1.0.0"
+  GITHUB_IMAGE_TAG: "v1.0.0"
+  WEB_BRIDGE_IMAGE_TAG: "v1.0.0"
+  CHROME_CDP_PORT: "9222"
+  CHROME_MCP_PORT: "9223"
+  GITHUB_MCP_PORT: "8129"
+  WEB_MCP_PORT: "8420"
+  WEB_BRIDGE_PORT: "8500"
+  MICROSOFT_FOUNDRY_API_BASE: ""
+  OPENCODE_ZEN_BASE_URL: "https://opencode.ai/zen/v1"
+  OPENCODE_GO_BASE_URL: "https://opencode.ai/zen/go/v1"
+  OPENCODE_GO_ANTHROPIC_BASE_URL: "https://opencode.ai/zen/go"
+  OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
+  CLINE_PASS_BASE_URL: "https://api.cline.bot/api/v1"
+  LOCAL_M_BASE_URL: "http://host.docker.internal:8000/v1"
+  LOCAL_M_API_KEY: "sk-dummy"
+  LOCAL_S_BASE_URL: "http://host.docker.internal:8001/v1"
+  LOCAL_S_API_KEY: "sk-dummy"
+
 files:
-  # ── Claude Code config (secrets only — config lives in profiles) ─────────
-  - path: .env.claude.secrets
-    target: .env.claude.secrets
-    merge: env
-
-  # ── Proxy config ────────────────────────────────────────────────────────
-  - path: .env.proxy
-    target: .env.proxy
-    merge: env
-  - path: .env.proxy.secrets
-    target: .env.proxy.secrets
-    merge: env
-
-  # ── MiMoCode config (secrets only — config lives in profiles) ───────────
-  - path: .env.mimo.secrets
-    target: .env.mimo.secrets
-    merge: env
-
-  # ── OpenCode config (secrets only — config lives in profiles) ───────────
-  - path: .env.opencode.secrets
-    target: .env.opencode.secrets
-    merge: env
-
-  # ── Pi Code secrets ─────────────────────────────────────────────────
-  - path: .env.pi.secrets
-    target: .env.pi.secrets
-    merge: env
-
-  # ── Profiles ────────────────────────────────────────────────────────────
-  - path: profiles/claude-code.yaml
-    target: profiles/claude-code.yaml
-    merge: deepdiff
-  - path: profiles/mimo-code.yaml
-    target: profiles/mimo-code.yaml
-    merge: deepdiff
-  - path: profiles/open-code.yaml
-    target: profiles/open-code.yaml
-    merge: deepdiff
-  - path: profiles/pi-code.yaml
-    target: profiles/pi-code.yaml
-    merge: deepdiff
-  - path: profiles/codex-code.yaml
-    target: profiles/codex-code.yaml
-    merge: deepdiff
-  - path: profiles/chrome.yaml
-    target: profiles/chrome.yaml
-    merge: deepdiff
-  - path: profiles/web.yaml
-    target: profiles/web.yaml
-    merge: deepdiff
-  - path: profiles/github.yaml
-    target: profiles/github.yaml
-    merge: deepdiff
-  - path: profiles/web-bridge.yaml
-    target: profiles/web-bridge.yaml
-    merge: deepdiff
-  - path: profiles/git.yaml
-    target: profiles/git.yaml
+  # ── Unified profiles (single file) ──────────────────────────────────
+  - path: profiles.yaml
+    target: profiles.yaml
     merge: deepdiff
 
-  # ── Proxy compose ───────────────────────────────────────────────────────
-  - path: proxy/docker-compose.yaml
-    target: proxy/docker-compose.yaml
-    merge: deepdiff
-  - path: proxy/config/config.yaml
-    target: proxy/config/config.yaml
-    merge: deepdiff
-
-  # ── Plugins ─────────────────────────────────────────────────────────────
-  - path: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
-    target: proxy/config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml
-    merge: deepdiff
-
-  # ── Proxy providers ─────────────────────────────────────────────────────
-  - path: proxy/config/providers/azure-foundry.yaml
-    target: proxy/config/providers/azure-foundry.yaml
-    merge: deepdiff
-  - path: proxy/config/providers/opencode.yaml
-    target: proxy/config/providers/opencode.yaml
-    merge: deepdiff
-  - path: proxy/config/providers/openrouter.yaml
-    target: proxy/config/providers/openrouter.yaml
-    merge: deepdiff
-  - path: proxy/config/providers/local.yaml
-    target: proxy/config/providers/local.yaml
-    merge: deepdiff
-
-  # ── Image Router Plugin ───────────────────────────────────────────────
-  - path: proxy/config/plugins/image-router/image-router.yaml
-    target: proxy/config/plugins/image-router/image-router.yaml
-    merge: deepdiff
+  # ── Proxy config (copy entire directory) ──────────────────────────────
+  - path: proxy
+    target: proxy/
+    copy_dir: true
 
   # ── Setup scripts ──────────────────────────────────────────────────────
   - path: scripts/setup-secrets.sh
@@ -116,34 +56,52 @@ dirs: []
   # PG data and backup both use Docker named volumes — no host
   # directories are needed.
 
+generated_artifacts:
+  - kind: setup_script_bash
+    target: scripts/costeffective-coding-with-local/setup-secrets.sh
+  - kind: setup_script_powershell
+    target: scripts/costeffective-coding-with-local/setup-secrets.ps1
+
 required_secrets:
-  - var: LITELLM_MASTER_KEY
-    prompt: "LiteLLM proxy master key"
+  - var: PROXY_API_KEY
+    prompt: "Proxy API key"
     hint: "Run: openssl rand -hex 32  (default: sk-codefreedom-local)"
     default: "sk-codefreedom-local"
+    env: "${CF_CLI_PROXY_API_KEY:-sk-codefreedom-local}"
   - var: MICROSOFT_FOUNDRY_API_KEY
     prompt: "Azure Foundry API key"
     hint: "Set in Azure AI Foundry portal"
+    env: "${CF_CLI_MICROSOFT_FOUNDRY_API_KEY:-}"
   - var: OPENCODE_ZEN_API_KEY
     prompt: "OpenCode Zen API key"
     hint: "Get key from OpenCode dashboard"
+    env: "${CF_CLI_OPENCODE_ZEN_API_KEY:-}"
   - var: OPENROUTER_API_KEY
     prompt: "OpenRouter API key"
     hint: "Get key at https://openrouter.ai/keys"
+    env: "${CF_CLI_OPENROUTER_API_KEY:-}"
+  - var: CLINE_PASS_API_KEY
+    prompt: "Cline Pass API key"
+    hint: "Create one at https://app.cline.bot -> Settings -> API Keys"
+    env: "${CF_CLI_CLINE_PASS_API_KEY:-}"
   - var: GITHUB_PERSONAL_ACCESS_TOKEN
     prompt: "GitHub personal access token"
     hint: "Get key at https://github.com/settings/tokens"
+    env: "${CF_CLI_GITHUB_PERSONAL_ACCESS_TOKEN:-}"
   - var: LOCAL_M_API_KEY
     prompt: "Local model key (primary)"
-    hint: "Any non-empty value — local server does not validate"
+    hint: "Any non-empty value -- local server does not validate"
+    env: "${CF_CLI_LOCAL_M_API_KEY:-sk-dummy}"
   - var: LOCAL_S_API_KEY
     prompt: "Local model key (secondary)"
-    hint: "Any non-empty value — local server does not validate"
+    hint: "Any non-empty value -- local server does not validate"
+    env: "${CF_CLI_LOCAL_S_API_KEY:-sk-dummy}"
 
 config_vars:
   - var: MICROSOFT_FOUNDRY_API_BASE
     prompt: "Azure Foundry base URL"
     hint: "Azure AI Foundry workspace endpoint"
+    env: "${CF_CLI_MICROSOFT_FOUNDRY_API_BASE:-}"
 
 advice: |
   For interactive secret setup (recommended), run the assisted script:
