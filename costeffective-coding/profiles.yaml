@@ -233,7 +233,7 @@ tools:
     container_name: codefreedom-tools-codebase-memory
     port: ${CODEBASE_MEMORY_MCP_PORT:-8330}
     ui_port: ${CODEBASE_MEMORY_UI_PORT:-9749}
-    enable_ui: false
+    enable_ui: true
     log_level: info
     auto_index: false
     env:
