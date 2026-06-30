@@ -64,6 +64,7 @@ cline_pass_model_info: &cline_pass_model_info
 # Priority slot: 11 (see PROVIDER_ORDER.md). Order is configurable via CLINE_SUB_ROUTING_ORDER.
 sub_model_routing_params: &sub_model_routing_params
   cooldown_time: 3600
+  order: os.environ/CLINE_SUB_ROUTING_ORDER
   timeout: 120
 
 model_list:
@@ -72,7 +73,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/glm-5.2
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-glm-5-2"
       custom_llm_provider: cline-pass
@@ -101,7 +101,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/kimi-k2.7-code
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-kimi-k2-7-code"
       custom_llm_provider: cline-pass
@@ -128,7 +127,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/kimi-k2.6
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-kimi-k2-6"
       custom_llm_provider: cline-pass
@@ -155,7 +153,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/deepseek-v4-pro
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-deepseek-v4-pro"
       custom_llm_provider: cline-pass
@@ -184,7 +181,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/deepseek-v4-flash
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-deepseek-v4-flash"
       custom_llm_provider: cline-pass
@@ -213,7 +209,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/mimo-v2.5
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-mimo-v2-5"
       custom_llm_provider: cline-pass
@@ -242,7 +237,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/mimo-v2.5-pro
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-mimo-v2-5-pro"
       custom_llm_provider: cline-pass
@@ -271,7 +265,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/minimax-m3
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-minimax-m3"
       custom_llm_provider: cline-pass
@@ -300,7 +293,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/qwen3.7-max
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-qwen3-7-max"
       custom_llm_provider: cline-pass
@@ -334,7 +326,6 @@ model_list:
     litellm_params:
       model: openai/cline-pass/qwen3.7-plus
       <<: [*cline_pass_api_params, *cline_pass_params, *sub_model_routing_params]
-      order: os.environ/CLINE_SUB_ROUTING_ORDER
     model_info:
       id: "cline-pass-qwen3-7-plus"
       custom_llm_provider: cline-pass

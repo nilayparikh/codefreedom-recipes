@@ -76,10 +76,10 @@ free_model_routing_params: &free_model_routing_params
   timeout: 120
 
 # Routing params for subscription models that we want to use more aggressively since they're more cost effective than the direct API after rate limiting on free models.
-# Priority slot: 10 (see PROVIDER_ORDER.md).
+# Priority slot: 10 (see PROVIDER_ORDER.md). Order is configurable via OPENCODE_SUB_ROUTING_ORDER.
 sub_model_routing_params: &sub_model_routing_params
-  cooldown_time: 60
-  order: 10
+  cooldown_time: 3600
+  order: os.environ/OPENCODE_SUB_ROUTING_ORDER
   timeout: 120
 
 model_list:

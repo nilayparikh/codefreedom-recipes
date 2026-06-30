@@ -26,8 +26,8 @@ Flat-rate / metered subscriptions. Used after free tier is exhausted.
 
 | Slot | Provider | Anchor in YAML | Notes |
 |------|----------|----------------|-------|
-| `10` | OpenCode Zen (subscription / GO) | `opencode.yaml` → `sub_model_routing_params` | OpenCode subscription. 60 s cooldown. |
-| `11` | Cline Pass | `cline-pass.yaml` → `sub_model_routing_params` | Flat-rate subscription. 60 s cooldown. |
+| `10` | OpenCode Zen (subscription / GO) | `opencode.yaml` → `sub_model_routing_params` | OpenCode subscription. 1 h cooldown. **Order configurable** via `OPENCODE_SUB_ROUTING_ORDER` (default: `10`). |
+| `11` | Cline Pass | `cline-pass.yaml` → `sub_model_routing_params` | Flat-rate subscription. 1 h cooldown. **Order configurable** via `CLINE_SUB_ROUTING_ORDER` (default: `11`). |
 | `12`–`25` | *reserved* | — | Available for future subscription providers. |
 
 ### Tier 3 — Pay-per-token (slots 26–98)

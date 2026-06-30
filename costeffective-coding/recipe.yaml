@@ -38,6 +38,8 @@ vars:
   OPENCODE_GO_ANTHROPIC_BASE_URL: "https://opencode.ai/zen/go"
   OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
   CLINE_PASS_BASE_URL: "https://api.cline.bot/api/v1"
+  CLINE_SUB_ROUTING_ORDER: "11"
+  OPENCODE_SUB_ROUTING_ORDER: "10"
 files:
   # ── Unified profiles (single file) ──────────────────────────────────
   - path: profiles.yaml
