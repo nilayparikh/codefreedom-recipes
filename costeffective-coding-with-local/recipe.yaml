@@ -7,7 +7,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: costeffective-coding-with-local
-description: "Cloud + local inference — DeepSeek, Azure, OpenCode, OpenRouter, and local backends via LiteLLM proxy"
+description: "Cloud + local inference -- DeepSeek, Azure, OpenCode, OpenRouter, and local backends via LiteLLM proxy"
 version: 1
 
 vars:
@@ -82,7 +82,7 @@ required_secrets:
     env: "${CF_CLI_OPENROUTER_API_KEY:-}"
   - var: CLINE_PASS_API_KEY
     prompt: "Cline Pass API key"
-    hint: "Create one at https://app.cline.bot → Settings → API Keys"
+    hint: "Create one at https://app.cline.bot -> Settings -> API Keys"
     env: "${CF_CLI_CLINE_PASS_API_KEY:-}"
   - var: GITHUB_PERSONAL_ACCESS_TOKEN
     prompt: "GitHub personal access token"
@@ -90,11 +90,11 @@ required_secrets:
     env: "${CF_CLI_GITHUB_PERSONAL_ACCESS_TOKEN:-}"
   - var: LOCAL_M_API_KEY
     prompt: "Local model key (primary)"
-    hint: "Any non-empty value — local server does not validate"
+    hint: "Any non-empty value -- local server does not validate"
     env: "${CF_CLI_LOCAL_M_API_KEY:-sk-dummy}"
   - var: LOCAL_S_API_KEY
     prompt: "Local model key (secondary)"
-    hint: "Any non-empty value — local server does not validate"
+    hint: "Any non-empty value -- local server does not validate"
     env: "${CF_CLI_LOCAL_S_API_KEY:-sk-dummy}"
 
 config_vars:
