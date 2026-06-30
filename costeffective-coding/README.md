@@ -43,6 +43,7 @@ Set at least one. Unset providers are skipped automatically.
 | Azure Foundry | `MICROSOFT_FOUNDRY_API_KEY` | [ai.azure.com](https://ai.azure.com) |
 | OpenCode Zen | `OPENCODE_ZEN_API_KEY` | [opencode.ai](https://opencode.ai) (free tier available) |
 | OpenRouter | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai) |
+| Cline Pass | `CLINE_PASS_API_KEY` | [app.cline.bot](https://app.cline.bot) — flat-rate subscription to open-weight coding models |
 
 Keys are stored in `~/.codefreedom/.env.proxy.secrets`. You can also set them as `CF_CLI_*` environment variables (highest priority):
 

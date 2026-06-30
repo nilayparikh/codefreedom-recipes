@@ -35,6 +35,7 @@ $Placeholders = @{
     MICROSOFT_FOUNDRY_API_KEY       = ""   # Azure AI Foundry API key
     OPENCODE_ZEN_API_KEY            = ""   # https://opencode.ai dashboard
     OPENROUTER_API_KEY              = ""   # https://openrouter.ai/keys
+    CLINE_PASS_API_KEY              = ""   # https://app.cline.bot → Settings → API Keys
     GITHUB_PERSONAL_ACCESS_TOKEN    = ""   # https://github.com/settings/tokens
 }
 
@@ -73,6 +74,12 @@ $SecretDefs = [ordered]@{
         URL         = "https://openrouter.ai/keys"
         Default     = ""
     }
+    CLINE_PASS_API_KEY = @{
+        Name        = "Cline Pass API Key"
+        Description = "Flat-rate subscription to open-weight coding models"
+        URL         = "https://app.cline.bot"
+        Default     = ""
+    }
     GITHUB_PERSONAL_ACCESS_TOKEN = @{
         Name        = "GitHub PAT"
         Description = "Git push/pull in sandbox mode"
@@ -90,6 +97,7 @@ $ServiceDefs = [ordered]@{
     "Azure Foundry Provider"    = @("MICROSOFT_FOUNDRY_API_BASE", "MICROSOFT_FOUNDRY_API_KEY")
     "OpenCode Zen Provider"     = @("OPENCODE_ZEN_API_KEY")
     "OpenRouter Provider"       = @("OPENROUTER_API_KEY")
+    "Cline Pass Provider"       = @("CLINE_PASS_API_KEY")
     "Git in Sandbox"            = @("GITHUB_PERSONAL_ACCESS_TOKEN")
 }
 

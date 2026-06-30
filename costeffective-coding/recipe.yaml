@@ -14,14 +14,11 @@ vars:
   PROXY_PORT: "4000"
   PROXY_BIND_HOST: "127.0.0.1"
   PROXY_BASE_URL: "http://${PROXY_BIND_HOST}:${PROXY_PORT}"
-  TOOL_IMAGE_BASE: "docker.io/nilayparikh/codefreedom"
-  CHROME_IMAGE_TAG: "latest"
-  WEB_IMAGE_TAG: "latest"
-  GITHUB_IMAGE_TAG: "latest"
-  WEB_BRIDGE_IMAGE_TAG: "latest"
-  AGENT_IMAGE: "docker.io/nilayparikh/codefreedom:ubuntu-dev-0.2.2rc1.dev1"
-  AGENT_CUDA_IMAGE: "docker.io/nilayparikh/codefreedom:cuda-dev-0.2.2rc1.dev1"
-  AGENT_ROCM_IMAGE: "docker.io/nilayparikh/codefreedom:rocm-dev-0.2.2rc1.dev1"
+  IMAGE_BASE: "docker.io/nilayparikh/codefreedom"
+  CHROME_IMAGE_TAG: "v1.0.0"
+  WEB_IMAGE_TAG: "v1.0.0"
+  GITHUB_IMAGE_TAG: "v1.0.0"
+  WEB_BRIDGE_IMAGE_TAG: "v1.0.0"
   CHROME_CDP_PORT: "9222"
   CHROME_MCP_PORT: "9223"
   GITHUB_MCP_PORT: "8129"
@@ -32,6 +29,7 @@ vars:
   OPENCODE_GO_BASE_URL: "https://opencode.ai/zen/go/v1"
   OPENCODE_GO_ANTHROPIC_BASE_URL: "https://opencode.ai/zen/go"
   OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
+  CLINE_PASS_BASE_URL: "https://api.cline.bot/api/v1"
 files:
   # ── Unified profiles (single file) ──────────────────────────────────
   - path: profiles.yaml
@@ -77,6 +75,10 @@ required_secrets:
     prompt: "OpenRouter API key"
     hint: "Get key at https://openrouter.ai/keys"
     env: "${CF_CLI_OPENROUTER_API_KEY:-}"
+  - var: CLINE_PASS_API_KEY
+    prompt: "Cline Pass API key"
+    hint: "Create one at https://app.cline.bot → Settings → API Keys"
+    env: "${CF_CLI_CLINE_PASS_API_KEY:-}"
   - var: GITHUB_PERSONAL_ACCESS_TOKEN
     prompt: "GitHub personal access token"
     hint: "Get key at https://github.com/settings/tokens"

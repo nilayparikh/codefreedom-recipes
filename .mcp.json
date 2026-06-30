@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "dockerhub": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "HUB_PAT_TOKEN",
+        "mcp/dockerhub",
+        "--transport=stdio",
+        "--username="
+      ],
+      "env": {
+        "HUB_PAT_TOKEN": ""
+      }
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": ""
+      }
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        ""
+      ]
+    },
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "chrome-devtools": {
+      "type": "http",
+      "url": "http://127.0.0.1:9223/mcp"
+    },
+    "web": {
+      "type": "http",
+      "url": "http://127.0.0.1:8420/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "http://127.0.0.1:8129/mcp"
+    }
+  }
+}

@@ -179,7 +179,7 @@ agents:
 tools:
   chrome:
     kind: tool
-    image: ${TOOL_IMAGE_BASE}:chrome-${CHROME_IMAGE_TAG}
+    image: ${IMAGE_BASE}:chrome-${CHROME_IMAGE_TAG}
     container_name: codefreedom-tools-chrome
     port: ${CHROME_CDP_PORT:-9222}
     mcp_port: ${CHROME_MCP_PORT:-9223}
@@ -190,7 +190,7 @@ tools:
 
   web:
     kind: tool
-    image: ${TOOL_IMAGE_BASE}:web-${WEB_IMAGE_TAG}
+    image: ${IMAGE_BASE}:web-${WEB_IMAGE_TAG}
     container_name: codefreedom-web
     port: ${WEB_MCP_PORT:-8420}
     env: {}
@@ -216,7 +216,7 @@ tools:
 
   github:
     kind: tool
-    image: ${TOOL_IMAGE_BASE}:github-${GITHUB_IMAGE_TAG}
+    image: ${IMAGE_BASE}:github-${GITHUB_IMAGE_TAG}
     container_name: codefreedom-tools-github
     port: ${GITHUB_MCP_PORT:-8129}
     env:
@@ -224,7 +224,7 @@ tools:
 
   web-bridge:
     kind: tool
-    image: ${TOOL_IMAGE_BASE}:web-bridge-${WEB_BRIDGE_IMAGE_TAG}
+    image: ${IMAGE_BASE}:web-bridge-${WEB_BRIDGE_IMAGE_TAG}
     container_name: codefreedom-web-bridge
     port: ${WEB_BRIDGE_PORT:-8500}
     env:

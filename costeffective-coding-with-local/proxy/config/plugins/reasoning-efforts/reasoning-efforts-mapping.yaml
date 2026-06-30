@@ -106,6 +106,28 @@ rules:
       xhigh: high
       max: high
 
+  kimi-k2-7-code:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
+  kimi-k2-6:
+    type: mapping
+    output: reasoning_effort
+    values:
+      none: none
+      low: low
+      medium: medium
+      high: high
+      xhigh: high
+      max: high
+
   glm:
     type: mapping
     output: reasoning_effort

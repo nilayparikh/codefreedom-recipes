@@ -28,7 +28,7 @@
 
 services:
   litellm:
-    image: ${PROXY_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
+    image: ${PROXY_IMAGE:-${IMAGE_BASE:-docker.io/nilayparikh/codefreedom}:litellm-${PROXY_IMAGE_TAG:-v1.89.4}}
     container_name: ${PROXY_CONTAINER_NAME:-codefreedom-proxy}
     restart: unless-stopped
     profiles:
@@ -103,6 +103,10 @@ services:
       # OpenRouter
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+
+      # Cline Pass
+      CLINE_PASS_BASE_URL: ${CLINE_PASS_BASE_URL:-https://api.cline.bot/api/v1}
+      CLINE_PASS_API_KEY: ${CLINE_PASS_API_KEY:-}
 
     networks:
       - codefreedom

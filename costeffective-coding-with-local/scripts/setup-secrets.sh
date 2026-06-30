@@ -30,6 +30,7 @@ MICROSOFT_FOUNDRY_API_BASE=""       # Azure AI Foundry endpoint URL
 MICROSOFT_FOUNDRY_API_KEY=""        # Azure AI Foundry API key
 OPENCODE_ZEN_API_KEY=""             # https://opencode.ai dashboard
 OPENROUTER_API_KEY=""               # https://openrouter.ai/keys
+CLINE_PASS_API_KEY=""               # https://app.cline.bot → Settings → API Keys
 GITHUB_PERSONAL_ACCESS_TOKEN=""     # https://github.com/settings/tokens
 LOCAL_M_API_KEY=""                  # Local model key (any non-empty value; local server does not validate)
 LOCAL_S_API_KEY=""                  # Local model key (any non-empty value; local server does not validate)
@@ -61,6 +62,7 @@ SECRETS=(
     "MICROSOFT_FOUNDRY_API_KEY|Azure Foundry API Key|Azure AI Foundry API key|-|-"
     "OPENCODE_ZEN_API_KEY|OpenCode Zen API Key|Covers both Zen (free) and GO (subscription)|https://opencode.ai|-"
     "OPENROUTER_API_KEY|OpenRouter API Key|Multi-provider routing|https://openrouter.ai/keys|-"
+    "CLINE_PASS_API_KEY|Cline Pass API Key|Flat-rate subscription to open-weight coding models|https://app.cline.bot|-"
     "GITHUB_PERSONAL_ACCESS_TOKEN|GitHub PAT|Git push/pull in sandbox mode|https://github.com/settings/tokens|-"
     "LOCAL_M_API_KEY|Local Model Key (primary)|Any non-empty value; local server does not validate|-|-"
     "LOCAL_S_API_KEY|Local Model Key (secondary)|Any non-empty value; local server does not validate|-|-"
@@ -73,6 +75,7 @@ SERVICES=(
     "Azure Foundry Provider|MICROSOFT_FOUNDRY_API_BASE,MICROSOFT_FOUNDRY_API_KEY"
     "OpenCode Zen Provider|OPENCODE_ZEN_API_KEY"
     "OpenRouter Provider|OPENROUTER_API_KEY"
+    "Cline Pass Provider|CLINE_PASS_API_KEY"
     "Local Inference (primary)|LOCAL_M_API_KEY"
     "Local Inference (secondary)|LOCAL_S_API_KEY"
     "Git in Sandbox|GITHUB_PERSONAL_ACCESS_TOKEN"

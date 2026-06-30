@@ -110,8 +110,8 @@ model_list:
       id: "openrouter-deepseek-v4-flash"
       custom_llm_provider: openrouter
       <<: *openrouter_model_info
-      input_cost_per_token: 0.00000014
-      output_cost_per_token: 0.00000028
+      input_cost_per_token: 0.00000009
+      output_cost_per_token: 0.00000018
       cached_input_cost_per_token: 0.0000000028
       supports_vision: false
       context_window: 1000000
@@ -147,7 +147,7 @@ model_list:
       id: "openrouter-mimo-v2-5"
       custom_llm_provider: openrouter
       <<: *openrouter_model_info
-      input_cost_per_token: 0.00000014
+      input_cost_per_token: 0.000000105
       output_cost_per_token: 0.00000028
       cached_input_cost_per_token: 0.0000000028
       supports_vision: false
@@ -328,13 +328,13 @@ model_list:
         reasoning-efforts:
           rule: minimax-m3
 
-  # https://openrouter.ai/moonshotai/kimi-k2.7
+  # https://openrouter.ai/moonshotai/kimi-k2.7-code
   # | Model | Input Price | Output Price | Cache Read |
   # |---|---|---|---|
-  # | Kimi K2.7 | $0.95 | $4.00 | $0.19 |
-  - model_name: Kimi-K2.7
+  # | Kimi K2.7 Code | $0.74 | $3.50 | $0.19 |
+  - model_name: Kimi-K2.7-Code
     litellm_params:
-      model: openrouter/moonshotai/kimi-k2.7
+      model: openrouter/moonshotai/kimi-k2.7-code
       <<:
         [
           *openrouter_api_params,
@@ -347,24 +347,24 @@ model_list:
           only: ["moonshotai"]
           allow_fallbacks: false
     model_info:
-      id: "openrouter-kimi-k2-7"
+      id: "openrouter-kimi-k2-7-code"
       custom_llm_provider: openrouter
       <<: *openrouter_model_info
-      input_cost_per_token: 0.00000095
-      output_cost_per_token: 0.00000400
+      input_cost_per_token: 0.00000074
+      output_cost_per_token: 0.00000350
       cache_read_input_token_cost: 0.00000019
       supports_vision: true
-      context_window: 1000000
-      max_tokens: 1000000
-      max_input_tokens: 524300
-      max_output_tokens: 512000
+      context_window: 262000
+      max_tokens: 262000
+      max_input_tokens: 262000
+      max_output_tokens: 262000
       limit:
-        context: 1000000
-        output: 512000
+        context: 262000
+        output: 262000
     codefreedom:
       plugins:
         reasoning-efforts:
-          rule: kimi-k2-7
+          rule: kimi-k2-7-code
 
   # -- Free models with aggressive routing after rate limits --
 

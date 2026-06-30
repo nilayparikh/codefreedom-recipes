@@ -43,6 +43,7 @@ Set at least one cloud provider key. Local backends need no keys.
 | Azure Foundry | `MICROSOFT_FOUNDRY_API_KEY` | [ai.azure.com](https://ai.azure.com) |
 | OpenCode Zen | `OPENCODE_ZEN_API_KEY` | [opencode.ai](https://opencode.ai) (free tier available) |
 | OpenRouter | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai) |
+| Cline Pass | `CLINE_PASS_API_KEY` | [app.cline.bot](https://app.cline.bot) — flat-rate subscription to open-weight coding models |
 | Local M | `LOCAL_M_API_KEY` | Any value works (default `sk-dummy`) |
 | Local S | `LOCAL_S_API_KEY` | Any value works (default `sk-dummy`) |
 
