@@ -61,9 +61,10 @@ cline_pass_model_info: &cline_pass_model_info
 
 # Cline Pass is a flat-rate subscription — use moderate cooldown so we
 # fail over quickly on rate-limit bursts but don't churn on transient errors.
+# Priority slot: 11 (see PROVIDER_ORDER.md).
 sub_model_routing_params: &sub_model_routing_params
   cooldown_time: 60
-  order: 2
+  order: 11
   timeout: 120
 
 model_list:

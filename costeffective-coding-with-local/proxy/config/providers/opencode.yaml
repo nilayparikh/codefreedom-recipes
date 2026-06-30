@@ -69,15 +69,17 @@ free_model_cost_params: &free_model_cost_params
   cache_creation_input_token_cost: 0
 
 # Free models, with 12H cooldown after encountering rate limits.
+# Priority slot: 1 (see PROVIDER_ORDER.md).
 free_model_routing_params: &free_model_routing_params
   cooldown_time: 43200
   order: 1
   timeout: 120
 
 # Routing params for subscription models that we want to use more aggressively since they're more cost effective than the direct API after rate limiting on free models.
+# Priority slot: 10 (see PROVIDER_ORDER.md).
 sub_model_routing_params: &sub_model_routing_params
   cooldown_time: 60
-  order: 2
+  order: 10
   timeout: 120
 
 model_list:

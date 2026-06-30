@@ -19,6 +19,12 @@ azure_litellm_params: &azure_litellm_params
     stream_options:
       include_usage: true
 
+# Pay-per-token provider — slot 26 (see PROVIDER_ORDER.md).
+azure_routing_params: &azure_routing_params
+  cooldown_time: 60
+  order: 26
+  timeout: 300
+
 # Base model_info block shared by all Azure/Foundry GPT models
 azure_model_info: &azure_model_info
   db_model: false
@@ -53,7 +59,7 @@ model_list:
   - model_name: GPT-5.5
     litellm_params:
       model: openai/gpt-5.5
-      <<: [*azure_api_params, *azure_litellm_params]
+      <<: [*azure_api_params, *azure_litellm_params, *azure_routing_params]
     model_info:
       id: "azure-gpt-5-5"
       <<: *azure_model_info
@@ -78,7 +84,7 @@ model_list:
   - model_name: GPT-5.4
     litellm_params:
       model: openai/gpt-5.4
-      <<: [*azure_api_params, *azure_litellm_params]
+      <<: [*azure_api_params, *azure_litellm_params, *azure_routing_params]
     model_info:
       id: "azure-gpt-5-4"
       <<: *azure_model_info
@@ -103,7 +109,7 @@ model_list:
   - model_name: GPT-5.4-Mini
     litellm_params:
       model: openai/gpt-5.4-mini
-      <<: [*azure_api_params, *azure_litellm_params]
+      <<: [*azure_api_params, *azure_litellm_params, *azure_routing_params]
     model_info:
       id: "azure-gpt-5-4-mini"
       <<: *azure_model_info
@@ -128,7 +134,7 @@ model_list:
   - model_name: GPT-5.4-Nano
     litellm_params:
       model: openai/gpt-5.4-nano
-      <<: [*azure_api_params, *azure_litellm_params]
+      <<: [*azure_api_params, *azure_litellm_params, *azure_routing_params]
     model_info:
       id: "azure-gpt-5-4-nano"
       <<: *azure_model_info
