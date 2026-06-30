@@ -9,7 +9,7 @@
 #         The image is multi-arch (linux/arm64 + linux/amd64). Keep this
 #         compose file free of a `platform:` pin so Docker selects the
 #         matching manifest on Apple Silicon, Linux ARM, and Intel/AMD.
-#         Override PROXY_IMAGE in .env.proxy to use a different tag
+#         Override LITELLM_IMAGE in .env.proxy to use a different tag
 #         (e.g. a locally-built `codefreedom:litellm-local`).
 #
 # DATABASE: Embedded PostgreSQL 18.4 inside the image.
@@ -30,8 +30,8 @@
 
 services:
   litellm:
-    image: ${PROXY_IMAGE:-${IMAGE_BASE:-docker.io/nilayparikh/codefreedom}:litellm-${PROXY_IMAGE_TAG:-v1.89.4}}
-    container_name: ${PROXY_CONTAINER_NAME:-codefreedom-proxy}
+    image: ${LITELLM_IMAGE:-docker.io/nilayparikh/codefreedom:litellm-latest}
+    container_name: ${LITELLM_CONTAINER_NAME:-litellm-codefreedom}
     restart: unless-stopped
     profiles:
       - litellm
@@ -40,7 +40,7 @@ services:
       "codefreedom.component": "litellm-proxy"
     # Entrypoint is tini -> litellm (set in the image). The compose
     # file just passes the config path and port through. `--port` and
-    # `--host` are passed as args (not the PROXY_PORT env var) so
+    # `--host` are passed as args (not the LITELLM_PORT env var) so
     # they always win over the image's CMD defaults.
     command:
       - --config
@@ -50,7 +50,7 @@ services:
       - --host
       - "0.0.0.0"
     ports:
-      - "${PROXY_BIND_HOST:-0.0.0.0}:${PROXY_PORT:-4000}:4000"
+      - "${LITELLM_BIND_HOST:-0.0.0.0}:${LITELLM_PORT:-4000}:4000"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -64,12 +64,7 @@ services:
       # Docker Compose reads .env for ${VAR} interpolation (lowest priority).
       # System env vars override .env (highest priority).
       # .env.secrets is loaded at runtime by codefreedom CLI.
-      # The canonical user-facing name is PROXY_API_KEY; the codefreedom CLI
-      # mirrors it to LITELLM_MASTER_KEY at start time (LiteLLM's own
-      # convention) so the container always receives its auth key.
-      # LITELLM_LOG, LITELLM_DROP_PARAMS, and LITELLM_NO_DOCS are read
-      # directly by the LiteLLM process inside the container — they are
-      # LiteLLM's own conventions, not CodeFreedom names.
+      LITELLM_PORT: ${LITELLM_PORT:-4000}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-}
       LITELLM_LOG: ${LITELLM_LOG:-INFO}
 
@@ -106,10 +101,6 @@ services:
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
 
-      # Cline Pass
-      CLINE_PASS_BASE_URL: ${CLINE_PASS_BASE_URL:-https://api.cline.bot/api/v1}
-      CLINE_PASS_API_KEY: ${CLINE_PASS_API_KEY:-}
-
       # ── Local backends (optional) ──────────────────────────────────────
       # Cloud-only users: comment out this entire block or leave keys empty.
       # Leave LOCAL_M_API_KEY / LOCAL_S_API_KEY empty to disable local models.
@@ -121,19 +112,7 @@ services:
     networks:
       - codefreedom
     volumes:
-      # ── Subpath mounts (NOT a whole-dir bind) ─────────────────────
-      # Each plugin's yaml file is mounted individually, so the
-      # parent dirs /app/litellm-config/plugins/<name>/ are NOT
-      # bind-mounted.  The entrypoint.sh creates .py symlinks in
-      # those dirs that point at the image-baked plugin code; those
-      # symlinks stay in the container and never appear on the host.
-      # Host's ~/.codefreedom/config/proxy/config/plugins/ therefore
-      # contains only user-editable .yaml files.
-      - ./config/config.yaml:/app/litellm-config/config.yaml:ro
-      - ./config/providers:/app/litellm-config/providers:ro
-      - ./config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml:/app/litellm-config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml:ro
-      - ./config/plugins/system-message-merger/system-message-merger.yaml:/app/litellm-config/plugins/system-message-merger/system-message-merger.yaml:ro
-      - ./config/plugins/image-router/image-router.yaml:/app/litellm-config/plugins/image-router/image-router.yaml:ro
+      - ./config:/app/litellm-config
 
       # ── Embedded PostgreSQL 18.4 ────────────────────────────────────
       # The entrypoint auto-initialises the cluster, generates the Prisma

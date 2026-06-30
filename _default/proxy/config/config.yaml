@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# General Settings
+# ═══════════════════════════════════════════════════════════════════════════════
+general_settings:
+  store_model_in_db: false
+  store_prompts_in_spend_logs: false
+
+  # ── Forward Client Headers ───────────────────────────────────────────────
+  forward_client_headers_to_llm_api: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Router Settings
+# ═══════════════════════════════════════════════════════════════════════════════
+router_settings:
+  num_retries: 5
+  retry_after: 0
+  allowed_fails: 3
+
+  # ── Retry Policy ─────────────────────────────────────────────────────────
+  retry_policy:
+    AuthenticationErrorRetries: 0 # never retry bad credentials
+    TimeoutErrorRetries: os.environ/LITELLM_TIMEOUT_ERROR_RETRIES
+    RateLimitErrorRetries: os.environ/LITELLM_RATE_LIMIT_ERROR_RETRIES
+    ContentPolicyViolationErrorRetries: 0 # never retry content violations
+    InternalServerErrorRetries: os.environ/LITELLM_INTERNAL_ERROR_RETRIES
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# LiteLLM Settings
+# ═══════════════════════════════════════════════════════════════════════════════
+litellm_settings:
+  always_include_stream_usage: os.environ/LITELLM_STREAM_USAGE
+  drop_params: os.environ/LITELLM_DROP_PARAMS
+  redact_user_api_key_info: os.environ/LITELLM_REDACT_USER_API_KEY
+  turn_off_message_logging: os.environ/LITELLM_TURN_OFF_MSG_LOGGING
+  json_logs: os.environ/LITELLM_JSON_LOGS
+
+  modify_params: true
+
+  # Translate Anthropic /v1/messages format to OpenAI for non-Anthropic backends
+  use_chat_completions_url_for_anthropic_messages: true
+
+  # Expose Prometheus metrics at /metrics/
+  callbacks:
+    - prometheus
+    - websearch_interception
+    - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
+    - plugins.image-router.image_router.instance
+
+  websearch_interception_params:
+    enabled_providers:
+      [
+        "openai",
+        "anthropic",
+        "vertex_ai",
+        "bedrock",
+        "azure",
+        "deepseek",
+        "nvidia",
+        "opencode-zen",
+        "openrouter",
+        "minimax",
+      ]
+  search_tool_name: codefreedom-web
+  require_auth_for_metrics_endpoint: os.environ/LITELLM_REQUIRE_AUTH_METRICS
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CodeFreedom Plugins
+# ═══════════════════════════════════════════════════════════════════════════════
+codefreedom:
+  image-router-for-text-only:
+    enabled: true
+    models:
+      - "OpenCode/MiMo-V2.5-FREE"
+      - "OpenCode/Kimi-K2.6"
+      - "OpenCode/Qwen3.7-Max"
+
+search_tools:
+  - search_tool_name: codefreedom-web
+    litellm_params:
+      search_provider: searxng
+      api_base: http://web-bridge:8500

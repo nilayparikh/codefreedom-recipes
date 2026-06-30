@@ -1,0 +1,20 @@
+# ── Git Workflow Config ────────────────────────────────────────────────────
+# Overrides _default git config with MiMo V2.5 as default model.
+# ──────────────────────────────────────────────────────────────────────────
+
+git:
+      model: "MiMo-V2.5"
+      conventional_commit: true
+      signed_commit: true
+      templates:
+            commit_message: "${type}(${scope}): ${description}"
+            pr_title: "${type}(${scope}): ${description}"
+            pr_description: |
+                  ## Summary
+                  ${summary}
+
+                  ## Changes
+                  ${changes}
+
+                  ## Testing
+                  ${testing}

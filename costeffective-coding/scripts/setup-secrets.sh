@@ -25,12 +25,11 @@ set -euo pipefail
 # Edit these before running, OR leave empty to be prompted interactively.
 # Press ENTER at the prompt to skip (the service will not be available).
 
-PROXY_API_KEY=""                   # Proxy master key (default: sk-codefreedom-local)
+LITELLM_MASTER_KEY=""               # Proxy master key (default: sk-codefreedom-local)
 MICROSOFT_FOUNDRY_API_BASE=""       # Azure AI Foundry endpoint URL
 MICROSOFT_FOUNDRY_API_KEY=""        # Azure AI Foundry API key
 OPENCODE_ZEN_API_KEY=""             # https://opencode.ai dashboard
 OPENROUTER_API_KEY=""               # https://openrouter.ai/keys
-CLINE_PASS_API_KEY=""               # https://app.cline.bot → Settings → API Keys
 GITHUB_PERSONAL_ACCESS_TOKEN=""     # https://github.com/settings/tokens
 
 # ── Marker for shell profile block (do not edit) ─────────────────────────────
@@ -55,23 +54,21 @@ fi
 # DEFAULT_VALUE: "-" means no default (will be skipped if empty)
 
 SECRETS=(
-    "PROXY_API_KEY|Proxy API Key|Proxy authentication (clients use this to talk to the proxy)|-|sk-codefreedom-local"
+    "LITELLM_MASTER_KEY|LiteLLM Master Key|Proxy authentication (clients use this to talk to the proxy)|-|sk-codefreedom-local"
     "MICROSOFT_FOUNDRY_API_BASE|Azure Foundry Base URL|Azure AI Foundry workspace endpoint|-|-"
     "MICROSOFT_FOUNDRY_API_KEY|Azure Foundry API Key|Azure AI Foundry API key|-|-"
     "OPENCODE_ZEN_API_KEY|OpenCode Zen API Key|Covers both Zen (free) and GO (subscription)|https://opencode.ai|-"
     "OPENROUTER_API_KEY|OpenRouter API Key|Multi-provider routing|https://openrouter.ai/keys|-"
-    "CLINE_PASS_API_KEY|Cline Pass API Key|Flat-rate subscription to open-weight coding models|https://app.cline.bot|-"
     "GITHUB_PERSONAL_ACCESS_TOKEN|GitHub PAT|Git push/pull in sandbox mode|https://github.com/settings/tokens|-"
 )
 
 # ── Service → secret mapping (for failure summary) ───────────────────────────
 # Format: SERVICE_NAME|REQUIRED_SECRETS (comma-separated, ALL required)
 SERVICES=(
-    "LiteLLM Proxy|PROXY_API_KEY"
+    "LiteLLM Proxy|LITELLM_MASTER_KEY"
     "Azure Foundry Provider|MICROSOFT_FOUNDRY_API_BASE,MICROSOFT_FOUNDRY_API_KEY"
     "OpenCode Zen Provider|OPENCODE_ZEN_API_KEY"
     "OpenRouter Provider|OPENROUTER_API_KEY"
-    "Cline Pass Provider|CLINE_PASS_API_KEY"
     "Git in Sandbox|GITHUB_PERSONAL_ACCESS_TOKEN"
 )
 
@@ -167,6 +164,7 @@ detect_shell_profile() {
 remove_existing_block() {
     local profile="$1"
     if [[ -f "$profile" ]] && grep -qF "$MARKER_BEGIN" "$profile"; then
+        # Remove existing block between markers (inclusive)
         sed -i.bak "/$MARKER_BEGIN/,/$MARKER_END/d" "$profile"
         rm -f "${profile}.bak"
     fi
@@ -204,7 +202,8 @@ export_current_session() {
 
 print_summary() {
     local set_count=0
-    local failing_services=()
+    local skipped_secrets=()
+    local set_secrets=()
 
     echo -e ""
     echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
@@ -225,8 +224,10 @@ print_summary() {
             fi
             echo -e "  ${GREEN}✔${RESET} ${var_name}=${DIM}${masked}${RESET}"
             ((set_count++))
+            set_secrets+=("$var_name")
         else
             echo -e "  ${YELLOW}⊘${RESET} ${var_name} ${DIM}(skipped)${RESET}"
+            skipped_secrets+=("$var_name")
         fi
     done
 
@@ -234,6 +235,8 @@ print_summary() {
     echo -e "  ${BOLD}Set:${RESET} ${GREEN}${set_count}${RESET} / ${#SECRETS[@]} secrets"
     echo -e ""
 
+    # ── Service failure analysis ──────────────────────────────────────────────
+    local failing_services=()
     for service_def in "${SERVICES[@]}"; do
         IFS='|' read -r service_name required_keys <<< "$service_def"
         IFS=',' read -ra required_arr <<< "$required_keys"

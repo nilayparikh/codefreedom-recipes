@@ -1,0 +1,28 @@
+# ── Git Workflow Config ────────────────────────────────────────────────────
+# Default configuration for cf git commands (cmt, pr).
+# Shipped in _default recipe, inherited by all other recipes.
+# ──────────────────────────────────────────────────────────────────────────
+
+git:
+      # LLM model for commit message and PR description generation
+      model: MiMo-V2.5
+
+      # Conventional commit format (feat(scope): description)
+      conventional_commit: true
+
+      # Sign commits with GPG (-S flag)
+      signed_commit: true
+
+      # Templates use ${VAR} syntax — variables filled by LLM output
+      templates:
+            commit_message: "${type}(${scope}): ${description}"
+            pr_title: "${type}(${scope}): ${description}"
+            pr_description: |
+                  ## Summary
+                  ${summary}
+
+                  ## Changes
+                  ${changes}
+
+                  ## Testing
+                  ${testing}
