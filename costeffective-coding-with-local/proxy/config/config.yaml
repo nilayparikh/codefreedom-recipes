@@ -102,6 +102,7 @@ litellm_settings:
     - plugins.reasoning-efforts.reasoning_efforts_mapping.instance
     - plugins.system-message-merger.system_message_merger.instance
     - plugins.image-router.image_router.instance
+    - plugins.filter-empty-errors.filter_empty_errors.instance
 
   websearch_interception_params:
     enabled_providers:
