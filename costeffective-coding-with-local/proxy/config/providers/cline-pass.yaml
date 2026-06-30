@@ -330,6 +330,8 @@ model_list:
       id: "cline-pass-qwen3-7-plus"
       custom_llm_provider: cline-pass
       <<: *cline_pass_model_info
+      cache_read_input_token_cost: 0.00000004
+      cache_creation_input_token_cost: 0.00000050
       use_tiered_pricing: true
       tiered_pricing:
         - max_tokens: 256000

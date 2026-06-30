@@ -258,6 +258,8 @@ model_list:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-plus"
       supports_vision: true
+      cache_read_input_token_cost: 0.00000004
+      cache_creation_input_token_cost: 0
       tiered_pricing:
         - max_tokens: 256000
           input_cost_per_token: 0.00000032
@@ -299,6 +301,7 @@ model_list:
       input_cost_per_token: 0.00000014
       output_cost_per_token: 0.00000028
       cache_read_input_token_cost: 0.0000000028
+      cache_creation_input_token_cost: 0
       supports_vision: false
       context_window: 1000000
       max_tokens: 1000000
@@ -330,6 +333,7 @@ model_list:
       input_cost_per_token: 0.00000095
       output_cost_per_token: 0.00000400
       cache_read_input_token_cost: 0.00000019
+      cache_creation_input_token_cost: 0
       supports_vision: true
       context_window: 262000
       max_tokens: 262000
@@ -359,6 +363,7 @@ model_list:
       input_cost_per_token: 0.00000014
       output_cost_per_token: 0.00000028
       cache_read_input_token_cost: 0.0000000028
+      cache_creation_input_token_cost: 0
       supports_vision: false
       context_window: 1000000
       max_tokens: 1000000
@@ -390,6 +395,7 @@ model_list:
       input_cost_per_token: 0.00000174
       output_cost_per_token: 0.00000348
       cache_read_input_token_cost: 0.0000000145
+      cache_creation_input_token_cost: 0
       supports_vision: false
       context_window: 1000000
       max_tokens: 1000000
@@ -424,6 +430,7 @@ model_list:
       output_cost_per_token: 0.00000440
       # $0.26 per 1M cache read tokens
       cache_read_input_token_cost: 0.00000026
+      cache_creation_input_token_cost: 0
       supports_vision: false
       context_window: 1048576
       max_tokens: 131072

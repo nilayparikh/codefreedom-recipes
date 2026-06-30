@@ -42,6 +42,10 @@ model_list:
       db_model: false
       supports_reasoning: true
       mode: chat
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
       context_window: 131072
       max_tokens: 131072
       max_input_tokens: 114688
@@ -102,6 +106,10 @@ model_list:
     model_info:
       <<: *local_model_info
       id: "local-qwen3.6-35b-a3b"
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
       supports_vision: true
       context_window: 262144
       max_tokens: 262144

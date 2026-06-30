@@ -127,6 +127,183 @@ litellm_settings:
   # Require auth for the /metrics/ endpoint (set to true for production)
   require_auth_for_metrics_endpoint: false
 
+  # ── Pre-register model costs ─────────────────────────────────────────────
+  # Pre-populates LiteLLM's built-in cost map so register_model() doesn't
+  # warn "not in built-in cost map" at startup. Values mirror the per-model
+  # `model_info` cost fields in providers/*.yaml — when one changes, update
+  # both. Use the ≤256K tier for tiered_pricing models.
+  # See: https://docs.litellm.ai/docs/completion/json_mode
+  model_cost:
+    # ── OpenCode Zen free tier (cost = 0) ────────────────────────────
+    openai/mimo-v2.5-free:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+    openai/deepseek-v4-flash-free:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+    anthropic/minimax-m3-free:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+
+    # ── OpenCode GO subscription ────────────────────────────────────
+    anthropic/minimax-m3:
+      input_cost_per_token: 0.00000030
+      output_cost_per_token: 0.00000120
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000006
+    anthropic/qwen3.7-max:
+      input_cost_per_token: 0.00000125
+      output_cost_per_token: 0.00000375
+      cache_creation_input_token_cost: 0.000001563
+      cache_read_input_token_cost: 0.00000025
+    anthropic/qwen3.7-plus:
+      input_cost_per_token: 0.00000040
+      output_cost_per_token: 0.00000160
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000004
+    openai/deepseek-v4-flash:
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openai/kimi-k2.7:
+      input_cost_per_token: 0.00000095
+      output_cost_per_token: 0.00000400
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000019
+    openai/mimo-v2.5:
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openai/mimo-v2.5-pro:
+      input_cost_per_token: 0.00000174
+      output_cost_per_token: 0.00000348
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000145
+    openai/glm-5.2:
+      input_cost_per_token: 0.00000140
+      output_cost_per_token: 0.00000440
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000026
+
+    # ── OpenRouter ──────────────────────────────────────────────────
+    openrouter/deepseek/deepseek-v4-pro:
+      input_cost_per_token: 0.000000435
+      output_cost_per_token: 0.00000087
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.000000003625
+    openrouter/deepseek/deepseek-v4-flash:
+      input_cost_per_token: 0.00000009
+      output_cost_per_token: 0.00000018
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openrouter/xiaomi/mimo-v2.5:
+      input_cost_per_token: 0.000000105
+      output_cost_per_token: 0.00000028
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openrouter/xiaomi/mimo-v2.5-pro:
+      input_cost_per_token: 0.000000435
+      output_cost_per_token: 0.00000087
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.000000003625
+    openrouter/qwen/qwen3.7-plus:
+      input_cost_per_token: 0.00000040
+      output_cost_per_token: 0.00000160
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000004
+    openrouter/qwen/qwen3.7-max:
+      input_cost_per_token: 0.00000125
+      output_cost_per_token: 0.00000375
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000025
+    openrouter/minimax/minimax-m3:
+      input_cost_per_token: 0.00000030
+      output_cost_per_token: 0.00000120
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000006
+    openrouter/moonshotai/kimi-k2.7-code:
+      input_cost_per_token: 0.00000074
+      output_cost_per_token: 0.00000350
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000019
+    openrouter/openrouter/free:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+
+    # ── Cline Pass ──────────────────────────────────────────────────
+    openai/cline-pass/glm-5.2:
+      input_cost_per_token: 0.00000140
+      output_cost_per_token: 0.00000440
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000026
+    openai/cline-pass/kimi-k2.7-code:
+      input_cost_per_token: 0.00000095
+      output_cost_per_token: 0.00000400
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000019
+    openai/cline-pass/kimi-k2.6:
+      input_cost_per_token: 0.00000095
+      output_cost_per_token: 0.00000400
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000016
+    openai/cline-pass/deepseek-v4-pro:
+      input_cost_per_token: 0.00000174
+      output_cost_per_token: 0.00000348
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000145
+    openai/cline-pass/deepseek-v4-flash:
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openai/cline-pass/mimo-v2.5:
+      input_cost_per_token: 0.00000014
+      output_cost_per_token: 0.00000028
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000028
+    openai/cline-pass/mimo-v2.5-pro:
+      input_cost_per_token: 0.00000174
+      output_cost_per_token: 0.00000348
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.0000000145
+    openai/cline-pass/minimax-m3:
+      input_cost_per_token: 0.00000030
+      output_cost_per_token: 0.00000120
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000006
+    openai/cline-pass/qwen3.7-max:
+      input_cost_per_token: 0.00000250
+      output_cost_per_token: 0.00000750
+      cache_creation_input_token_cost: 0.000003125
+      cache_read_input_token_cost: 0.00000050
+    openai/cline-pass/qwen3.7-plus:
+      input_cost_per_token: 0.00000040
+      output_cost_per_token: 0.00000160
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0.00000004
+
+    # ── Local backends (only in -with-local) ────────────────────────
+    openai/qwen3.6_27b:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+    openai/qwen3.6_35b_a3b:
+      input_cost_per_token: 0
+      output_cost_per_token: 0
+      cache_creation_input_token_cost: 0
+      cache_read_input_token_cost: 0
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Web Search Bridge — SearXNG-shaped provider for the Camoufox MCP
 # ═══════════════════════════════════════════════════════════════════════════════
