@@ -121,7 +121,19 @@ services:
     networks:
       - codefreedom
     volumes:
-      - ./config:/app/litellm-config
+      # ── Subpath mounts (NOT a whole-dir bind) ─────────────────────
+      # Each plugin's yaml file is mounted individually, so the
+      # parent dirs /app/litellm-config/plugins/<name>/ are NOT
+      # bind-mounted.  The entrypoint.sh creates .py symlinks in
+      # those dirs that point at the image-baked plugin code; those
+      # symlinks stay in the container and never appear on the host.
+      # Host's ~/.codefreedom/config/proxy/config/plugins/ therefore
+      # contains only user-editable .yaml files.
+      - ./config/config.yaml:/app/litellm-config/config.yaml:ro
+      - ./config/providers:/app/litellm-config/providers:ro
+      - ./config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml:/app/litellm-config/plugins/reasoning-efforts/reasoning-efforts-mapping.yaml:ro
+      - ./config/plugins/system-message-merger/system-message-merger.yaml:/app/litellm-config/plugins/system-message-merger/system-message-merger.yaml:ro
+      - ./config/plugins/image-router/image-router.yaml:/app/litellm-config/plugins/image-router/image-router.yaml:ro
 
       # ── Embedded PostgreSQL 18.4 ────────────────────────────────────
       # The entrypoint auto-initialises the cluster, generates the Prisma
