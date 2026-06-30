@@ -28,7 +28,7 @@
 
 services:
   litellm:
-    image: ${PROXY_IMAGE:-${IMAGE_BASE:-docker.io/nilayparikh/codefreedom}:litellm-${PROXY_IMAGE_TAG:-v1.89.4}}
+    image: ${PROXY_IMAGE:-${IMAGE_BASE:-docker.io/nilayparikh/codefreedom}:litellm-${PROXY_IMAGE_TAG:-v1.90.0}}
     container_name: ${PROXY_CONTAINER_NAME:-codefreedom-proxy}
     restart: unless-stopped
     profiles:
