@@ -76,10 +76,9 @@ free_model_routing_params: &free_model_routing_params
   timeout: 120
 
 # Routing params for subscription models that we want to use more aggressively since they're more cost effective than the direct API after rate limiting on free models.
-# Priority slot: 10 (see PROVIDER_ORDER.md).
+# Priority slot: 10 (see PROVIDER_ORDER.md). Order is configurable via OPENCODE_SUB_ROUTING_ORDER.
 sub_model_routing_params: &sub_model_routing_params
-  cooldown_time: 60
-  order: 10
+  cooldown_time: 3600
   timeout: 120
 
 model_list:
@@ -170,6 +169,7 @@ model_list:
           *opencode_anthropic_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-minimax-m3"
@@ -199,6 +199,7 @@ model_list:
           *opencode_anthropic_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-max"
@@ -228,6 +229,7 @@ model_list:
           *opencode_anthropic_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       <<: *opencode_openai_model_info
       id: "opencode-qwen3-7-plus"
@@ -268,6 +270,7 @@ model_list:
           *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       id: "opencode-go-deepseek-v4-flash"
       custom_llm_provider: opencode-go
@@ -300,6 +303,7 @@ model_list:
           *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       id: "opencode-go-kimi-k2-7"
       custom_llm_provider: opencode-go
@@ -330,6 +334,7 @@ model_list:
           *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       id: "opencode-go-mimo-v2-5"
       custom_llm_provider: opencode-go
@@ -362,6 +367,7 @@ model_list:
           *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       id: "opencode-go-mimo-v2-5-pro"
       custom_llm_provider: opencode-go
@@ -394,6 +400,7 @@ model_list:
           *opencode_openai_go_api_params,
           *sub_model_routing_params,
         ]
+      order: os.environ/OPENCODE_SUB_ROUTING_ORDER
     model_info:
       id: "opencode-go-glm-5-2"
       custom_llm_provider: opencode-go

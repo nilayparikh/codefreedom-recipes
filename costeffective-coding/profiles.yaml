@@ -236,6 +236,12 @@ tools:
     enable_ui: true
     log_level: info
     auto_index: false
+    # Persistent index cache (bind-mounted at /cache:rw).
+    # Survives `cf run tools stop && start` and container recreates.
+    data_dir: ${CODEFREEDOM_HOME}/tools/codebase-memory
+    # Host directory to expose to the indexer at /workspace:ro.
+    # Leave empty string to disable the workspace mount.
+    workspace_dir: ${CODEBASE_MEMORY_WORKSPACE_DIR:-}
     env:
       CBM_LOG_LEVEL: info
       CBM_CACHE_DIR: /cache
