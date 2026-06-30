@@ -44,6 +44,7 @@ agents:
           - chrome
           - web
           - github
+          - codebase-memory
       bare:
         env:
           ANTHROPIC_BASE_URL: ${PROXY_BASE_URL}
@@ -90,6 +91,7 @@ agents:
           - chrome
           - web
           - github
+          - codebase-memory
       bare:
         env:
           MIMOCODE_MIMO_ONLY: "1"
@@ -113,6 +115,7 @@ agents:
           - chrome
           - web
           - github
+          - codebase-memory
           - dockerhub
           - context7
           - filesystem
@@ -136,6 +139,7 @@ agents:
           - chrome
           - web
           - github
+          - codebase-memory
       bare:
         env: {}
 
@@ -153,6 +157,7 @@ agents:
           - chrome
           - web
           - github
+          - codebase-memory
         extensions:
           - pi-mcp-adapter
           - pi-lean-ctx
@@ -221,6 +226,19 @@ tools:
     port: ${GITHUB_MCP_PORT:-8129}
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
+
+  codebase-memory:
+    kind: tool
+    image: ${IMAGE_BASE}:codebase-memory-${CODEBASE_MEMORY_IMAGE_TAG}
+    container_name: codefreedom-tools-codebase-memory
+    port: ${CODEBASE_MEMORY_MCP_PORT:-8330}
+    ui_port: ${CODEBASE_MEMORY_UI_PORT:-9749}
+    enable_ui: false
+    log_level: info
+    auto_index: false
+    env:
+      CBM_LOG_LEVEL: info
+      CBM_CACHE_DIR: /cache
 
   web-bridge:
     kind: tool
