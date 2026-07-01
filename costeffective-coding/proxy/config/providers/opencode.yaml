@@ -79,7 +79,7 @@ free_model_routing_params: &free_model_routing_params
 # Priority slot: 10 (see PROVIDER_ORDER.md). Order is configurable via OPENCODE_SUB_ROUTING_ORDER.
 sub_model_routing_params: &sub_model_routing_params
   cooldown_time: 3600
-  order: os.environ/OPENCODE_SUB_ROUTING_ORDER
+  order: os.environ/int/OPENCODE_SUB_ROUTING_ORDER
   timeout: 120
 
 model_list:
