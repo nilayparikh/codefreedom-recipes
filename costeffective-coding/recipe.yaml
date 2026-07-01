@@ -26,10 +26,6 @@ vars:
   GITHUB_MCP_PORT: "8129"
   CODEBASE_MEMORY_MCP_PORT: "8330"
   CODEBASE_MEMORY_UI_PORT: "9749"
-  # Host directory that gets mounted at /workspace:ro inside the container so
-  # the agent can index_repo(path="/workspace/...") directly. Set to empty
-  # string to disable the workspace mount.
-  CODEBASE_MEMORY_WORKSPACE_DIR: "${PWD}"
   WEB_MCP_PORT: "8420"
   WEB_BRIDGE_PORT: "8500"
   MICROSOFT_FOUNDRY_API_BASE: ""
