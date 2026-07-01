@@ -112,14 +112,9 @@ agents:
           OPENCODE_DISABLE_AUTOUPDATE: "1"
           OPENCODE_DISABLE_CLAUDE_CODE: "1"
         tools:
-          - chrome
-          - web
           - github
           - codebase-memory
-          - dockerhub
-          - context7
-          - filesystem
-          - sentry
+          - web
       bare:
         env:
           OPENCODE_DISABLE_AUTOUPDATE: "1"
