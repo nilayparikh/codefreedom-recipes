@@ -222,24 +222,19 @@ tools:
     env:
       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN}
 
+  # Centralized single-instance tool. The runtime config (repos list,
+  # resource limits, ports) lives in ~/.codefreedom/codebase-memory.yaml
+  # (the central manifest), NOT here. This section is used by `cf m doctor`
+  # and `cf m update` for status checks. Manage repos with:
+  #   cf r cbmem add <path> [--alias NAME]
+  #   cf r cbmem remove <path|alias>
+  #   cf r cbmem list
   codebase-memory:
     kind: tool
     image: ${IMAGE_BASE}:codebase-memory-${CODEBASE_MEMORY_IMAGE_TAG}
     container_name: codefreedom-tools-codebase-memory
     port: ${CODEBASE_MEMORY_MCP_PORT:-8330}
     ui_port: ${CODEBASE_MEMORY_UI_PORT:-9749}
-    enable_ui: true
-    log_level: info
-    auto_index: false
-    # Persistent index cache (bind-mounted at /cache:rw).
-    # Survives `cf run tools stop && start` and container recreates.
-    data_dir: ${CODEFREEDOM_HOME}/tools/codebase-memory
-    # Host directory to expose to the indexer at /workspace:ro.
-    # Leave empty string to disable the workspace mount.
-    workspace_dir: ${CODEBASE_MEMORY_WORKSPACE_DIR:-}
-    env:
-      CBM_LOG_LEVEL: info
-      CBM_CACHE_DIR: /cache
 
   web-bridge:
     kind: tool
